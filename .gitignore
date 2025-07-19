@@ -1,0 +1,5 @@
+.env
+source code/backend/src/main/resources/application.properties
+node_modules/
+target/
+*.log
