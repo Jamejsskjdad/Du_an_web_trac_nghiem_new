@@ -61,5 +61,14 @@ public class Exam extends Auditable<Long> implements Serializable {
     @Column(name = "lock_screen", columnDefinition = "TINYINT")
     @Type(type = "org.hibernate.type.NumericBooleanType")
     private boolean lockScreen;
-
+    @Column(name = "max_point", nullable = false)
+    private int maxPoint; // ✅ Thêm dòng này
+    public int getMaxPoint() {
+        return maxPoint;
+    }
+    
+    public void setMaxPoint(int maxPoint) {
+        this.maxPoint = maxPoint;
+    }
+    
 }

@@ -150,6 +150,9 @@
                                    [disabled]="true"
                             />
                             <label for="lockScreen">Khóa màn hình khi thi</label>
+                            <span class="text-sm text-blue-700 font-semibold">
+                              Tổng điểm tối đa: {{ exam.maxPoint !== undefined && exam.maxPoint !== null ? exam.maxPoint : 100 }}
+                            </span>
                           </div>
                         </div>
                       </div>

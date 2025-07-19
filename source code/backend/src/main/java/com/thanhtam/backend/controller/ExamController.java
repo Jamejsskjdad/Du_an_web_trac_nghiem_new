@@ -264,43 +264,53 @@ public class ExamController {
         @RequestParam Long partId,
         @RequestParam boolean isShuffle,
         @RequestParam boolean locked,
-        @RequestParam("lockScreen") boolean lockScreen  // ✅ thêm dòng này
+        @RequestParam("lockScreen") boolean lockScreen
     ) {
         try {
             String username = userService.getUserName();
             User user = userService.getUserByUsername(username).get();
-    
+
+            // Đảm bảo maxPoint hợp lệ
+            if (exam.getMaxPoint() < 1) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Tổng điểm tối đa phải >= 1");
+            }
+
             Optional<Intake> intake = intakeService.findById(intakeId);
             if (intake.isPresent()) {
                 exam.setIntake(intake.get());
             }
-    
+
             Optional<Part> part = partService.findPartById(partId);
             if (part.isPresent()) {
                 exam.setPart(part.get());
             }
-    
+
             exam.setCreatedBy(user);
             exam.setShuffle(isShuffle);
-            exam.setLockScreen(lockScreen);  // ✅ thêm dòng này
+            exam.setLockScreen(lockScreen);
             exam.setCanceled(false);
-            logger.error("begin: " + exam.getBeginExam());
-    
+
+            // Nếu cần kiểm tra tổng điểm câu hỏi (ví dụ: sum point > maxPoint)
+            ObjectMapper mapper = new ObjectMapper();
+            String questionJson = exam.getQuestionData();
+            List<ExamQuestionPoint> examQuestionPoints = mapper.readValue(questionJson, new TypeReference<List<ExamQuestionPoint>>() {});
+            int sumPoint = examQuestionPoints.stream().mapToInt(ExamQuestionPoint::getPoint).sum();
+            if (sumPoint > exam.getMaxPoint()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Tổng điểm câu hỏi vượt quá tổng điểm tối đa (" + exam.getMaxPoint() + ")");
+            }
+
+            logger.info("begin: " + exam.getBeginExam() + ", maxPoint=" + exam.getMaxPoint());
+
             this.examService.saveExam(exam);
             List<User> users = userService.findAllByIntakeId(intakeId);
             examUserService.create(exam, users);
-    
-            // Parse questionData json
-            ObjectMapper mapper = new ObjectMapper();
-            String questionJson = exam.getQuestionData();
-            List<ExamQuestionPoint> examQuestionPoints = mapper.readValue(questionJson, new TypeReference<List<ExamQuestionPoint>>() {
-            });
-    
+
             return ResponseEntity.ok(exam);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
+
     
 
     @GetMapping(value = "/exams/{id}")

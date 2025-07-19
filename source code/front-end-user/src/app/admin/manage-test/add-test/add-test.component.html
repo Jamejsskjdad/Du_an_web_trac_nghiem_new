@@ -191,6 +191,25 @@
                             <label for="lockScreen">Khóa màn hình khi thi</label>
                           </div>
                         </div>
+                      </div>
+                      <div class="w-64 px-3 flex flex-col justify-end">
+                        <label class="block uppercase tracking-wide text-gray-600 text-xs font-bold mb-2" for="maxPoint">
+                          Tổng điểm tối đa <span class="text-red-500">*</span>
+                        </label>
+                        <input type="number"
+                               class="appearance-none border rounded-md w-full py-2 px-3 my-1 text-gray-600 bg-gray-200 leading-tight outline-none focus:border-blue-500"
+                               id="maxPoint"
+                               formControlName="maxPoint"
+                               min="1"
+                               required
+                               [ngModel]="rfAdd.get('maxPoint').value"
+                               (ngModelChange)="rfAdd.get('maxPoint').setValue($event)"
+                               autocomplete="off"
+                               placeholder="Nhập tổng điểm tối đa"
+                        >
+                        <div *ngIf="maxPoint.invalid && (maxPoint.dirty || maxPoint.touched)" class="text-red-500 text-xs italic">
+                          Tổng điểm tối đa phải lớn hơn hoặc bằng 1
+                        </div>
                       </div>                   
                     </div>
                     </div>                   
@@ -296,9 +315,10 @@
                   </div>
                   <div>
                     <span class="text-red-500 bg-red-200 rounded px-2 py-1 text-sm"
-                          *ngIf="getTotalPoint()>100">Điểm số vượt quá 100</span>
+                        *ngIf="getTotalPoint() > maxPoint.value">Điểm số vượt quá {{maxPoint.value}}
+                    </span>
                     <span class="mx-1">Tổng điểm:</span>
-                    <span class="mx-1 text-blue-700">{{getTotalPoint()}}/100</span>
+                    <span class="mx-1 text-blue-700">{{getTotalPoint()}}/{{maxPoint.value}}</span>
                   </div>
                 </div>
 

@@ -78,19 +78,23 @@ export class AddTestComponent implements OnInit {
   get intake() {
     return this.rfAdd.get('intake');
   }
-
+  get maxPoint() {
+    return this.rfAdd.get('maxPoint');
+  }
+  
   ngOnInit(): void {
     this.rfAdd = this.fb.group({
-        testTitle: [''],
-        timeBegin: [''],
-        timeEnd: [''],
-        timeDuration: [0],
-        locked: [false],
-        isShuffle: [false],
-        isLockScreen: [false],
-        intake: [-1]
-      }
-    );
+      testTitle: [''],
+      timeBegin: [''],
+      timeEnd: [''],
+      timeDuration: [0],
+      locked: [false],
+      isShuffle: [false],
+      isLockScreen: [false],
+      intake: [-1],
+      maxPoint: [100] // ✅ Thêm dòng này, giá trị mặc định là 100
+  });
+  
   
     this.intakeService.getIntakeList().subscribe(res => {
       this.intakeList = res;
@@ -101,33 +105,42 @@ export class AddTestComponent implements OnInit {
   
 
   onSubmit() {
-    if (this.getTotalPoint() !== 100) {
-      this.toast.error('Điểm số không phù hợp', 'Lỗi');
+    if (!this.maxPoint.value || this.maxPoint.value < 1) {
+      this.toast.error('Vui lòng nhập tổng điểm tối đa hợp lệ (>=1)', 'Lỗi');
       return;
     }
+    if (this.getTotalPoint() > this.maxPoint.value) {
+      this.toast.error('Tổng điểm các câu hỏi vượt quá tổng điểm tối đa', 'Lỗi');
+      return;
+    }
+    // Các bước cũ giữ nguyên
     this.questionDataJson.length = 0;
     this.questionListSelected.forEach(item => {
       this.questionDataJson.push({questionId: item.id, point: item.point});
     });
-
+  
     const newExam = new Exam(
       this.testTitle.value,
       this.timeDuration.value,
       moment(this.timeBegin.value).format('YYYY-MM-DD HH:mm:ss'),
       moment(this.timeEnd.value).format('YYYY-MM-DD HH:mm:ss'),
-      JSON.stringify(this.questionDataJson));
-
-      this.examService.createExam(
-        this.intake.value,
-        this.selectedPartId,
-        this.isShuffle.value,
-        this.locked.value,
-        this.rfAdd.get('isLockScreen').value, // ✅ Truyền thêm tham số mới
-        newExam).subscribe(res => {
+      JSON.stringify(this.questionDataJson),
+      this.maxPoint.value // Thêm giá trị này nếu Exam constructor đã có (xem mục 5)
+    );
+  
+    this.examService.createExam(
+      this.intake.value,
+      this.selectedPartId,
+      this.isShuffle.value,
+      this.locked.value,
+      this.rfAdd.get('isLockScreen').value,
+      newExam
+    ).subscribe(res => {
       this.toast.success('Đã tạo bài kiểm tra', 'Thành công');
       setTimeout(() => this.goToExamManagePage(), 1000);
     });
   }
+  
 
   changeCourse(event) {
     this.selectedCourseId = event.target.value;
