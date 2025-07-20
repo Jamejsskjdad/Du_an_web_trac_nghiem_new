@@ -403,55 +403,48 @@ public class ExamController {
     }
 
     @GetMapping(value = "/exams/{examId}/result/all/question-report")
-    public ResponseEntity getResultExamQuestionsReport(@PathVariable Long examId) throws IOException {
+public ResponseEntity getResultExamQuestionsReport(@PathVariable Long examId) throws IOException {
+    Optional<Exam> exam = examService.getExamById(examId);
+    if (!exam.isPresent()) {
+        logger.error("NOT found");
+        return new ResponseEntity("Không tìm thấy exam", HttpStatus.NOT_FOUND);
+    }
+    List<ExamUser> finishedExamUser = examUserService.findExamUsersByIsFinishedIsTrueAndExam_Id(examId);
+    if (finishedExamUser.size() == 0) {
+        return new ResponseEntity("Chưa có người dùng thực hiện bài kiểm tra", HttpStatus.OK);
+    }
+    List<ExamQuestionPoint> examQuestionPoints = convertQuestionJsonToObject(exam);
 
-        Optional<Exam> exam = examService.getExamById(examId);
-        if (!exam.isPresent()) {
-            logger.error("NOT found");
-            return new ResponseEntity("Không tìm thấy exam", HttpStatus.NOT_FOUND);
-        }
-        List<ExamUser> finishedExamUser = examUserService.findExamUsersByIsFinishedIsTrueAndExam_Id(examId);
-        if (finishedExamUser.size() == 0) {
-            return new ResponseEntity("Chưa có người dùng thực hiện bài kiểm tra", HttpStatus.OK);
-        }
-        ExamUser firstExamUser = finishedExamUser.get(0);
-        List<QuestionExamReport> questionExamReports = new ArrayList<>();
-        List<ExamQuestionPoint> examQuestionPoints = convertQuestionJsonToObject(exam);
-//        convert answer sheet of first user
-        List<AnswerSheet> userChoicesFirstExam = convertAnswerJsonToObject(firstExamUser);
-//        get exam result of first user
-        List<ChoiceList> firstChoiceList = examService.getChoiceList(userChoicesFirstExam, examQuestionPoints);
-        for (ChoiceList choice : firstChoiceList) {
-            QuestionExamReport questionExamReport = new QuestionExamReport();
-            questionExamReport.setQuestion(choice.getQuestion());
+    // Chuẩn bị report cho từng câu hỏi
+    List<QuestionExamReport> questionExamReports = new ArrayList<>();
+    for (ExamQuestionPoint eqp : examQuestionPoints) {
+        QuestionExamReport report = new QuestionExamReport();
+        Question question = questionService.getQuestionById(eqp.getQuestionId()).orElse(null);
+        report.setQuestion(question);
+        report.setCorrectTotal(0);
+        questionExamReports.add(report);
+    }
 
-            if (choice.getIsSelectedCorrected().equals(true)) {
-                questionExamReport.setCorrectTotal(1);
-            } else {
-                questionExamReport.setCorrectTotal(0);
-            }
-            questionExamReports.add(questionExamReport);
-        }
+    // Đếm số người trả lời đúng cho từng câu hỏi
+    for (ExamUser user : finishedExamUser) {
+        List<AnswerSheet> answerSheets = convertAnswerJsonToObject(user);
+        List<ChoiceList> choiceLists = examService.getChoiceList(answerSheets, examQuestionPoints);
 
-//        done for first user
-        if (questionExamReports.size() == 0) {
-            return new ResponseEntity(questionExamReports, HttpStatus.OK);
-        }
-        for (int i = 1; i < finishedExamUser.size(); i++) {
-            List<AnswerSheet> userChoices = convertAnswerJsonToObject(firstExamUser);
-//        get exam result of first user
-            List<ChoiceList> choiceList = examService.getChoiceList(userChoices, examQuestionPoints);
-            for (ChoiceList choice : firstChoiceList) {
-
-                List<QuestionExamReport> questionExamReportsList = questionExamReports.stream().filter(item -> item.getQuestion().getId() == choice.getQuestion().getId()).collect(Collectors.toList());
-                QuestionExamReport questionExamReport = questionExamReportsList.get(0);
-                if (choice.getIsSelectedCorrected().equals(true)) {
-                    questionExamReport.setCorrectTotal(questionExamReport.getCorrectTotal() + 1);
+        for (ChoiceList choice : choiceLists) {
+            // Tìm đúng report cho question này
+            for (QuestionExamReport report : questionExamReports) {
+                if (report.getQuestion().getId().equals(choice.getQuestion().getId())) {
+                    if (Boolean.TRUE.equals(choice.getIsSelectedCorrected())) {
+                        report.setCorrectTotal(report.getCorrectTotal() + 1);
+                    }
                 }
             }
         }
-        return new ResponseEntity(questionExamReports, HttpStatus.OK);
     }
+
+    return new ResponseEntity(questionExamReports, HttpStatus.OK);
+}
+
 
     @GetMapping(value = "/exams/{examId}/result")
     public ResponseEntity getResultExam(@PathVariable Long examId) throws IOException {

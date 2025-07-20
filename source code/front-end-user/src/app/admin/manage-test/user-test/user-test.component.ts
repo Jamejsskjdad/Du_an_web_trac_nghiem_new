@@ -60,9 +60,10 @@ export class UserTestComponent implements OnInit {
   }
 
   getPercent(x: number, size: number) {
-    const dv = x / size;
-    return 100 * Math.round((dv + 0.00001) * 100) / 100;
+    if (!size || size === 0) return 0;
+    return Math.round((x / size) * 100);
   }
+  
 
   getQuestionReport() {
     this.examService.getExamQuestionReport(this.examId).subscribe(data => {
@@ -72,23 +73,44 @@ export class UserTestComponent implements OnInit {
       this.skeleton = false;
     });
   }
-
+  getFinishedUserCount(): number {
+    // Tùy backend quy ước examStatus: -1 = Hoàn thành (thường vậy)
+    return this.examResults.filter(e =>
+      e.examStatus === -1 &&
+      typeof e.totalPoint === 'number' &&
+      !isNaN(e.totalPoint)
+    ).length;
+  }
+  
   getExamList() {
     this.examService.getExamResultListByExamId(this.examId).subscribe(data => {
       this.examResults = data;
-      this.dataSort = _.shuffle(data).slice(0, 10);
-// ✅ Kiểm tra phần tử bị thiếu user hoặc profile
-    this.examResults.forEach((exam, index) => {
-      if (!exam.user) {
-        console.warn(`⚠️ [examResults[${index}]] thiếu user`, exam);
-      } else if (!exam.user.profile) {
-        console.warn(`⚠️ [examResults[${index}]] thiếu user.profile`, exam);
-      }
-    });
-          this.chartOptions = {
+  
+      // Lọc user hợp lệ và điểm là số hợp lệ
+      const validResults = this.examResults.filter(
+        exam => exam.user && exam.user.profile && typeof exam.totalPoint === 'number' && !isNaN(exam.totalPoint)
+      );
+      // Sắp xếp giảm dần theo điểm, lấy top 10
+      this.dataSort = _.orderBy(validResults, 'totalPoint', 'desc').slice(0, 10);
+  
+      // Màu cố định (tuỳ ý bạn, thêm màu nếu >10 user)
+      const fixedColors = [
+        '#4CAF50', // xanh lá
+        '#2196F3', // xanh dương
+        '#FFC107', // vàng
+        '#E91E63', // hồng
+        '#9C27B0', // tím
+        '#FF5722', // cam
+        '#3F51B5', // xanh tím
+        '#009688', // teal
+        '#795548', // nâu
+        '#607D8B', // xám xanh
+      ];
+  
+      this.chartOptions = {
         series: [{
           name: 'Result',
-          data: this.dataSort.map(value => value.totalPoint || NaN)
+          data: this.dataSort.map(value => value.totalPoint ?? NaN)
         }],
         chart: {
           type: 'bar',
@@ -104,7 +126,7 @@ export class UserTestComponent implements OnInit {
             }
           }
         },
-        colors: this.dataSort.map(() => this.colorsService.getRandomColor()),
+        colors: fixedColors.slice(0, this.dataSort.length), // Dùng đúng số màu cho số user
         dataLabels: {
           enabled: true,
           textAnchor: 'start',
@@ -112,7 +134,9 @@ export class UserTestComponent implements OnInit {
             colors: ['#fff']
           },
           formatter(val, opt) {
-            return opt.w.globals.labels[opt.dataPointIndex] + ': ' + val + ' point';
+            // Nếu label bị undefined sẽ trả về chuỗi rỗng
+            const label = opt.w.globals.labels[opt.dataPointIndex] || '';
+            return label + ': ' + val + ' point';
           },
           offsetX: 0,
           dropShadow: {
@@ -124,18 +148,28 @@ export class UserTestComponent implements OnInit {
           colors: ['#fff']
         },
         xAxis: {
-          categories: this.dataSort.map(val => `${val.user.profile.lastName} ${val.user.profile.firstName}`)
+          categories: this.dataSort.map(val => 
+            val.user?.profile
+              ? `${val.user.profile.lastName} ${val.user.profile.firstName}`
+              : '[No name]'
+          )
         },
         yAxis: {
           labels: { show: false }
         },
         subtitle: {
-          text: 'Category Names as DataLabels inside bars',
+          text: 'Top 10 điểm số cao nhất',
           align: 'center'
         }
       };
+  
+      // Log các giá trị để kiểm tra trực quan trên console
+      console.log('Data hiển thị trên biểu đồ:', this.dataSort);
+      console.log('chartOptions:', this.chartOptions);
     });
   }
+  
+  
 
   trackById(index: number, item: ExamResult): any {
     console.log('trackById', item?.user?.username ?? index);
