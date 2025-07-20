@@ -1,4 +1,4 @@
-  <div class="w-full lg:w-6/12 xl:w-3/12 px-4 my-2">
+<div class="w-full lg:w-6/12 xl:w-3/12 px-4 my-2">
   <div
     class="cursor-pointer relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg hover:shadow-2xl">
     <div class="flex-auto p-4">
@@ -8,8 +8,8 @@
             <span>{{courseCard.courseCode}}</span>
           </h5>
           <span class="font-semibold text-xl text-gray-800">
-                      {{courseCard.countExam}}
-                    </span>
+            {{courseCard.countExam}}
+          </span>
         </div>
         <div class="relative w-auto pl-4 flex-initial">
           <div
@@ -23,23 +23,23 @@
         <ng-container [ngSwitch]="courseCard.compareLastWeek">
           <ng-template [ngSwitchCase]="1">
             <span class="text-green-500 mr-2">
-                    <i class="fa fa-arrow-up p-1 rounded-full bg-green-200"></i> {{courseCard.changeRating}}%
-                  </span>
+              <i class="fa fa-arrow-up p-1 rounded-full bg-green-200"></i> {{courseCard.changeRating}}%
+            </span>
           </ng-template>
           <ng-template [ngSwitchCase]="-1">
             <span class="text-red-500 mr-2">
-                    <i class="fa fa-arrow-down p-1 rounded-full bg-red-200"></i> {{courseCard.changeRating}}%
-                  </span>
+              <i class="fa fa-arrow-down p-1 rounded-full bg-red-200"></i> {{courseCard.changeRating}}%
+            </span>
           </ng-template>
           <ng-template [ngSwitchCase]="0">
             <span class="text-gray-500 mr-2">
-                    <i class="fa fa-minus p-1 rounded-full bg-gray-200"></i> {{courseCard.changeRating}}%
-                  </span>
+              <i class="fa fa-minus p-1 rounded-full bg-gray-200"></i> {{courseCard.changeRating}}%
+            </span>
           </ng-template>
 
         </ng-container>
 
-        <span class="whitespace-no-wrap text-gray-600"> vs last week </span>
+        <span class="whitespace-no-wrap text-gray-600"> So với tuần trước </span>
       </p>
     </div>
   </div>

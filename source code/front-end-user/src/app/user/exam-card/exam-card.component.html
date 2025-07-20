@@ -3,7 +3,7 @@
   <a [routerLink]="['/user/exams', examUser?.exam?.id]">
     <div class="relative img-hover-zoom">
       <img alt="image of {{examUser?.exam.part.course.name}}" class="bg-img block h-56 w-full"
-           src="{{examUser?.exam.part.course.imgUrl}}">
+        src="{{examUser?.exam.part.course.imgUrl}}">
       <i class="fa fa-circle absolute top-0 right-0 mt-4 mr-4" [ngClass]="icon"></i>
     </div>
   </a>
@@ -11,40 +11,40 @@
   <header class="flex items-center justify-between leading-tight p-2 md:p-3">
     <h1 class="text-lg">
       <a class="no-underline hover:underline font-bold text-xl text-gray-700"
-         [routerLink]="['/user/exams', examUser?.exam?.id]">
-        {{examUser?.exam?.title}}
+        [routerLink]="['/user/exams', examUser?.exam?.id]">
+        <strong>{{examUser?.exam?.title}}</strong>
       </a>
     </h1>
 
   </header>
   <div class="text-gray-600 text-sm p-3 pb-0 flex justify-between">
     <p>
-      {{examUser.exam.beginExam}}
+      <strong> {{examUser.exam.beginExam}}</strong>
     </p>
 
     <ng-container [ngSwitch]="status">
       <ng-template [ngSwitchCase]="-2">
         <p class="text-sm text-red-500 flex items-center">
           <span class="mr-2"><i class="fa fa-lock"></i></span>
-          Missed
+          <b>Bỏ lỡ</b>
         </p>
       </ng-template>
       <ng-template [ngSwitchCase]="-1">
         <p class="text-sm text-gray-500 flex items-center">
           <span class="mr-2"><i class="fa fa-lock"></i></span>
-          Completed
+          <b>Hoàn thành</b>
         </p>
       </ng-template>
       <ng-template [ngSwitchCase]="0">
         <p class="text-sm text-yellow-500 flex items-center">
           <span class="mr-2"><i class="fa fa-lock"></i></span>
-          Waiting
+          <b>Đang chờ</b>
         </p>
       </ng-template>
       <ng-template [ngSwitchCase]="1">
         <p class="text-sm text-green-500 flex items-center">
           <span class="mr-2"><i class="fa fa-unlock"></i></span>
-          Doing
+          <b>Đang diễn ra</b>
         </p>
       </ng-template>
     </ng-container>
@@ -61,11 +61,9 @@
     <div class="inline-block bg-gray-300 rounded-full px-3 py-1 text-sm font-semibold text-gray-700">
 
       <i class="fa fa-clock-o text-gray-700 lg:mr-1"></i>
-      <span>{{examUser.exam.durationExam}} min</span>
+      <span>{{examUser.exam.durationExam}} phút</span>
     </div>
   </footer>
 
 </article>
 <!-- END Article -->
-
-

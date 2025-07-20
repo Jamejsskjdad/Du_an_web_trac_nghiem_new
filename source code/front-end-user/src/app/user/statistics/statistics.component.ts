@@ -99,7 +99,7 @@ export class StatisticsComponent implements OnInit {
           enabled: true,
           formatter(val) {
             if (val) {
-              return val + ' point';
+              return val + 'điểm';
             }
           },
           offsetX: -20,
@@ -129,7 +129,7 @@ export class StatisticsComponent implements OnInit {
           labels: {
             show: true,
             formatter(val) {
-              return val + ' point';
+              return val + ' điểm';
             }
           }
         },

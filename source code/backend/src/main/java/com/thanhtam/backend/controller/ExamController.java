@@ -577,16 +577,16 @@ public ResponseEntity getResultExamQuestionsReport(@PathVariable Long examId) th
 
 
             if (examUser.getExam().getFinishExam().compareTo(now) < 0 && examUser.getIsStarted().equals(false)) {
-                examCalendar.setCompleteString("Missed");
+                examCalendar.setCompleteString("Bỏ lỡ");
                 examCalendar.setIsCompleted(-2);
             } else if (examUser.getIsStarted().equals(false) && examUser.getExam().getBeginExam().compareTo(now) == 1) {
-                examCalendar.setCompleteString("Not yet started");
+                examCalendar.setCompleteString("Chưa diễn ra");
                 examCalendar.setIsCompleted(0);
             } else if (examUser.getIsFinished().equals(true)) {
-                examCalendar.setCompleteString("Completed");
+                examCalendar.setCompleteString("Hoàn thành");
                 examCalendar.setIsCompleted(-1);
             } else {
-                examCalendar.setCompleteString("Doing");
+                examCalendar.setCompleteString("Đang diễn ra");
                 examCalendar.setIsCompleted(1);
             }
 

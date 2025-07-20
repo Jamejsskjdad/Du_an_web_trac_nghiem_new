@@ -1,18 +1,23 @@
 <xng-breadcrumb></xng-breadcrumb>
 
 <div class="flex text-center flex-col w-full h-auto items-center">
-  <h2 class="text-center my-2 mt-5 font-bold  px-2 py-1 bg-blue-300 rounded">Title: {{examUser?.exam?.title}}</h2>
+  <h1 class="text-center my-2 mt-5 font-bold  px-2 py-1 bg-blue-300 rounded">Tiêu đề: {{examUser?.exam?.title}}</h1>
   <div class="flex flex-row flex-wrap justify-center">
-    <div class="my-2 mx-3 px-2 py-1 bg-gray-300 rounded"><span class="mx-2"><i class="fa fa-book"></i></span>Course:
-      {{examUser?.exam?.part?.course?.name}}</div>
-    <div class="my-2 mx-3 px-2 py-1 bg-gray-300 rounded">Part: {{examUser?.exam?.part?.name}}</div>
+    <div class="my-2 mx-3 px-2 py-1 bg-gray-300 rounded"><span class="mx-2"><i class="fa fa-book"></i></span>Khóa học:
+      <b>{{examUser?.exam?.part?.course?.name}}</b>
+    </div>
+    <div class="my-2 mx-3 px-2 py-1 bg-gray-300 rounded">Phần: <b>{{examUser?.exam?.part?.name}}</b></div>
   </div>
-  <div class="my-2 px-2 py-1 bg-gray-300 rounded"><span class="mx-2"><i class="fa fa-calendar"></i></span>Bài kiểm tra
-    này sẽ mở vào lúc {{examUser?.exam?.beginExam | date: 'medium'}}</div>
-  <div class="my-2 px-2 py-1 bg-gray-300 rounded"><span class="mx-2"><i class="fa fa-calendar-times-o"></i></span>Bài
-    kiểm tra này sẽ đóng vào lúc
-    at {{examUser?.exam?.finishExam | date:'medium'}}</div>
-  <div class="my-2 px-2 py-1 bg-gray-300 rounded mb-8">Thời gian làm bài {{examUser?.exam?.durationExam}} phút</div>
+  <div class="my-2 px-2 py-1 bg-gray-300 rounded">
+    <span class="mx-2"><i class="fa fa-calendar"></i></span>Bài kiểm tra
+    này sẽ mở vào lúc <strong><i>{{examUser?.exam?.beginExam | date: 'medium'}}</i></strong>
+  </div>
+  <div class="my-2 px-2 py-1 bg-gray-300 rounded">
+    <span class="mx-2"><i class="fa fa-calendar-times-o"></i></span>
+    Bài kiểm tra này sẽ đóng vào lúc <strong><i>{{examUser?.exam?.finishExam | date:'medium'}}</i></strong>
+  </div>
+  <div class="my-2 px-2 py-1 bg-gray-300 rounded mb-8">Thời gian làm bài: <strong>
+      {{examUser?.exam?.durationExam}} phút </strong></div>
   <div class="flex justify-center my-5" *ngIf="canStart">
     <a *ngIf="examUser?.isStarted === false && isAvailable" [routerLink]="['./start']"
       class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer">
