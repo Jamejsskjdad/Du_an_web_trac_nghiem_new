@@ -16,7 +16,6 @@
       "architect": {
         "build": {
           "builder": "@angular-builders/custom-webpack:browser",
-
           "options": {
             "outputPath": "dist/front-end-user",
             "customWebpackConfig": {
@@ -27,7 +26,6 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "aot": true,
-
             "assets": [
               "src/favicon.ico",
               "src/assets"
@@ -136,6 +134,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "front-end-user"
+    }
+  },
+  "defaultProject": "front-end-user",
+  "cli": {
+    "analytics": "c9839895-41ca-4bba-9aed-43bef7a6cc12"
+  }
 }

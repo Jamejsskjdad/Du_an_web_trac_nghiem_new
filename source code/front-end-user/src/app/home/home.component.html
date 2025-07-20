@@ -2,7 +2,7 @@
 
   <div class="relative min-h-screen overflow-hidden bg-gray-900 lg:bg-gray-300">
     <div class="hidden lg:block absolute scroll-bg"
-         style="height: 400%; width: 400%; top: -25%; left: -100%; background-size: 800px auto; background-image: url('../../assets/images/hero-pattern-lg.png');">
+      style="height: 400%; width: 400%; top: -25%; left: -100%; background-size: 800px auto; background-image: url('../../assets/images/hero-pattern-lg.png');">
     </div>
     <div
       class="bg-welcome relative min-h-screen lg:min-w-3xl xl:min-w-4xl lg:flex lg:items-center lg:justify-center lg:w-3/5 lg:py-20 lg:pl-8 lg:pr-8 bg-no-repeat"
@@ -11,11 +11,11 @@
         <div class="px-6 pt-8 pb-12 md:max-w-3xl md:mx-auto lg:mx-0 lg:max-w-none lg:pt-0 lg:pb-16">
           <div class="flex items-center justify-between">
             <div>
-              <img class="h-6 lg:h-8 xl:h-9" src="../../assets/images/logo.svg" alt="Tailwind UI"/>
+              <img class="h-6 lg:h-8 xl:h-9" src="../../assets/images/logo.svg" alt="Tailwind UI" />
             </div>
             <div>
               <a [routerLink]="[defaultUrl]"
-                 class="text-sm font-semibold text-white focus:outline-none focus:underline">
+                class="text-sm font-semibold text-white focus:outline-none focus:underline">
                 {{!isLoggedIn ? 'Đăng nhập &rarr;' : 'Vào ngay &rarr;'}}
               </a>
             </div>
@@ -28,7 +28,7 @@
           <h1
             class="mt-3 text-3xl leading-9 font-semibold font-display text-white sm:mt-6 sm:text-4xl sm:leading-10 xl:text-5xl xl:leading-snug">
             Chào mừng đến với trang web
-            <br class="hidden sm:inline"/>
+            <br class="hidden sm:inline" />
             <span class="text-teal-400">kiểm tra trắc nghiệm online.</span>
           </h1>
           <!--          <p-->
@@ -40,45 +40,46 @@
           <div class="mt-6 sm:flex sm:mt-8 xl:mt-12">
 
             <a [routerLink]="[defaultUrl]"
-               class="mt-4 sm:ml-4 sm:mt-0 w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 border border-transparent text-base leading-6 font-semibold rounded-md text-white bg-gray-800 shadow-sm hover:bg-gray-700 focus:outline-none focus:bg-gray-700 transition ease-in-out duration-150 xl:text-lg xl:py-4">
+              class="mt-4 sm:ml-4 sm:mt-0 w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 border border-transparent text-base leading-6 font-semibold rounded-md text-white bg-gray-800 shadow-sm hover:bg-gray-700 focus:outline-none focus:bg-gray-700 transition ease-in-out duration-150 xl:text-lg xl:py-4">
               Khám phá ngay &rarr;
             </a>
           </div>
         </div>
         <div class="mt-8 sm:mt-12 relative h-64 overflow-hidden bg-gray-300 lg:hidden">
           <div class="absolute scroll-bg"
-               style="height: 800%; width: 400%; top: -100%; left: -100%; background-size: 400px auto; background-image: url('../../assets/images/hero-pattern-lg.png');">
+            style="height: 800%; width: 400%; top: -100%; left: -100%; background-size: 400px auto; background-image: url('../../assets/images/hero-pattern-lg.png');">
           </div>
         </div>
         <div class="px-6 py-8 sm:pt-12 md:max-w-3xl md:mx-auto lg:mx-0 lg:max-w-full lg:py-0 lg:pt-24">
           <p class="text-sm font-semibold text-gray-300 uppercase tracking-wider">Thiết kế và phát triển bởi
           </p>
           <div class="mt-4 sm:flex flex:row">
-            <a href="https://twitter.com/httam298" class="flex items-center no-underline mr-6">
-              <div class="flex-shrink-0">
+
+            <div class="flex space-x-8">
+              <!-- Developer 1 -->
+              <div class="flex items-center">
                 <img class="h-12 w-12 rounded-full border-2 border-white"
-                     src="https://avatars1.githubusercontent.com/u/46307504?s=460&u=a75c4f0968df34649bdb9745dbab83acd628d702&v=4"
-                     alt="Đây là ảnh đại diện của Huỳnh Thanh Tâm"/>
+                  src="https://static.wikia.nocookie.net/arenaofvalor/images/0/05/Rank_cao_th%E1%BB%A7.webp/revision/latest?cb=20230809155121&path-prefix=vi"
+                  alt="Đây là ảnh đại diện của NDT" />
+                <div class="ml-4 text-white">
+                  <p class="font-semibold">Nguyễn Đăng Trường</p>
+                  <p class="text-sm text-gray-400">Developer</p>
+                </div>
               </div>
-              <div class="ml-3">
-                <p class="font-semibold text-white leading-tight">Huỳnh Thanh Tâm</p>
-                <p class="text-sm text-gray-500 leading-tight">Developer</p>
-              </div>
-            </a>
-            <div class="flex justify-start items-center mt-3 sm:mt-4">
-              <div
-                class="mr-2 text-white text-xs cursor-pointer rounded-full w-6 h-6 flex items-center justify-center bg-gray-800 hover:bg-blue-500 text-gray-500 hover:text-white transition duration-200 ease-in-out">
-                <a href="https://twitter.com/httam298"><i class="fa fa-twitter"></i></a>
-              </div>
-              <div
-                class="mr-2 text-white text-xs cursor-pointer rounded-full w-6 h-6 flex items-center justify-center bg-gray-800 hover:bg-blue-800 text-gray-500 hover:text-white transition duration-200 ease-in-out">
-                <a href="https://www.facebook.com/tth298"><i class="fa fa-facebook"></i></a>
-              </div>
-              <div
-                class="text-white text-xs cursor-pointer rounded-full w-6 h-6 flex items-center justify-center bg-gray-800 hover:bg-gray-800 text-gray-500 hover:text-white transition duration-200 ease-in-out">
-                <a href="https://github.com/tamht298"><i class="fa fa-github"></i></a>
+
+              <!-- Developer 2 -->
+              <div class="flex items-center ml-4">
+                <img class="h-12 w-12 rounded-full border-2 border-white"
+                  src="https://avatars1.githubusercontent.com/u/46307504?s=460&u=a75c4f0968df34649bdb9745dbab83acd628d702&v=4"
+                  alt="Đây là ảnh đại diện của " />
+                <div class="ml-4 text-white">
+                  <p class="font-semibold">Nguyễn Ngọc Khoa</p>
+                  <p class="text-sm text-gray-400">Developer</p>
+                </div>
               </div>
             </div>
+
+
           </div>
         </div>
       </div>
@@ -96,9 +97,8 @@
               class="content-overlay absolute rounded-md h-full w-full opacity-0 transition-all duration-500 ease-in-out">
             </div>
             <img src="../../assets/images/field/Swift_Fundamental.jpg" class="content-image w-full h-full p-5 lg:py-8 "
-                 alt="">
-            <div
-              class="content-details w-full absolute fadeIn-down opacity-0 m-auto flex items-center justify-center">
+              alt="">
+            <div class="content-details w-full absolute fadeIn-down opacity-0 m-auto flex items-center justify-center">
               <h3 class="text-white lg:text-xl lg:px-2 text-center text-4xl">Lập trình</h3>
             </div>
 
@@ -109,9 +109,8 @@
               class="content-overlay absolute rounded-md h-full w-full opacity-0 transition-all duration-500 ease-in-out">
             </div>
             <img src="../../assets/images/field/Critical_Thinking.jpg" class="content-image w-full h-full p-5 lg:py-8 "
-                 alt="">
-            <div
-              class="content-details w-full absolute fadeIn-down opacity-0 m-auto flex items-center justify-center">
+              alt="">
+            <div class="content-details w-full absolute fadeIn-down opacity-0 m-auto flex items-center justify-center">
               <h3 class="text-white lg:text-xl lg:px-2 text-center text-4xl">Kỹ năng mềm</h3>
             </div>
 
@@ -122,10 +121,8 @@
               class="content-overlay absolute rounded-md h-full w-full opacity-0 transition-all duration-500 ease-in-out">
             </div>
             <img src="../../assets/images/field/Professional_Speaking.jpg"
-                 class="content-image w-full h-full p-5 lg:py-8 "
-                 alt="">
-            <div
-              class="content-details w-full absolute fadeIn-down opacity-0 m-auto flex items-center justify-center">
+              class="content-image w-full h-full p-5 lg:py-8 " alt="">
+            <div class="content-details w-full absolute fadeIn-down opacity-0 m-auto flex items-center justify-center">
               <h3 class="text-white lg:text-xl lg:px-2 text-center text-4xl">Tiếng anh</h3>
             </div>
 
@@ -135,10 +132,8 @@
             <div
               class="content-overlay absolute rounded-md h-full w-full opacity-0 transition-all duration-500 ease-in-out">
             </div>
-            <img src="../../assets/images/field/Selenium.jpg" class="content-image w-full h-full p-5 lg:py-8 "
-                 alt="">
-            <div
-              class="content-details w-full absolute fadeIn-down opacity-0 m-auto flex items-center justify-center">
+            <img src="../../assets/images/field/Selenium.jpg" class="content-image w-full h-full p-5 lg:py-8 " alt="">
+            <div class="content-details w-full absolute fadeIn-down opacity-0 m-auto flex items-center justify-center">
               <h3 class="text-white lg:text-xl lg:px-2 text-center text-4xl">Testing</h3>
             </div>
 
@@ -149,9 +144,8 @@
               class="content-overlay absolute rounded-md h-full w-full opacity-0 transition-all duration-500 ease-in-out">
             </div>
             <img src="../../assets/images/field/Working_Process.jpg" class="content-image w-full h-full p-5 lg:py-8 "
-                 alt="">
-            <div
-              class="content-details w-full absolute fadeIn-down opacity-0 m-auto flex items-center justify-center">
+              alt="">
+            <div class="content-details w-full absolute fadeIn-down opacity-0 m-auto flex items-center justify-center">
               <h3 class="text-white lg:text-xl lg:px-2 text-center text-4xl">Kỹ năng làm việc nhóm</h3>
             </div>
 
@@ -222,24 +216,23 @@
                 <label for="contact-name" class="text-gray-500 text-sm md:text-xs font-semibold select-none">Tiêu
                   đề</label>
                 <input formControlName="subject"
-                       class="appearance-none border rounded-md w-full py-2 px-3 mt-1 text-gray-600 font-semibold bg-gray-200 leading-tight outline-none focus:border-green-500"
-                       id="contact-name" type="text" placeholder="Nhập tiêu đề" autocomplete="off">
+                  class="appearance-none border rounded-md w-full py-2 px-3 mt-1 text-gray-600 font-semibold bg-gray-200 leading-tight outline-none focus:border-green-500"
+                  id="contact-name" type="text" placeholder="Nhập tiêu đề" autocomplete="off">
                 <p class="text-red-500 text-xs italic"
-                   *ngIf="subject?.hasError('required') && (subject.dirty || subject.touched)">
+                  *ngIf="subject?.hasError('required') && (subject.dirty || subject.touched)">
                   Tiêu đề không được bỏ trống</p>
               </div>
               <div class="md:mx-2 lg:mx-0 w-full sm:max-w-sm sm:w-1/2 md:w-full pb-3 relative">
                 <label for="contact-email" class="text-gray-500 text-sm md:text-xs font-semibold select-none">Địa chỉ
                   email</label>
                 <input formControlName="email" required
-                       class="appearance-none border rounded-md w-full py-2 px-3 mt-1 text-gray-600 font-semibold bg-gray-200 leading-tight outline-none focus:border-green-500"
-                       id="contact-email" type="email" placeholder="Nhập email của bạn" autocomplete="off">
+                  class="appearance-none border rounded-md w-full py-2 px-3 mt-1 text-gray-600 font-semibold bg-gray-200 leading-tight outline-none focus:border-green-500"
+                  id="contact-email" type="email" placeholder="Nhập email của bạn" autocomplete="off">
                 <p class="text-red-500 text-xs italic"
-                   *ngIf="email?.hasError('required') && (email.dirty || email.touched)">
+                  *ngIf="email?.hasError('required') && (email.dirty || email.touched)">
                   Email không được bỏ trống</p>
                 <p class="text-red-500 text-xs italic"
-                   *ngIf="email?.hasError('pattern') && (email?.dirty || email?.touched)"
-                >Email không hợp lệ</p>
+                  *ngIf="email?.hasError('pattern') && (email?.dirty || email?.touched)">Email không hợp lệ</p>
               </div>
 
 
@@ -249,18 +242,18 @@
               <label for="contact-content" class="text-gray-500 text-sm md:text-xs font-semibold select-none">Nội
                 dung</label>
               <textarea formControlName="contentBody"
-                        class="appearance-none resize-none border rounded-md w-full py-2 px-3 mt-1 text-gray-600 font-semibold bg-gray-200 leading-tight outline-none focus:border-green-500"
-                        id="contact-content" type="textarea" rows="5" placeholder="Mô tả ý kiến, vấn đề của bạn"
-                        autocomplete="off"></textarea>
+                class="appearance-none resize-none border rounded-md w-full py-2 px-3 mt-1 text-gray-600 font-semibold bg-gray-200 leading-tight outline-none focus:border-green-500"
+                id="contact-content" type="textarea" rows="5" placeholder="Mô tả ý kiến, vấn đề của bạn"
+                autocomplete="off"></textarea>
               <p class="text-red-500 text-xs italic"
-                 *ngIf="contentBody?.hasError('required') && (contentBody.dirty || contentBody.touched)">
+                *ngIf="contentBody?.hasError('required') && (contentBody.dirty || contentBody.touched)">
                 Nội dung không được bỏ trống</p>
             </div>
             <div class="mt-4 mb-4">
               <button
                 class=" focus:outline-none text-white rounded-md px-1 px-6 py-2 ml-3 lg:ml-8 mb-3 shadow-xl transition duration-500 ease-in-out"
-                type="submit" [ngClass]="rfEmail.invalid? 'bg-gray-400': 'bg-blue-500 hover:bg-blue-400 cursor-pointer'" [disabled]="rfEmail.invalid"><i
-                class="fa fa-paper-plane"></i> Gửi phản hồi
+                type="submit" [ngClass]="rfEmail.invalid? 'bg-gray-400': 'bg-blue-500 hover:bg-blue-400 cursor-pointer'"
+                [disabled]="rfEmail.invalid"><i class="fa fa-paper-plane"></i> Gửi phản hồi
               </button>
             </div>
 
@@ -290,6 +283,7 @@
 
     </div>
     <div class="text-center py-3">{{now}} - Made with <span class="text-pink-700"><i class="fa fa-heart"></i></span> by
-      <a class="text-blue-700" href="https://github.com/tamht298" target="_blank">Huynh Thanh Tam</a></div>
+      <a class="text-blue-700" href="https://github.com/tamht298" target="_blank">Huynh Thanh Tam</a>
+    </div>
   </div>
 </div>
