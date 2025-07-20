@@ -1,7 +1,7 @@
 <xng-breadcrumb></xng-breadcrumb>
 
 <div class="w-full py-5" *ngIf="result">
-  <div class="capitalize text-center mb-3 font-bold text-3xl text-blue-600">Your result</div>
+  <div class="capitalize text-center mb-3 font-bold text-3xl text-blue-600">Kết quả của bạn</div>
   <app-result-circle [current]="result?.totalPoint" [max]="maxPoint"></app-result-circle>
   <div class="flex justify-center">
     <div class="inline-flex bg-gray-300 mt-5 py-2 mx-auto rounded-full ">
@@ -10,7 +10,7 @@
       <span class="mx-5 pass flex items-center">{{ getPassMin() }}-{{ maxPoint }}</span>
     </div>
   </div>
-  
+
   <ng-container *ngFor="let ques of result.choiceList; let i = index">
     <div class="my-12 mx-4 flex flex-row">
       <div class="flex flex-col mx-4 mx-2 mb-3 pb-2">
@@ -22,19 +22,18 @@
                 <span class="px-2 py-1 my-2 rounded-md bg-green-300 text-green-600 text-sm font-semibold">Easy</span>
               </ng-template>
               <ng-template [ngSwitchCase]="'MEDIUM'">
-              <span
-                class="px-2 py-1 my-2 rounded-md bg-gray-400 text-gray-600 text-sm font-semibold">Medium</span>
+                <span class="px-2 py-1 my-2 rounded-md bg-gray-400 text-gray-600 text-sm font-semibold">Medium</span>
               </ng-template>
               <ng-template [ngSwitchCase]="'HARD'">
-              <span
-                class="px-2 py-1 my-2 rounded-md bg-red-300 text-red-600 text-sm font-semibold">Hard</span>
+                <span class="px-2 py-1 my-2 rounded-md bg-red-300 text-red-600 text-sm font-semibold">Hard</span>
               </ng-template>
             </ng-container>
           </div>
           <div class="py-2 text-gray-600">{{ques.point}} pts</div>
         </div>
         <div class="w-full text-center font-bold pr-2 bg-red-300 text-red-600 mt-2 py-2 rounded-md"
-             [ngClass]="ques?.isSelectedCorrected==true? 'bg-green-300 text-green-600': 'bg-red-300 text-red-600'">{{ques?.isSelectedCorrected == true ? 'Correct' : 'Incorrect'}}</div>
+          [ngClass]="ques?.isSelectedCorrected==true? 'bg-green-300 text-green-600': 'bg-red-300 text-red-600'">
+          {{ques?.isSelectedCorrected == true ? 'Correct' : 'Incorrect'}}</div>
 
       </div>
 
@@ -52,32 +51,33 @@
                   <div class="radio-type flex-1 flex items-center">
                     <span class="text-2xl pr-2 w-8">
                       <ng-container *ngIf="userChoice.choice.choiceText=='True'">
-                        <i *ngIf="(userChoice.isRealCorrect==1 && userChoice.choice.isCorrected==1)||(userChoice.isRealCorrect==1 && userChoice.choice.isCorrected==0)" class="fa fa-check text-green-600"></i>
-                        <i *ngIf="userChoice.isRealCorrect==0 && userChoice.choice.isCorrected==1" class="fa fa-close text-red-600"></i>
+                        <i *ngIf="(userChoice.isRealCorrect==1 && userChoice.choice.isCorrected==1)||(userChoice.isRealCorrect==1 && userChoice.choice.isCorrected==0)"
+                          class="fa fa-check text-green-600"></i>
+                        <i *ngIf="userChoice.isRealCorrect==0 && userChoice.choice.isCorrected==1"
+                          class="fa fa-close text-red-600"></i>
                       </ng-container>
                     </span>
                     <div class="radio-btn w-full">
-                      <input type="radio"
-                             name="choicesTF-{{ques.question.id}}" value="True"
-                             [checked]="userChoice.choice.choiceText=='True' && userChoice.choice.isCorrected==1"
-                             disabled="true"
-                      />
+                      <input type="radio" name="choicesTF-{{ques.question.id}}" value="True"
+                        [checked]="userChoice.choice.choiceText=='True' && userChoice.choice.isCorrected==1"
+                        disabled="true" />
                       <label class="select-none">True</label>
                     </div>
                   </div>
-              
+
                   <div class="radio-type flex-1 flex items-center">
                     <span class="text-2xl pr-2 w-8">
                       <ng-container *ngIf="userChoice.choice.choiceText=='False'">
-                        <i *ngIf="(userChoice.isRealCorrect==1 && userChoice.choice.isCorrected==1)||(userChoice.isRealCorrect==1 && userChoice.choice.isCorrected==0)" class="fa fa-check text-green-600"></i>
-                        <i *ngIf="userChoice.isRealCorrect==0 && userChoice.choice.isCorrected==1" class="fa fa-close text-red-600"></i>
+                        <i *ngIf="(userChoice.isRealCorrect==1 && userChoice.choice.isCorrected==1)||(userChoice.isRealCorrect==1 && userChoice.choice.isCorrected==0)"
+                          class="fa fa-check text-green-600"></i>
+                        <i *ngIf="userChoice.isRealCorrect==0 && userChoice.choice.isCorrected==1"
+                          class="fa fa-close text-red-600"></i>
                       </ng-container>
                     </span>
                     <div class="radio-btn w-full">
-                      <input type="radio" id="false-{{ques.question.id}}"
-                             name="choicesTF-{{ques.question.id}}" value="False"
-                             [checked]="userChoice.choice.choiceText=='False' && userChoice.choice.isCorrected==1"
-                      />
+                      <input type="radio" id="false-{{ques.question.id}}" name="choicesTF-{{ques.question.id}}"
+                        value="False"
+                        [checked]="userChoice.choice.choiceText=='False' && userChoice.choice.isCorrected==1" />
                       <label for="false-{{ques.question.id}}" class="select-none">False</label>
                     </div>
                   </div>
@@ -89,19 +89,18 @@
                     <div class="flex">
                       <div class="radio-type w-full flex items-center">
                         <span class="text-2xl pr-2 w-8">
-                      <ng-container
-                        *ngIf="(userChoice.isRealCorrect==1&& userChoice.choice.isCorrected==1) || userChoice.isRealCorrect==1">
-                        <i class="fa fa-check text-green-600"></i>
-                      </ng-container>
-                      <ng-container
-                        *ngIf="(userChoice.isRealCorrect!=userChoice.choice.isCorrected) && userChoice.isRealCorrect==0">
-                        <i class="fa fa-close text-red-600"></i>
-                    </ng-container>
-                      </span>
+                          <ng-container
+                            *ngIf="(userChoice.isRealCorrect==1&& userChoice.choice.isCorrected==1) || userChoice.isRealCorrect==1">
+                            <i class="fa fa-check text-green-600"></i>
+                          </ng-container>
+                          <ng-container
+                            *ngIf="(userChoice.isRealCorrect!=userChoice.choice.isCorrected) && userChoice.isRealCorrect==0">
+                            <i class="fa fa-close text-red-600"></i>
+                          </ng-container>
+                        </span>
                         <div class="radio-btn w-full">
                           <input type="radio" name="mcChoices-{{ques.question.id}}"
-                                 [checked]="userChoice.choice.isCorrected==1"
-                                 disabled="true">
+                            [checked]="userChoice.choice.isCorrected==1" disabled="true">
                           <label class="select-none" [innerHTML]="userChoice.choice.choiceText"></label>
                         </div>
                       </div>
@@ -117,24 +116,21 @@
                   <div class="w-full my-1">
                     <div class="flex my-1">
                       <div class="radio-type w-full flex items-center">
-                         <span class="text-2xl pr-2 w-8">
-                      <ng-container
-                        *ngIf="(userChoice.isRealCorrect==1&& userChoice.choice.isCorrected==1) || userChoice.isRealCorrect==1">
-                        <i class="fa fa-check text-green-600"></i>
-                      </ng-container>
-                      <ng-container
-                        *ngIf="(userChoice.isRealCorrect!=userChoice.choice.isCorrected) && userChoice.isRealCorrect==0">
-                        <i class="fa fa-close text-red-600"></i>
-                    </ng-container>
-                      </span>
+                        <span class="text-2xl pr-2 w-8">
+                          <ng-container
+                            *ngIf="(userChoice.isRealCorrect==1&& userChoice.choice.isCorrected==1) || userChoice.isRealCorrect==1">
+                            <i class="fa fa-check text-green-600"></i>
+                          </ng-container>
+                          <ng-container
+                            *ngIf="(userChoice.isRealCorrect!=userChoice.choice.isCorrected) && userChoice.isRealCorrect==0">
+                            <i class="fa fa-close text-red-600"></i>
+                          </ng-container>
+                        </span>
                         <div class="check-box-btn w-full">
                           <input type="checkbox" name="msChoices-{{userChoice.choice.id}}"
-                                 id="ms-{{userChoice.choice.id}}"
-                                 [checked]="userChoice.choice.isCorrected==1"
-                                 disabled="true"
-                          >
-                          <label class="check-box select-none"
-                                 [innerHTML]="userChoice.choice.choiceText"></label>
+                            id="ms-{{userChoice.choice.id}}" [checked]="userChoice.choice.isCorrected==1"
+                            disabled="true">
+                          <label class="check-box select-none" [innerHTML]="userChoice.choice.choiceText"></label>
                         </div>
                       </div>
                     </div>

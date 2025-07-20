@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import {
   ApexAxisChartSeries,
   ApexChart,
@@ -9,8 +9,8 @@ import {
   ApexYAxis,
   ChartComponent
 } from 'ng-apexcharts';
-import {CoursePoint} from '../../models/course-point';
-import {ChartService} from '../../_services/chart.service';
+import { CoursePoint } from '../../models/course-point';
+import { ChartService } from '../../_services/chart.service';
 
 export interface ChartOptions {
   series: ApexAxisChartSeries;
@@ -83,7 +83,7 @@ export class StatisticsComponent implements OnInit {
           }
         },
         title: {
-          text: 'Statistics of courses',
+          text: 'Thống kê các khóa học',
           align: 'center',
           style: {
             color: '#444',
@@ -99,7 +99,7 @@ export class StatisticsComponent implements OnInit {
           enabled: true,
           formatter(val) {
             if (val) {
-            return val + ' point';
+              return val + ' point';
             }
           },
           offsetX: -20,
