@@ -1,18 +1,18 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {PageResult} from '../../../models/page-result';
-import {Question} from '../../../models/question';
-import {FormBuilder, FormGroup} from '@angular/forms';
-import {CourseService} from '../../../_services/course.service';
-import {Course} from '../../../models/course';
-import {Part} from '../../../models/part';
-import {PartService} from '../../../_services/part.service';
-import {QuestionTypeService} from '../../../_services/question-type.service';
-import {QuestionType} from '../../../models/question-type';
-import {QTYPE} from '../../../models/question-type.enum';
-import {Choice} from '../../../models/choice';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { PageResult } from '../../../models/page-result';
+import { Question } from '../../../models/question';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { CourseService } from '../../../_services/course.service';
+import { Course } from '../../../models/course';
+import { Part } from '../../../models/part';
+import { PartService } from '../../../_services/part.service';
+import { QuestionTypeService } from '../../../_services/question-type.service';
+import { QuestionType } from '../../../models/question-type';
+import { QTYPE } from '../../../models/question-type.enum';
+import { Choice } from '../../../models/choice';
 import * as BalloonEditor from '@ckeditor/ckeditor5-build-balloon';
-import {QuestionService} from '../../../_services/question.service';
-import {ToastrService} from 'ngx-toastr';
+import { QuestionService } from '../../../_services/question.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-add-question',
@@ -137,12 +137,12 @@ export class AddQuestionComponent implements OnInit {
 
   initChoice() {
     this.multipleChoice.push(
-      new Choice('<p>Choice_1</p>', 1),
-      new Choice('<p>Choice_2</p>', 0),
+      new Choice('<p>Đáp án 1</p>', 1),
+      new Choice('<p>Đáp án 2</p>', 0),
     );
     this.multipleSelect.push(
-      new Choice('<p>Choice_1</p>', 1),
-      new Choice('<p>Choice_2</p>', 1),
+      new Choice('<p>Đáp án 1</p>', 1),
+      new Choice('<p>Đáp án 2</p>', 1),
     );
   }
 

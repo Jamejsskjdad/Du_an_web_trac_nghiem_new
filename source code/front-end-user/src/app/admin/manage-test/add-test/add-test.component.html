@@ -16,8 +16,7 @@
                 </h3>
                 <button
                   class="bg-blue-200 shadow-md hover:bg-blue-300 text-blue-600 border border-gray-400 transition duration-200 ease-in-out text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1"
-                  type="submit"
-                ><span><i class="fa mr-1"></i>Tạo bài test</span>
+                  type="submit"><span><i class="fa mr-1"></i>Tạo bài test</span>
                 </button>
               </div>
               <hr class="border w-full my-3">
@@ -26,24 +25,22 @@
                 <div class="flex flex-wrap flex-row">
                   <div class="relative w-full px-4 max-w-full flex-flow flex-basis">
 
-                    <p class="mx-3 my-3 text-gray-600 text-md text-blue-700 text-xl font-semibold">Đối tượng tham gia</p>
+                    <p class="mx-3 my-3 text-gray-600 text-md text-blue-700 text-xl font-semibold">Đối tượng tham gia
+                    </p>
 
                     <div class="-mx-3 md:flex mb-2 w-full">
                       <div class="md:w-full px-3">
-                        <label class="block uppercase tracking-wide text-gray-600 text-xs font-bold mb-2"
-                        >
-                          Khoá thực tập
+                        <label class="block uppercase tracking-wide text-gray-600 text-xs font-bold mb-2">
+                          Khoá học
                         </label>
-                        <select
-                        formControlName="intake"
-                        class="block appearance-none w-full bg-gray-200 py-2 px-3 my-1 mt-3 pr-4 rounded shadow leading-tight focus:outline-none"
-                        (change)="changeIntake($event)"
-                        >
-                        <option value="-1">-- please choose intake --</option>
-                        <option *ngFor="let intake of intakeList" [value]="intake.id">
-                          {{intake.name}}
-                        </option>
-                      </select>
+                        <select formControlName="intake"
+                          class="block appearance-none w-full bg-gray-200 py-2 px-3 my-1 mt-3 pr-4 rounded shadow leading-tight focus:outline-none"
+                          (change)="changeIntake($event)">
+                          <option value="-1">-- vui lòng chọn khóa học --</option>
+                          <option *ngFor="let intake of intakeList" [value]="intake.id">
+                            {{intake.name}}
+                          </option>
+                        </select>
 
                       </div>
                     </div>
@@ -57,51 +54,39 @@
                     <div class="-mx-3 md:flex mb-2 w-full">
                       <div class="md:w-full px-3">
                         <label class="block uppercase tracking-wide text-gray-600 text-xs font-bold mb-2"
-                               for="test-title"
-                        >
+                          for="test-title">
                           Đặt tiêu đề
                         </label>
                         <input
                           class="appearance-none border rounded-md w-full py-2 px-3 my-1 text-gray-600 bg-gray-200 leading-tight outline-none focus:border-blue-500"
-                          id="test-title"
-                          formControlName="testTitle"
-                          type="text"
-                          placeholder="Nhập tiêu đề bài test"
-                          autocomplete="off"
-                          tabindex="1"
-                          required
-                        >
+                          id="test-title" formControlName="testTitle" type="text"
+                          placeholder="Nhập tiêu đề cho bài kiểm tra" autocomplete="off" tabindex="1" required>
                       </div>
                     </div>
 
                     <div class="-mx-3 md:flex mb-2 w-full">
                       <div class="md:w-1/2 px-3">
-                        <label class="block uppercase tracking-wide text-gray-600 text-xs font-bold mb-2"
-                        >
+                        <label class="block uppercase tracking-wide text-gray-600 text-xs font-bold mb-2">
                           Chọn môn học
                         </label>
-                        <select
-                          tabindex="2"
-                          name="course" (change)="changeCourse($event)"
+                        <select tabindex="2" name="course" (change)="changeCourse($event)"
                           class="block appearance-none w-full bg-gray-200 py-2 px-3 my-1 mt-3 pr-4 rounded shadow leading-tight focus:outline-none">
-                          <option value="-1">-- please choose course --</option>
+                          <option value="-1">-- Vui lòng chọn khóa học --</option>
                           <option *ngFor="let course of courseList" [value]="course.id"
-                                  [selected]="course.id === selectedCourseId">{{course.name}}</option>
+                            [selected]="course.id === selectedCourseId">{{course.name}}</option>
 
                         </select>
 
                       </div>
                       <div class="md:w-1/2 px-3">
-                        <label class="block uppercase tracking-wide text-gray-600 text-xs font-bold mb-2"
-                        >
+                        <label class="block uppercase tracking-wide text-gray-600 text-xs font-bold mb-2">
                           Nội dung
                         </label>
-                        <select (change)="changePart($event)"
-                                name="part"
-                                class="block appearance-none w-full bg-gray-200 py-2 px-3 my-1 mt-3 pr-4 rounded shadow leading-tight focus:outline-none">
-                          <option value="">-- please choose part --</option>
-                          <option *ngFor="let part of partList" [selected]="part.id===selectedPartId"
-                                  [value]="part.id">{{part.name}}</option>
+                        <select (change)="changePart($event)" name="part"
+                          class="block appearance-none w-full bg-gray-200 py-2 px-3 my-1 mt-3 pr-4 rounded shadow leading-tight focus:outline-none">
+                          <option value="">-- Vui lòng chọn phần --</option>
+                          <option *ngFor="let part of partList" [selected]="part.id===selectedPartId" [value]="part.id">
+                            {{part.name}}</option>
 
                         </select>
 
@@ -118,54 +103,32 @@
                       gian</p>
                     <div class="-mx-3 md:flex mb-2 w-full">
                       <div class="md:w-1/3 px-3">
-                        <label class="block uppercase tracking-wide text-gray-600 text-xs font-bold mb-2"
-                        >
+                        <label class="block uppercase tracking-wide text-gray-600 text-xs font-bold mb-2">
                           Thời gian mở
                         </label>
                         <input
                           class="appearance-none border rounded-md w-full py-2 px-3 my-1 text-gray-600 bg-gray-200 leading-tight outline-none focus:border-blue-500"
-                          type="datetime-local"
-                          step="1"
-                          formControlName="timeBegin"
-                          autocomplete="off"
-                          tabindex="1"
-                          required
-                        >
+                          type="datetime-local" step="1" formControlName="timeBegin" autocomplete="off" tabindex="1"
+                          required>
                       </div>
 
                       <div class="md:w-1/3 px-3">
-                        <label class="block uppercase tracking-wide text-gray-600 text-xs font-bold mb-2"
-                        >
+                        <label class="block uppercase tracking-wide text-gray-600 text-xs font-bold mb-2">
                           Thời gian đóng
                         </label>
                         <input
                           class="appearance-none border rounded-md w-full py-2 px-3 my-1 text-gray-600 bg-gray-200 leading-tight outline-none focus:border-blue-500"
-
-                          type="datetime-local"
-                          step="1"
-                          (input)="getBeginTime($event)"
-                          formControlName="timeEnd"
-                          autocomplete="off"
-                          tabindex="1"
-                          required
-                        >
+                          type="datetime-local" step="1" (input)="getBeginTime($event)" formControlName="timeEnd"
+                          autocomplete="off" tabindex="1" required>
                       </div>
                       <div class="md:w-1/3 px-3">
-                        <label class="block uppercase tracking-wide text-gray-600 text-xs font-bold mb-2"
-                        >
+                        <label class="block uppercase tracking-wide text-gray-600 text-xs font-bold mb-2">
                           Thời gian làm bài (phút)
                         </label>
                         <input
                           class="appearance-none border rounded-md w-full py-2 px-3 my-1 text-gray-600 bg-gray-200 leading-tight outline-none focus:border-blue-500"
-                          type="number"
-                          name="timeDuration"
-                          formControlName="timeDuration"
-                          (keypress)="$event.charCode >= 48"
-                          min="1"
-                          autocomplete="off"
-                          tabindex="1"
-                          required
-                        >
+                          type="number" name="timeDuration" formControlName="timeDuration"
+                          (keypress)="$event.charCode >= 48" min="1" autocomplete="off" tabindex="1" required>
                       </div>
                     </div>
                   </div>
@@ -176,10 +139,7 @@
                       <div class="w-64 px-3">
                         <div class="radio-type flex-1">
                           <div class="radio-btn">
-                            <input type="checkbox" id="shuffle"
-                                   name="shuffle"
-                                   formControlName="isShuffle"
-                            />
+                            <input type="checkbox" id="shuffle" name="shuffle" formControlName="isShuffle" />
                             <label for="shuffle">Trộn câu hỏi</label>
                           </div>
                         </div>
@@ -187,32 +147,29 @@
                       <div class="w-64 px-3">
                         <div class="radio-type flex-1">
                           <div class="radio-btn">
-                            <input type="checkbox" id="lockScreen" name="lockScreen" formControlName="isLockScreen"/>
+                            <input type="checkbox" id="lockScreen" name="lockScreen" formControlName="isLockScreen" />
                             <label for="lockScreen">Khóa màn hình khi thi</label>
                           </div>
                         </div>
                       </div>
                       <div class="w-64 px-3 flex flex-col justify-end">
-                        <label class="block uppercase tracking-wide text-gray-600 text-xs font-bold mb-2" for="maxPoint">
+                        <label class="block uppercase tracking-wide text-gray-600 text-xs font-bold mb-2"
+                          for="maxPoint">
                           Tổng điểm tối đa <span class="text-red-500">*</span>
                         </label>
                         <input type="number"
-                               class="appearance-none border rounded-md w-full py-2 px-3 my-1 text-gray-600 bg-gray-200 leading-tight outline-none focus:border-blue-500"
-                               id="maxPoint"
-                               formControlName="maxPoint"
-                               min="1"
-                               required
-                               [ngModel]="rfAdd.get('maxPoint').value"
-                               (ngModelChange)="rfAdd.get('maxPoint').setValue($event)"
-                               autocomplete="off"
-                               placeholder="Nhập tổng điểm tối đa"
-                        >
-                        <div *ngIf="maxPoint.invalid && (maxPoint.dirty || maxPoint.touched)" class="text-red-500 text-xs italic">
+                          class="appearance-none border rounded-md w-full py-2 px-3 my-1 text-gray-600 bg-gray-200 leading-tight outline-none focus:border-blue-500"
+                          id="maxPoint" formControlName="maxPoint" min="1" required
+                          [ngModel]="rfAdd.get('maxPoint').value"
+                          (ngModelChange)="rfAdd.get('maxPoint').setValue($event)" autocomplete="off"
+                          placeholder="Nhập tổng điểm tối đa">
+                        <div *ngIf="maxPoint.invalid && (maxPoint.dirty || maxPoint.touched)"
+                          class="text-red-500 text-xs italic">
                           Tổng điểm tối đa phải lớn hơn hoặc bằng 1
                         </div>
-                      </div>                   
+                      </div>
                     </div>
-                    </div>                   
+                  </div>
                   <hr class="border w-full my-3">
                   <div class="relative w-full px-4 max-w-full flex-flow flex-basis">
                     <p class="mx-3 my-3 text-gray-600 text-md text-blue-700 text-xl font-semibold">Chọn câu hỏi</p>
@@ -223,71 +180,63 @@
                       <table
                         class="items-center w-full bg-transparent border-collapse table-fixed user-list block lg:table overflow-x-auto overflow-y-auto">
                         <thead>
-                        <tr>
-                          <th
-                            class="row-header row-checkbox px-6 bg-gray-100 text-gray-600 align-middle  border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0  font-semibold text-left">
-                            <input type="checkbox" name="allCheck" [value]="checkedAll" [(ngModel)]="checkedAll"
-                                   [ngModelOptions]="{standalone: true}"
-                                   (change)="checkBoxAll($event)">
-                          </th>
-                          <th
-                            class="row-header row-question px-6 bg-gray-100 text-gray-600 align-middle  border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0  font-semibold text-left">
-                            Câu hỏi
-                          </th>
+                          <tr>
+                            <th
+                              class="row-header row-checkbox px-6 bg-gray-100 text-gray-600 align-middle  border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0  font-semibold text-left">
+                              <input type="checkbox" name="allCheck" [value]="checkedAll" [(ngModel)]="checkedAll"
+                                [ngModelOptions]="{standalone: true}" (change)="checkBoxAll($event)">
+                            </th>
+                            <th
+                              class="row-header row-question px-6 bg-gray-100 text-gray-600 align-middle  border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0  font-semibold text-left">
+                              Câu hỏi
+                            </th>
 
-                          <th
-                            class="row-header row-difficulty text-center px-6 bg-gray-100 text-gray-600 align-middle  border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0  font-semibold text-left">
-                            Độ khó
-                          </th>
-                          <th
-                            class="row-header row-type px-6 bg-gray-100 text-gray-600 align-middle  border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0  font-semibold text-left">
-                            Loại câu
-                          </th>
-                        </tr>
+                            <th
+                              class="row-header row-difficulty text-center px-6 bg-gray-100 text-gray-600 align-middle  border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0  font-semibold text-left">
+                              Độ khó
+                            </th>
+                            <th
+                              class="row-header row-type px-6 bg-gray-100 text-gray-600 align-middle  border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0  font-semibold text-left">
+                              Loại câu
+                            </th>
+                          </tr>
                         </thead>
 
                         <tbody>
-                        <ng-container *ngFor="let ques of questionList; trackBy: trackById">
-                          <tr class="border hover:bg-gray-300">
+                          <ng-container *ngFor="let ques of questionList; trackBy: trackById">
+                            <tr class="border hover:bg-gray-300">
 
-                            <td
-                              class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-md text-gray-500  p-4">
-                              <input type="checkbox" name="noneCheck" [(ngModel)]="ques.isSelected"
-                                     [ngModelOptions]="{standalone: true}"
-                                     (change)="changeChecked(ques)">
-                            </td>
+                              <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-md text-gray-500  p-4">
+                                <input type="checkbox" name="noneCheck" [(ngModel)]="ques.isSelected"
+                                  [ngModelOptions]="{standalone: true}" (change)="changeChecked(ques)">
+                              </td>
 
-                            <th
-                              class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs p-4 text-left"
+                              <th class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs p-4 text-left">
+                                <div [innerHTML]="ques.questionText"></div>
+                              </th>
 
-                            >
-                              <div [innerHTML]="ques.questionText"></div>
-                            </th>
+                              <td class="border-t-0 text-center px-6 align-middle border-l-0 border-r-0 text-xs  p-4">
+                                <ng-container [ngSwitch]="ques.difficultyLevel">
+                                  <ng-template [ngSwitchCase]="'EASY'">
+                                    <span
+                                      class="px-2 py-1 bg-green-200 cursor-pointer font-medium hover:bg-green-300 transition duration-300 ease-in-out font-light text-green-600 text-xs rounded-md">{{ques.difficultyLevel}}</span>
+                                  </ng-template>
+                                  <ng-template [ngSwitchCase]="'MEDIUM'">
+                                    <span
+                                      class="px-2 py-1 bg-gray-200 cursor-pointer font-medium hover:bg-gray-400 transition duration-300 ease-in-out font-light text-gray-600 text-xs rounded-md">{{ques.difficultyLevel}}</span>
+                                  </ng-template>
+                                  <ng-template [ngSwitchCase]="'HARD'">
+                                    <span
+                                      class="px-2 py-1 bg-red-200 cursor-pointer font-medium hover:bg-red-300 transition duration-300 ease-in-out font-light text-red-600 text-xs rounded-md">{{ques.difficultyLevel}}</span>
+                                  </ng-template>
+                                </ng-container>
+                              </td>
+                              <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs  p-4">
+                                {{ques.questionType.description}}
+                              </td>
 
-                            <td
-                              class="border-t-0 text-center px-6 align-middle border-l-0 border-r-0 text-xs  p-4">
-                              <ng-container [ngSwitch]="ques.difficultyLevel">
-                                <ng-template [ngSwitchCase]="'EASY'">
-                                  <span
-                                    class="px-2 py-1 bg-green-200 cursor-pointer font-medium hover:bg-green-300 transition duration-300 ease-in-out font-light text-green-600 text-xs rounded-md">{{ques.difficultyLevel}}</span>
-                                </ng-template>
-                                <ng-template [ngSwitchCase]="'MEDIUM'">
-                                  <span
-                                    class="px-2 py-1 bg-gray-200 cursor-pointer font-medium hover:bg-gray-400 transition duration-300 ease-in-out font-light text-gray-600 text-xs rounded-md">{{ques.difficultyLevel}}</span>
-                                </ng-template>
-                                <ng-template [ngSwitchCase]="'HARD'">
-                                  <span
-                                    class="px-2 py-1 bg-red-200 cursor-pointer font-medium hover:bg-red-300 transition duration-300 ease-in-out font-light text-red-600 text-xs rounded-md">{{ques.difficultyLevel}}</span>
-                                </ng-template>
-                              </ng-container>
-                            </td>
-                            <td
-                              class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs  p-4">
-                              {{ques.questionType.description}}
-                            </td>
-
-                          </tr>
-                        </ng-container>
+                            </tr>
+                          </ng-container>
                         </tbody>
 
 
@@ -315,7 +264,7 @@
                   </div>
                   <div>
                     <span class="text-red-500 bg-red-200 rounded px-2 py-1 text-sm"
-                        *ngIf="getTotalPoint() > maxPoint.value">Điểm số vượt quá {{maxPoint.value}}
+                      *ngIf="getTotalPoint() > maxPoint.value">Điểm số vượt quá {{maxPoint.value}}
                     </span>
                     <span class="mx-1">Tổng điểm:</span>
                     <span class="mx-1 text-blue-700">{{getTotalPoint()}}/{{maxPoint.value}}</span>
@@ -329,49 +278,39 @@
                       <div class="px-4">
                         <span class="text-gray-600 italic font-semibold text-lg">#{{i+1}}</span>
                       </div>
-                      <div
-                        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs p-4 text-left md:w-1/2">
+                      <div class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs p-4 text-left md:w-1/2">
                         <div [innerHTML]="ques.questionText"></div>
                       </div>
 
-                      <div
-                        class="border-t-0 md:w-1/6 text-center px-6 align-middle border-l-0 border-r-0 text-xs  p-4">
+                      <div class="border-t-0 md:w-1/6 text-center px-6 align-middle border-l-0 border-r-0 text-xs  p-4">
                         <ng-container [ngSwitch]="ques.difficultyLevel">
                           <ng-template [ngSwitchCase]="'EASY'">
-                                  <span
-                                    class="px-2 py-1 bg-green-200 cursor-pointer font-medium hover:bg-green-300 transition duration-300 ease-in-out font-light text-green-600 text-xs rounded-md">{{ques.difficultyLevel}}</span>
+                            <span
+                              class="px-2 py-1 bg-green-200 cursor-pointer font-medium hover:bg-green-300 transition duration-300 ease-in-out font-light text-green-600 text-xs rounded-md">{{ques.difficultyLevel}}</span>
                           </ng-template>
                           <ng-template [ngSwitchCase]="'MEDIUM'">
-                                  <span
-                                    class="px-2 py-1 bg-gray-200 cursor-pointer font-medium hover:bg-gray-400 transition duration-300 ease-in-out font-light text-gray-600 text-xs rounded-md">{{ques.difficultyLevel}}</span>
+                            <span
+                              class="px-2 py-1 bg-gray-200 cursor-pointer font-medium hover:bg-gray-400 transition duration-300 ease-in-out font-light text-gray-600 text-xs rounded-md">{{ques.difficultyLevel}}</span>
                           </ng-template>
                           <ng-template [ngSwitchCase]="'HARD'">
-                                  <span
-                                    class="px-2 py-1 bg-red-200 cursor-pointer font-medium hover:bg-red-300 transition duration-300 ease-in-out font-light text-red-600 text-xs rounded-md">{{ques.difficultyLevel}}</span>
+                            <span
+                              class="px-2 py-1 bg-red-200 cursor-pointer font-medium hover:bg-red-300 transition duration-300 ease-in-out font-light text-red-600 text-xs rounded-md">{{ques.difficultyLevel}}</span>
                           </ng-template>
                         </ng-container>
                       </div>
-                      <div
-                        class="border-t-0 px-6 md:w-1/6 align-middle border-l-0 border-r-0 text-xs  p-4">
+                      <div class="border-t-0 px-6 md:w-1/6 align-middle border-l-0 border-r-0 text-xs  p-4">
                         {{ques.questionType.description}}
                       </div>
 
-                      <div
-                        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs  p-4">
+                      <div class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs  p-4">
                         <input
                           class="appearance-none border text-center text-xl rounded-md w-full py-2 px-3 my-1 text-gray-600 bg-gray-200 leading-tight outline-none focus:border-blue-500"
-                          type="number"
-                          (keypress)="$event.charCode >= 48"
-                          min="1"
-                          max="100"
-                          autocomplete="off"
-                          tabindex="1"
-                          required
-                          [(ngModel)]="ques.point"
-                          [ngModelOptions]="{standalone: true}"
-                        >
+                          type="number" (keypress)="$event.charCode >= 48" min="1" max="100" autocomplete="off"
+                          tabindex="1" required [(ngModel)]="ques.point" [ngModelOptions]="{standalone: true}">
                       </div>
-                      <div class="mx-2 cursor-pointer" (click)="removeSelectedQuestion(ques)"><span class="hover:bg-red-300 text-red-700 px-2 py-1 bg-red-200 rounded"><i class="fa fa-minus"></i></span></div>
+                      <div class="mx-2 cursor-pointer" (click)="removeSelectedQuestion(ques)"><span
+                          class="hover:bg-red-300 text-red-700 px-2 py-1 bg-red-200 rounded"><i
+                            class="fa fa-minus"></i></span></div>
 
                     </div>
                   </div>
@@ -389,4 +328,3 @@
   </form>
   <app-admin-footer></app-admin-footer>
 </div>
-

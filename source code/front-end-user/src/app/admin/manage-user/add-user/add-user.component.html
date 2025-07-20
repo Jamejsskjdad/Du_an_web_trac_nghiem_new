@@ -1,6 +1,6 @@
 <button
   class="bg-white shadow-md hover:bg-blue-500 hover:text-blue-200 transition duration-200 ease-in-out text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mx-1 mb-1"
-  type="button" (click)="toggleModalAdd()"><span><i class="fa fa-user-plus mr-1"></i>Add new</span>
+  type="button" (click)="toggleModalAdd()"><span><i class="fa fa-user-plus mr-1"></i>Thêm người dùng</span>
 </button>
 
 <form novalidate (ngSubmit)="onSubmit()" [formGroup]="rfAddUser">
@@ -76,7 +76,7 @@
                             </label>
                             <input
                               class="appearance-none border rounded-md w-full py-2 px-3 my-1 text-gray-600 bg-gray-200 leading-tight outline-none focus:border-green-500"
-                              id="frm-add-last-name" type="text" placeholder="Huỳnh Thanh" autocomplete="off"
+                              id="frm-add-last-name" type="text" placeholder="Nguyễn Văn" autocomplete="off"
                               formControlName="lastName" required>
                             <p class="text-red-500 text-xs italic"
                               *ngIf="lastName?.hasError('required') && (lastName.dirty || lastName.touched)">
@@ -90,7 +90,7 @@
                             </label>
                             <input
                               class="appearance-none border rounded-md w-full py-2 px-3 my-1 text-gray-600 bg-gray-200 leading-tight outline-none focus:border-green-500"
-                              id="frm-add-first-name" type="text" placeholder="Tâm" autocomplete="off"
+                              id="frm-add-first-name" type="text" placeholder="A" autocomplete="off"
                               formControlName="firstName" required>
                             <p class="text-red-500 text-xs italic"
                               *ngIf="firstName?.hasError('required') && (firstName.dirty || firstName.touched)">
@@ -135,7 +135,7 @@
                                 </label>
                                 <label class="flex items-center">
                                   <input type="radio" formControlName="roleId" [value]="3" class="mr-2" />
-                                  Học viên
+                                  Học sinh
                                 </label>
                               </div>
                               <p class="text-red-500 text-xs italic"
