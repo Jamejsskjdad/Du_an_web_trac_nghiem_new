@@ -59,7 +59,7 @@
                         </ng-template>
                       </ng-container>
                     </div>
-                    <div class="py-2 text-gray-600">{{ques.point}} pts</div>
+                    <div class="py-2 text-gray-600">{{ques.point}} điểm</div>
                   </div>
                   <div class="w-full text-center font-bold pr-2 bg-red-300 text-red-600 mt-2 py-2 rounded-md"
                     [ngClass]="ques?.isSelectedCorrected==true? 'bg-green-300 text-green-600': 'bg-red-300 text-red-600'">
@@ -91,7 +91,7 @@
                                 <input type="radio" name="choicesTF-{{ques.question.id}}" value="True"
                                   [checked]="userChoice.choice.choiceText=='True' && userChoice.choice.isCorrected==1"
                                   disabled="true" />
-                                <label class="select-none">True</label>
+                                <label class="select-none">Đúng</label>
                               </div>
                             </div>
 
@@ -108,7 +108,7 @@
                                 <input type="radio" id="false-{{ques.question.id}}"
                                   name="choicesTF-{{ques.question.id}}" value="False"
                                   [checked]="userChoice.choice.choiceText=='False' && userChoice.choice.isCorrected==1" />
-                                <label for="false-{{ques.question.id}}" class="select-none">False</label>
+                                <label for="false-{{ques.question.id}}" class="select-none">Sai</label>
                               </div>
                             </div>
                           </div>

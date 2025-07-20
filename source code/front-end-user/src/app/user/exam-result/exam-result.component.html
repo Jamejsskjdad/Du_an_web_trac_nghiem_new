@@ -15,30 +15,32 @@
     <div class="my-12 mx-4 flex flex-row">
       <div class="flex flex-col mx-4 mx-2 mb-3 pb-2">
         <div class="w-48 bg-gray-300 rounded-md ml-0 flex flex-col  items-center">
-          <div class="font-bold text-gray-600 text-xl my-2">Question {{i + 1}}</div>
-          <div class="text-gray-600 text-sm">Difficult:
+          <div class="font-bold text-gray-600 text-xl my-2">Câu {{i + 1}}</div>
+          <div class="text-gray-600 text-sm">Mức độ:
             <ng-container [ngSwitch]="ques.question.difficultyLevel">
               <ng-template [ngSwitchCase]="'EASY'">
-                <span class="px-2 py-1 my-2 rounded-md bg-green-300 text-green-600 text-sm font-semibold">Easy</span>
+                <span class="px-2 py-1 my-2 rounded-md bg-green-300 text-green-600 text-sm font-semibold">Dễ</span>
               </ng-template>
               <ng-template [ngSwitchCase]="'MEDIUM'">
-                <span class="px-2 py-1 my-2 rounded-md bg-gray-400 text-gray-600 text-sm font-semibold">Medium</span>
+                <span class="px-2 py-1 my-2 rounded-md bg-gray-400 text-gray-600 text-sm font-semibold">Trung
+                  bình</span>
               </ng-template>
               <ng-template [ngSwitchCase]="'HARD'">
-                <span class="px-2 py-1 my-2 rounded-md bg-red-300 text-red-600 text-sm font-semibold">Hard</span>
+                <span class="px-2 py-1 my-2 rounded-md bg-red-300 text-red-600 text-sm font-semibold">Khó</span>
               </ng-template>
             </ng-container>
           </div>
-          <div class="py-2 text-gray-600">{{ques.point}} pts</div>
+          <div class="py-2 text-gray-600">{{ques.point}} điểm</div>
         </div>
         <div class="w-full text-center font-bold pr-2 bg-red-300 text-red-600 mt-2 py-2 rounded-md"
           [ngClass]="ques?.isSelectedCorrected==true? 'bg-green-300 text-green-600': 'bg-red-300 text-red-600'">
-          {{ques?.isSelectedCorrected == true ? 'Correct' : 'Incorrect'}}</div>
+          {{ques?.isSelectedCorrected == true ? 'Đúng' : 'Sai'}}</div>
 
       </div>
 
       <div class="bg-gray-300 rounded-md shadow-lg px-8 py-6 w-full">
         <div class="my-4"><span class="font-bold">Q {{i + 1}}: </span>
+          <!-- <div class="my-4"><span class="font-bold"> </span> -->
           <p class="select-none" [innerHTML]="ques.question.questionText"></p>
         </div>
         <div class="h-auto">
@@ -61,7 +63,7 @@
                       <input type="radio" name="choicesTF-{{ques.question.id}}" value="True"
                         [checked]="userChoice.choice.choiceText=='True' && userChoice.choice.isCorrected==1"
                         disabled="true" />
-                      <label class="select-none">True</label>
+                      <label class="select-none">Sai</label>
                     </div>
                   </div>
 
@@ -78,7 +80,7 @@
                       <input type="radio" id="false-{{ques.question.id}}" name="choicesTF-{{ques.question.id}}"
                         value="False"
                         [checked]="userChoice.choice.choiceText=='False' && userChoice.choice.isCorrected==1" />
-                      <label for="false-{{ques.question.id}}" class="select-none">False</label>
+                      <label for="false-{{ques.question.id}}" class="select-none">Đúng</label>
                     </div>
                   </div>
                 </div>
