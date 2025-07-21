@@ -1,12 +1,17 @@
 package com.thanhtam.backend.controller;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +34,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.opencsv.CSVWriter;
-import com.opencsv.bean.StatefulBeanToCsv;
-import com.opencsv.bean.StatefulBeanToCsvBuilder;
 import com.thanhtam.backend.dto.EmailUpdate;
 import com.thanhtam.backend.dto.PageResult;
 import com.thanhtam.backend.dto.PasswordUpdate;
@@ -245,21 +247,45 @@ public UserController(UserService userService,
         userService.createUser(user);
         return ResponseEntity.ok(new ServiceResult(HttpStatus.OK.value(), "User created successfully!", user));
     }
-
-    @GetMapping("deleted/{status}/export/users.csv")
-    public void exportUsersToCSV(HttpServletResponse response) throws Exception {
-        String fileName = "users.csv";
-        response.setContentType("text/csv");
+    @CrossOrigin(origins = "http://localhost:4200") // FE Angular chạy tại đây
+    @GetMapping("deleted/{status}/export/users.xlsx")
+    public void exportUsersToExcel(HttpServletResponse response) throws Exception {
+        String fileName = "users.xlsx";
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"");
-        //create a csv writer
-        StatefulBeanToCsv<UserExport> writer = new StatefulBeanToCsvBuilder<UserExport>(response.getWriter())
-                .withQuotechar(CSVWriter.NO_QUOTE_CHARACTER)
-                .withSeparator(CSVWriter.DEFAULT_SEPARATOR)
-                .withOrderedResults(false)
-                .build();
 
-        //write all users to csv file'
-        writer.write(userService.findAllByDeletedToExport(false));
+        // Tạo workbook và sheet
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Users");
+
+        // Tạo header
+        Row header = sheet.createRow(0);
+        header.createCell(0).setCellValue("Tên đăng nhập");
+        header.createCell(1).setCellValue("Họ");
+        header.createCell(2).setCellValue("Tên");
+        header.createCell(3).setCellValue("Email");
+
+        // Lấy danh sách user export
+        List<UserExport> userList = userService.findAllByDeletedToExport(false);
+
+        // Ghi dữ liệu
+        int rowNum = 1;
+        for (UserExport user : userList) {
+            Row row = sheet.createRow(rowNum++);
+            row.createCell(0).setCellValue(user.getUsername());
+            row.createCell(1).setCellValue(user.getFirstName());
+            row.createCell(2).setCellValue(user.getLastName());
+            row.createCell(3).setCellValue(user.getEmail());
+        }
+
+        // Auto-size columns
+        for (int i = 0; i < 4; i++) {
+            sheet.autoSizeColumn(i);
+        }
+
+        // Ghi file ra response
+        workbook.write(response.getOutputStream());
+        workbook.close();
     }
 
     public void addRoles(ERole roleName, Set<Role> roles) {

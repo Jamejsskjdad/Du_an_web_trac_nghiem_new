@@ -52,13 +52,18 @@ export class ManageUserComponent implements OnInit, AfterContentInit {
   }
 
   exportUserToExcel() {
-    this.userService.exportExcel(false).subscribe(response => {
+    this.userService.exportExcel(false).subscribe(blob => {
       const link = document.createElement('a');
-      link.href = window.URL.createObjectURL(new Blob([response], {type: 'text/csv'}));
-      link.download = 'users.csv';
+      link.href = window.URL.createObjectURL(blob);
+      link.download = 'users.xlsx';
       link.click();
+      window.URL.revokeObjectURL(link.href);
+    }, err => {
+      // Có thể hiện toast báo lỗi nếu cần
+      this.toast.error('Không thể xuất file!');
     });
   }
+  
 
   goPreviousPage() {
     const isFirstPage: boolean = this.paginationDetail.isFirstPage;

@@ -145,10 +145,24 @@ private Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
         List<User> userList = userRepository.findAllByDeleted(statusDelete);
         List<UserExport> userExportList = new ArrayList<>();
         userList.forEach(user -> {
-            userExportList.add(new UserExport(user.getUsername(), user.getEmail(), user.getProfile().getFirstName(), user.getProfile().getLastName()));
+            // Kiểm tra user có profile không
+            if (user.getProfile() != null) {
+                userExportList.add(
+                    new UserExport(
+                        user.getUsername(),
+                        user.getEmail(),
+                        user.getProfile().getFirstName(),
+                        user.getProfile().getLastName()
+                    )
+                );
+            } else {
+                // Có thể log ra nếu muốn
+                logger.warn("User '{}' không có profile, bỏ qua khi export!", user.getUsername());
+            }
         });
         return userExportList;
     }
+
 
     @Override
     public void updateUser(User user) {

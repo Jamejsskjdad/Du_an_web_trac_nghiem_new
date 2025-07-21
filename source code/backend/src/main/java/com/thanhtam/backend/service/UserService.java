@@ -1,14 +1,15 @@
 package com.thanhtam.backend.service;
 
-import com.thanhtam.backend.dto.UserExport;
-import com.thanhtam.backend.entity.Intake;
-import com.thanhtam.backend.entity.User;
+import java.util.List;
+import java.util.Optional;
+
+import javax.mail.MessagingException;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import javax.mail.MessagingException;
-import java.util.List;
-import java.util.Optional;
+import com.thanhtam.backend.dto.UserExport;
+import com.thanhtam.backend.entity.User;
 
 public interface UserService {
     //    List<User> getAllUsers();
@@ -32,7 +33,7 @@ public interface UserService {
 
     Optional<User> findUserById(Long id);
 
-    List<UserExport> findAllByDeletedToExport(boolean statusDelete);
+    List<UserExport> findAllByDeletedToExport(boolean deleted);
 
     void updateUser(User user);
 

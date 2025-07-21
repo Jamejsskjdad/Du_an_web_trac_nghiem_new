@@ -42,14 +42,16 @@ export class UserService {
     return this.http.get<PageResult<UserAccount>>(`${this.baseUrl}/users/search`, {params: pageParams});
   }
 
-  exportExcel(status: boolean): Observable<any> {
-    let headers = new HttpHeaders();
-    headers = headers.set('Accept', 'application/csv');
-    return this.http.get(`${this.baseUrl}/users/deleted/${status}/export/users.csv`, {
+  exportExcel(status: boolean): Observable<Blob> {
+    const headers = new HttpHeaders({
+      'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    });
+    return this.http.get(`${this.baseUrl}/users/deleted/${status}/export/users.xlsx`, {
       headers,
-      responseType: 'text'
+      responseType: 'blob'
     });
   }
+  
 
   addUser(user: UserAccount): Observable<UserAccount> {
     return this.http.post<UserAccount>(`${this.baseUrl}/users`, user);
