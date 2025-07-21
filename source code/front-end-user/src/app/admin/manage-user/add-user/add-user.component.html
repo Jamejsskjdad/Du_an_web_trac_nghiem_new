@@ -6,7 +6,8 @@
 <form novalidate (ngSubmit)="onSubmit()" [formGroup]="rfAddUser">
   <div *ngIf="showModalAdd"
     class="fixed inset-0 overflow-auto z-50 outline-none focus:outline-none justify-center flex">
-    <div class="relative w-4/5 my-5 mx-auto max-w-2xl" style="margin-top: 2.5rem">
+    <div class="relative w-11/12 my-5 mx-auto max-w-3xl" style="margin-top: 2.5rem">
+
       <!--content-->
       <div
         class="border-0 rounded-lg shadow-lg relative flex flex-col w-full overflow-y-auto my-5 bg-white outline-none focus:outline-none"
@@ -119,47 +120,7 @@
                               *ngIf="email?.hasError('emailExists') && (email?.dirty || email.touched)">
                               Email đã tồn tại</p>
                           </div>
-                          <div class="-mx-3 md:flex mb-2 w-full">
-                            <div class="md:w-full px-3">
-                              <label class="block uppercase tracking-wide text-gray-600 text-xs font-bold mb-2">
-                                Quyền người dùng
-                              </label>
-                              <div class="flex space-x-4">
-                                <label class="flex items-center">
-                                  <input type="radio" formControlName="roleId" [value]="1" class="mr-2" />
-                                  Quản trị viên
-                                </label>
-                                <label class="flex items-center">
-                                  <input type="radio" formControlName="roleId" [value]="2" class="mr-2" />
-                                  Giáo viên
-                                </label>
-                                <label class="flex items-center">
-                                  <input type="radio" formControlName="roleId" [value]="3" class="mr-2" />
-                                  Học sinh
-                                </label>
-                              </div>
-                              <p class="text-red-500 text-xs italic"
-                                *ngIf="rfAddUser.get('roleId').hasError('required') && rfAddUser.get('roleId').touched">
-                                Vui lòng chọn quyền cho user!
-                              </p>
-                            </div>
-                          </div>
-                          <div class="-mx-3 md:flex mb-2 w-full" *ngIf="rfAddUser.get('roleId').value == 3">
-                            <div class="md:w-full px-3">
-                              <label class="block uppercase tracking-wide text-gray-600 text-xs font-bold mb-2">
-                                Chọn khoá thực tập (Intake)
-                              </label>
-                              <select formControlName="intakeId"
-                                class="block appearance-none w-full bg-gray-200 py-2 px-3 my-1 mt-3 pr-4 rounded shadow leading-tight focus:outline-none">
-                                <option value="">-- Vui lòng chọn intake --</option>
-                                <option *ngFor="let intake of intakes" [value]="intake.id">{{intake.name}}</option>
-                              </select>
-                              <p class="text-red-500 text-xs italic"
-                                *ngIf="rfAddUser.get('roleId').value == 3 && !rfAddUser.get('intakeId').value && rfAddUser.get('intakeId').touched">
-                                Vui lòng chọn khoá thực tập
-                              </p>
-                            </div>
-                          </div>
+
 
                           <div class="-mx-3 md:flex mb-2 w-full">
                             <div class="md:w-full px-3">
@@ -182,7 +143,56 @@
                             </div>
                           </div>
 
+                          <!-- div cho khối quyền người dùng xuống dòng-->
                         </div>
+
+                        <div class="-mx-3 md:flex mb-2 w-full">
+                          <div class="md:w-full px-3">
+                            <label class="block uppercase tracking-wide text-gray-600 text-xs font-bold mb-2">
+                              Quyền người dùng
+                            </label>
+                            <div class="flex flex-col space-y-3">
+                              <label class="flex items-center">
+                                <input type="radio" formControlName="roleId" [value]="1" class="mr-2" />
+                                Quản trị viên
+                              </label>
+                              <label class="flex items-center">
+                                <input type="radio" formControlName="roleId" [value]="2" class="mr-2" />
+                                Giáo viên
+                              </label>
+                              <label class="flex items-center">
+                                <input type="radio" formControlName="roleId" [value]="3" class="mr-2" />
+                                Học sinh
+                              </label>
+                            </div>
+                            <p class="text-red-500 text-xs italic"
+                              *ngIf="rfAddUser.get('roleId').hasError('required') && rfAddUser.get('roleId').touched">
+                              Vui lòng chọn quyền cho user!
+                            </p>
+                          </div>
+
+                          <!-- div cũ v2 -->
+
+                          <div class="-mx-3 md:flex mb-2 w-full" *ngIf="rfAddUser.get('roleId').value == 3">
+                            <div class="md:w-full px-3">
+                              <label class="block uppercase tracking-wide text-gray-600 text-xs font-bold mb-2">
+                                Chọn khoá thực tập (Intake)
+                              </label>
+                              <select formControlName="intakeId"
+                                class="block appearance-none w-full bg-gray-200 py-2 px-3 my-1 mt-3 pr-4 rounded shadow leading-tight focus:outline-none">
+                                <option *ngFor="let intake of intakes" [value]="intake.id">{{ intake.name }}</option>
+                              </select>
+
+                              <p class="text-red-500 text-xs italic"
+                                *ngIf="rfAddUser.get('roleId').value == 3 && !rfAddUser.get('intakeId').value && rfAddUser.get('intakeId').touched">
+                                Vui lòng chọn khoá thực tập
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- div cũ -->
+
+
                       </div>
                     </div>
                     <!--footer-->

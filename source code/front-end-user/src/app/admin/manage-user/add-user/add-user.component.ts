@@ -1,15 +1,15 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {UserService} from '../../../_services/user.service';
-import {UserAccount} from '../../../models/user-account';
-import {UserProfile} from '../../../models/user-profile';
-import {PageResult} from '../../../models/page-result';
-import {switchMap} from 'rxjs/operators';
-import {ToastrService} from 'ngx-toastr';
-import {FileUploadComponent} from '../../../shared/file-upload/file-upload.component';
-import {UploadFileService} from '../../../_services/upload-file.service';
-import {IntakeService} from '../../../_services/intake.service';
-import {Intake} from '../../../models/intake';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UserService } from '../../../_services/user.service';
+import { UserAccount } from '../../../models/user-account';
+import { UserProfile } from '../../../models/user-profile';
+import { PageResult } from '../../../models/page-result';
+import { switchMap } from 'rxjs/operators';
+import { ToastrService } from 'ngx-toastr';
+import { FileUploadComponent } from '../../../shared/file-upload/file-upload.component';
+import { UploadFileService } from '../../../_services/upload-file.service';
+import { IntakeService } from '../../../_services/intake.service';
+import { Intake } from '../../../models/intake';
 
 @Component({
   selector: 'app-add-user',
@@ -32,9 +32,9 @@ export class AddUserComponent implements OnInit {
   userTotal: number;
 
   constructor(private userService: UserService,
-              private fb: FormBuilder,
-              private toast: ToastrService,
-              private uploadFileService: UploadFileService, private intakeService: IntakeService) {
+    private fb: FormBuilder,
+    private toast: ToastrService,
+    private uploadFileService: UploadFileService, private intakeService: IntakeService) {
   }
 
   get username() {
@@ -57,10 +57,10 @@ export class AddUserComponent implements OnInit {
     this.intakeService.getIntakeList().subscribe(data => {
       this.intakes = data;
     });
-  
+
     // Bỏ dòng reset cũ (nó không cần thiết ở đây)
     // this.rfAddUser?.reset(this.rfAddUser.value);
-  
+
     this.rfAddUser = this.fb.group({
       username: ['', [Validators.required, Validators.minLength(6)]],
       email: ['', [
@@ -74,9 +74,9 @@ export class AddUserComponent implements OnInit {
       roleId: [1, Validators.required],
       intakeId: [null]  // Thêm dòng này!
     });
-    
+
   }
-  
+
 
   closeModal() {
     this.showModalAdd = false;
@@ -104,23 +104,23 @@ export class AddUserComponent implements OnInit {
     };
     // Debug:
     console.log(user);
-  
-          this.userService.addUser(user).subscribe((res: any) => {
-        // Log password gốc và hash trả về từ backend
-        console.log("Password gốc:", res.data.rawPassword);
-        console.log("Password hash:", res.data.passwordHash);
 
-        // Sau khi tạo xong, lấy lại danh sách user
-        this.userService.getUserList(0, 20).subscribe(res2 => {
-          this.closeModal();
-          this.showSuccess();
-          this.pageResult = res2;
-          this.usersAddOutput.emit(this.pageResult);
-        });
+    this.userService.addUser(user).subscribe((res: any) => {
+      // Log password gốc và hash trả về từ backend
+      console.log("Password gốc:", res.data.rawPassword);
+      console.log("Password hash:", res.data.passwordHash);
+
+      // Sau khi tạo xong, lấy lại danh sách user
+      this.userService.getUserList(0, 20).subscribe(res2 => {
+        this.closeModal();
+        this.showSuccess();
+        this.pageResult = res2;
+        this.usersAddOutput.emit(this.pageResult);
       });
+    });
   }
-  
-  
+
+
   toggleModalAdd() {
     this.showModalAdd = !this.showModalAdd;
   }
