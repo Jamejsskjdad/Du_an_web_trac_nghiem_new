@@ -63,7 +63,7 @@
                       <input type="radio" name="choicesTF-{{ques.question.id}}" value="True"
                         [checked]="userChoice.choice.choiceText=='True' && userChoice.choice.isCorrected==1"
                         disabled="true" />
-                      <label class="select-none">Sai</label>
+                      <label class="select-none">Đúng</label>
                     </div>
                   </div>
 
@@ -80,7 +80,7 @@
                       <input type="radio" id="false-{{ques.question.id}}" name="choicesTF-{{ques.question.id}}"
                         value="False"
                         [checked]="userChoice.choice.choiceText=='False' && userChoice.choice.isCorrected==1" />
-                      <label for="false-{{ques.question.id}}" class="select-none">Đúng</label>
+                      <label for="false-{{ques.question.id}}" class="select-none">Sai</label>
                     </div>
                   </div>
                 </div>

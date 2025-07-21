@@ -5,6 +5,7 @@ import {Question} from '../../models/question';
 import {ExamService} from '../../_services/exam.service';
 import {AnswerSheet} from '../../models/answer-sheet';
 import {interval, Subscription, timer} from 'rxjs';
+import { SidebarService } from '../../_services/sidebar.service';
 
 @Component({
   selector: 'app-exam-question',
@@ -30,9 +31,10 @@ export class ExamQuestionComponent implements OnInit, OnDestroy {
   constructor(
     private activatedRoute: ActivatedRoute,
     private examService: ExamService,
-    private router: Router) {
-  }
-
+    private router: Router,
+    private sidebarService: SidebarService // ✅ Thêm dòng này
+  ) { }
+  
   ngOnDestroy(): void {
     this.subscription?.unsubscribe();
     this.countDown?.unsubscribe();
@@ -72,14 +74,17 @@ export class ExamQuestionComponent implements OnInit, OnDestroy {
       this.subscription = interval(10000).subscribe(x => {
         this.saveToServer(false);
       });
-
+  
+      // === Thêm dòng sau để ẩn sidebar khi lockScreen bật ===
       if (this.exam.lockScreen) {
+        this.sidebarService.setSidebarCollapsed(true); // Ẩn sidebar
         this.requestFullscreen();
         this.preventCopyPaste();
         this.detectTabSwitching();
       }
     });
   }
+  
 
   requestFullscreen() {
     const docElm = document.documentElement as any;
@@ -181,6 +186,7 @@ export class ExamQuestionComponent implements OnInit, OnDestroy {
     this.subscription?.unsubscribe();
     this.removeSecurityListeners(); // ✅ Gỡ đúng
     this.exitFullscreen();
+    this.sidebarService.setSidebarCollapsed(false);
     this.examService.submitExamUser(this.examId, true, this.counter, answerSheets).subscribe(res => {
       this.router.navigate(['../result'], { relativeTo: this.activatedRoute });
     }, error => {
