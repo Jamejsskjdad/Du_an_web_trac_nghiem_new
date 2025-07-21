@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import com.thanhtam.backend.config.JwtUtils;
 import com.thanhtam.backend.dto.UserExport;
+import com.thanhtam.backend.dto.UserPasswordExportDTO;
 import com.thanhtam.backend.entity.PasswordResetToken;
 import com.thanhtam.backend.entity.Role;
 import com.thanhtam.backend.entity.User;
@@ -227,6 +228,31 @@ private Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     public void addRoles(ERole roleName, Set<Role> roles) {
         Role userRole = roleService.findByName(roleName).orElseThrow(() -> new RuntimeException("Error: Role is not found"));
         roles.add(userRole);
+    }
+    private String generateRandomPassword(int length) {
+        // Loại bỏ ký tự dễ nhầm lẫn (I, l, 1, O, 0)
+        String chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%";
+        StringBuilder password = new StringBuilder();
+        java.util.Random rnd = new java.util.Random();
+        for (int i = 0; i < length; i++) {
+            password.append(chars.charAt(rnd.nextInt(chars.length())));
+        }
+        return password.toString();
+    }
+    
+    @Override
+    public List<UserPasswordExportDTO> generatePasswordsForStudents(Long intakeId) {
+    List<User> users = userRepository.findAllByIntakeId(intakeId);
+    List<UserPasswordExportDTO> exportList = new ArrayList<>();
+    for (User user : users) {
+        boolean isStudent = user.getRoles().stream()
+                .anyMatch(role -> "ROLE_STUDENT".equals(role.getName()));
+        if (!isStudent) continue;
+        String rawPass = generateRandomPassword(6);
+        String intakeName = user.getIntake() != null ? user.getIntake().getName() : "";
+        exportList.add(new UserPasswordExportDTO(user.getUsername(), rawPass, intakeName));
+        }
+        return exportList;
     }
 
 }

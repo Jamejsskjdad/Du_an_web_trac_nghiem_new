@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.thanhtam.backend.dto.UserExport;
+import com.thanhtam.backend.dto.UserPasswordExportDTO;
 import com.thanhtam.backend.entity.User;
 
 public interface UserService {
@@ -44,6 +45,6 @@ public interface UserService {
     boolean resetPassword(String token, String password);
 
     public Page<User> findAllByUsernameContainsOrEmailContains(String username, String email, Pageable pageable);
-
+    List<UserPasswordExportDTO> generatePasswordsForStudents(Long intakeId);
 
 }

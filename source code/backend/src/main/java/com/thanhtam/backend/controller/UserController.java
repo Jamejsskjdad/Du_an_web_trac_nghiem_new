@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.thanhtam.backend.dto.EmailUpdate;
 import com.thanhtam.backend.dto.PageResult;
@@ -40,6 +41,7 @@ import com.thanhtam.backend.dto.PasswordUpdate;
 import com.thanhtam.backend.dto.ServiceResult;
 import com.thanhtam.backend.dto.UserCreateRequest;
 import com.thanhtam.backend.dto.UserExport;
+import com.thanhtam.backend.dto.UserPasswordExportDTO;
 import com.thanhtam.backend.dto.UserUpdate;
 import com.thanhtam.backend.entity.Intake;
 import com.thanhtam.backend.entity.Profile;
@@ -291,6 +293,68 @@ public UserController(UserService userService,
     public void addRoles(ERole roleName, Set<Role> roles) {
         Role userRole = roleService.findByName(roleName).orElseThrow(() -> new RuntimeException("Error: Role is not found"));
         roles.add(userRole);
+    }
+    @PostMapping("/generate-passwords-excel")
+    public void generatePasswordsExcel(
+            @RequestParam("intakeId") Long intakeId,
+            HttpServletResponse response) throws Exception {
+        List<UserPasswordExportDTO> exportList = userService.generatePasswordsForStudents(intakeId);
+
+        String fileName = "student_passwords.xlsx";
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"");
+
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("StudentPasswords");
+
+        Row header = sheet.createRow(0);
+        header.createCell(0).setCellValue("Tên đăng nhập");
+        header.createCell(1).setCellValue("Mật khẩu");
+        header.createCell(2).setCellValue("Lớp (Intake)");
+
+        int rowNum = 1;
+        for (UserPasswordExportDTO dto : exportList) {
+            Row row = sheet.createRow(rowNum++);
+            row.createCell(0).setCellValue(dto.getUsername());
+            row.createCell(1).setCellValue(dto.getPassword());
+            row.createCell(2).setCellValue(dto.getIntakeName());
+        }
+        for (int i = 0; i < 3; i++) sheet.autoSizeColumn(i);
+        workbook.write(response.getOutputStream());
+        workbook.close();
+    }
+    @PostMapping("/update-passwords-excel")
+    public ResponseEntity<?> updatePasswordsFromExcel(@RequestParam("file") MultipartFile file) {
+        int updateCount = 0, skipCount = 0;
+        try (Workbook workbook = new XSSFWorkbook(file.getInputStream())) {
+            Sheet sheet = workbook.getSheetAt(0);
+            for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+                Row row = sheet.getRow(i);
+                if (row == null) continue;
+                if (row.getCell(0) == null || row.getCell(1) == null) {
+                    skipCount++;
+                    continue;
+                }
+                String username = row.getCell(0).getStringCellValue();
+                String rawPassword = row.getCell(1).getStringCellValue();
+
+                Optional<User> optUser = userService.getUserByUsername(username);
+                if (optUser.isPresent()) {
+                    User user = optUser.get();
+                    boolean isStudent = user.getRoles().stream()
+                        .anyMatch(role -> "ROLE_STUDENT".equals(role.getName()));
+                    if (isStudent) {
+                        user.setPassword(passwordEncoder.encode(rawPassword));
+                        userService.updateUser(user);
+                        updateCount++;
+                    }
+                }
+            }
+            return ResponseEntity.ok("Cập nhật mật khẩu thành công! " + updateCount + " user được đổi.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Lỗi cập nhật mật khẩu: " + e.getMessage());
+        }
     }
 
 

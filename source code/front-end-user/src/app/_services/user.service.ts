@@ -118,6 +118,13 @@ export class UserService {
   updatePassword(id: number, data: any): Observable<any> {
     return this.http.patch<any>(`${this.baseUrl}/users/${id}/password/updating`, data);
   }
-
-
+  generatePasswordsExcel(intakeId: number): Observable<Blob> {
+    return this.http.post(`${this.baseUrl}/users/generate-passwords-excel?intakeId=${intakeId}`, {}, {
+      responseType: 'blob'
+    });
+  }
+  updatePasswordsFromExcel(formData: FormData): Observable<any> {
+    return this.http.post(`${this.baseUrl}/users/update-passwords-excel`, formData, { responseType: 'text' }); // responseType là 'text'
+  }  
+  
 }

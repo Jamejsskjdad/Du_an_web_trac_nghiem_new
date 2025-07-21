@@ -4,6 +4,7 @@ import {UserAccount} from '../../models/user-account';
 import {PaginationDetail} from '../../models/pagination/pagination-detail';
 import {delay, switchMap} from 'rxjs/operators';
 import {ToastrService} from 'ngx-toastr';
+import { IntakeService } from '../../_services/intake.service';
 
 @Component({
   selector: 'app-manage-user',
@@ -23,14 +24,24 @@ export class ManageUserComponent implements OnInit, AfterContentInit {
   ];
   searchKeyWord = '';
   pageCountShowing = 20;
-
-  constructor(private userService: UserService, private toast: ToastrService) {
-  }
+  selectedIntakeId: number | null = null;
+  intakeList: any[] = [];
+  constructor(
+    private userService: UserService, 
+    private intakeService: IntakeService,
+    private toast: ToastrService
+  ) { }
+  
 
 
   ngOnInit(): void {
+    this.intakeService.getIntakeList().subscribe({
+      next: (data) => this.intakeList = data,
+      error: () => this.toast.error('Không lấy được danh sách lớp!')
+    });
     this.fetchUserList();
   }
+  
 
   fetchUserList() {
     // this.userService.searchUserListDeletedByPage(0, 20, this.searchKeyWord, false).subscribe(res => {
@@ -133,4 +144,34 @@ export class ManageUserComponent implements OnInit, AfterContentInit {
         this.toast.error('Không thể thay đổi trạng thái', 'Lỗi');
       });
   }
+  onExportPasswords() {
+    if (!this.selectedIntakeId) {
+      this.toast.error('Bạn phải chọn lớp trước!');
+      return;
+    }
+    this.userService.generatePasswordsExcel(this.selectedIntakeId).subscribe(blob => {
+      const link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.download = 'student-passwords.xlsx';
+      link.click();
+      window.URL.revokeObjectURL(link.href);
+    });
+  }
+  onUpdatePasswords(file: File) {
+    if (!file) {
+      this.toast.error('Bạn cần chọn file!');
+      return;
+    }
+    const formData = new FormData();
+    formData.append('file', file);
+    this.userService.updatePasswordsFromExcel(formData).subscribe(
+      res => {
+        this.toast.success(res || 'Cập nhật thành công!');
+      },
+      err => {
+        this.toast.error('Lỗi cập nhật mật khẩu!');
+      }
+    );    
+  }
+  
 }

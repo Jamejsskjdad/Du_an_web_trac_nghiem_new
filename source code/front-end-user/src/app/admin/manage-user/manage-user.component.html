@@ -41,6 +41,19 @@
                   </button>
 
                   <app-add-user (usersAddOutput)="fetchUsersAfterCRUD($event)"></app-add-user>
+                  <select [(ngModel)]="selectedIntakeId" class="form-select mx-2 w-56">
+                    <option [ngValue]="null">-- Chọn lớp --</option>
+                    <option *ngFor="let intake of intakeList" [ngValue]="intake.id">
+                      {{intake.name}} ({{intake.intakeCode}})
+                    </option>
+                  </select>
+                  <button (click)="onExportPasswords()" class="bg-blue-500 text-white px-3 py-1 rounded ml-2">
+                    Sinh mật khẩu & Xuất file
+                  </button>
+                  <input type="file" #passwordFile accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+                  <button (click)="onUpdatePasswords(passwordFile.files[0])" class="bg-green-500 text-white px-3 py-1 rounded ml-2">
+                    Cập nhật mật khẩu từ file
+                  </button>
 
                 </div>
               </div>
