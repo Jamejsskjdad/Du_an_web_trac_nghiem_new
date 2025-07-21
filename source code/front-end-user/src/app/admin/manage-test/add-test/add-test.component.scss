@@ -2,20 +2,24 @@ $accentColor: #0c5d7d;
 $lightColor: #fff;
 $darkColor: #444;
 
-.row-header{
+.row-header {
   position: sticky;
   top: 0;
 }
-.row-checkbox{
+
+.row-checkbox {
   width: 10%;
 }
-.row-question{
+
+.row-question {
   width: 60%;
 }
-.row-difficulty{
+
+.row-difficulty {
   width: 15%;
 }
-.row-type{
+
+.row-type {
   width: 15%;
 }
 
@@ -47,7 +51,7 @@ $darkColor: #444;
 
     &:before {
       transition: 0.1s width cubic-bezier(0.075, 0.82, 0.165, 1) 0s,
-      0.3s height cubic-bezier(0.075, 0.82, 0.165, 2) 0.1s;
+        0.3s height cubic-bezier(0.075, 0.82, 0.165, 2) 0.1s;
       z-index: 2;
       overflow: hidden;
       background-size: 13px;
@@ -63,15 +67,17 @@ $darkColor: #444;
     width: 90%;
     appearance: none;
 
-    &:checked + label {
-      background: lighten($accentColor, 15%);
+    &:checked+label {
+      //background: lighten($accentColor, 15%);
+      background: lighten(#4caf50, 5%);
       color: $lightColor;
       animation-name: blink;
       animation-duration: 1s;
       border-color: lighten($accentColor, 5%);
 
       &:after {
-        background: $accentColor;
+        //background: $accentColor;
+        background: #4caf50;
       }
 
       &:before {
@@ -86,27 +92,35 @@ $darkColor: #444;
   0% {
     background-color: lighten($accentColor, 15%);
   }
+
   10% {
     background-color: lighten($accentColor, 15%);
   }
+
   11% {
     background-color: lighten($accentColor, 20%);
   }
+
   29% {
     background-color: lighten($accentColor, 20%);
   }
+
   30% {
     background-color: lighten($accentColor, 15%);
   }
+
   50% {
     background-color: lighten($accentColor, 20%);
   }
+
   45% {
     background-color: lighten($accentColor, 15%);
   }
+
   50% {
     background-color: lighten($accentColor, 20%);
   }
+
   100% {
     background-color: lighten($accentColor, 15%);
   }
@@ -141,8 +155,8 @@ $darkColor: #444;
   box-sizing: border-box;
   border-radius: 4px;
   box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
-  0 8px 10px 1px rgba(0, 0, 0, 0.14),
-  0 3px 14px 2px rgba(0, 0, 0, 0.12);
+    0 8px 10px 1px rgba(0, 0, 0, 0.14),
+    0 3px 14px 2px rgba(0, 0, 0, 0.12);
 }
 
 .cdk-drag-animating {

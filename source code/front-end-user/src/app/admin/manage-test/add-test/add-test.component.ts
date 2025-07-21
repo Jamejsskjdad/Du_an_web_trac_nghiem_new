@@ -1,20 +1,20 @@
-import {Component, OnInit} from '@angular/core';
-import {Course} from '../../../models/course';
-import {CourseService} from '../../../_services/course.service';
-import {FormBuilder, FormGroup} from '@angular/forms';
-import {Part} from '../../../models/part';
-import {PartService} from '../../../_services/part.service';
+import { Component, OnInit } from '@angular/core';
+import { Course } from '../../../models/course';
+import { CourseService } from '../../../_services/course.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { Part } from '../../../models/part';
+import { PartService } from '../../../_services/part.service';
 import * as moment from 'moment';
-import {Question} from '../../../models/question';
-import {QuestionService} from '../../../_services/question.service';
-import {PaginationDetail} from '../../../models/pagination/pagination-detail';
-import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
-import {Exam} from '../../../models/exam';
-import {Intake} from '../../../models/intake';
-import {IntakeService} from '../../../_services/intake.service';
-import {ExamService} from '../../../_services/exam.service';
-import {ToastrService} from 'ngx-toastr';
-import {Router} from '@angular/router';
+import { Question } from '../../../models/question';
+import { QuestionService } from '../../../_services/question.service';
+import { PaginationDetail } from '../../../models/pagination/pagination-detail';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { Exam } from '../../../models/exam';
+import { Intake } from '../../../models/intake';
+import { IntakeService } from '../../../_services/intake.service';
+import { ExamService } from '../../../_services/exam.service';
+import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-test',
@@ -81,7 +81,7 @@ export class AddTestComponent implements OnInit {
   get maxPoint() {
     return this.rfAdd.get('maxPoint');
   }
-  
+
   ngOnInit(): void {
     this.rfAdd = this.fb.group({
       testTitle: [''],
@@ -93,16 +93,16 @@ export class AddTestComponent implements OnInit {
       isLockScreen: [false],
       intake: [-1],
       maxPoint: [100] // ✅ Thêm dòng này, giá trị mặc định là 100
-  });
-  
-  
+    });
+
+
     this.intakeService.getIntakeList().subscribe(res => {
       this.intakeList = res;
       // Thêm dòng này để debug
       console.log('✅ DANH SÁCH INTAKE:', this.intakeList);
     });
   }
-  
+
 
   onSubmit() {
     if (!this.maxPoint.value || this.maxPoint.value < 1) {
@@ -116,9 +116,9 @@ export class AddTestComponent implements OnInit {
     // Các bước cũ giữ nguyên
     this.questionDataJson.length = 0;
     this.questionListSelected.forEach(item => {
-      this.questionDataJson.push({questionId: item.id, point: item.point});
+      this.questionDataJson.push({ questionId: item.id, point: item.point });
     });
-  
+
     const newExam = new Exam(
       this.testTitle.value,
       this.timeDuration.value,
@@ -127,7 +127,7 @@ export class AddTestComponent implements OnInit {
       JSON.stringify(this.questionDataJson),
       this.maxPoint.value // Thêm giá trị này nếu Exam constructor đã có (xem mục 5)
     );
-  
+
     this.examService.createExam(
       this.intake.value,
       this.selectedPartId,
@@ -140,7 +140,7 @@ export class AddTestComponent implements OnInit {
       setTimeout(() => this.goToExamManagePage(), 1000);
     });
   }
-  
+
 
   changeCourse(event) {
     this.selectedCourseId = event.target.value;

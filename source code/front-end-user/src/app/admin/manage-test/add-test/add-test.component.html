@@ -12,11 +12,11 @@
             <div class="flex flex-wrap items-center">
               <div class="relative flex justify-between w-full px-4 max-w-full flex-grow leading-8 mb-3">
                 <h3 class="font-semibold text-2xl text-gray-800">
-                  Tạo bài test
+                  Tạo bài kiểm tra
                 </h3>
                 <button
                   class="bg-blue-200 shadow-md hover:bg-blue-300 text-blue-600 border border-gray-400 transition duration-200 ease-in-out text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1"
-                  type="submit"><span><i class="fa mr-1"></i>Tạo bài test</span>
+                  type="submit"><span><i class="fa mr-1"></i>Tạo bài kiểm tra</span>
                 </button>
               </div>
               <hr class="border w-full my-3">
@@ -58,7 +58,7 @@
                           Đặt tiêu đề
                         </label>
                         <input
-                          class="appearance-none border rounded-md w-full py-2 px-3 my-1 text-gray-600 bg-gray-200 leading-tight outline-none focus:border-blue-500"
+                          class="appearance-none border rounded-md w-full py-3 px-3 my-1 text-gray-600 bg-gray-200 leading-tight outline-none focus:border-blue-500"
                           id="test-title" formControlName="testTitle" type="text"
                           placeholder="Nhập tiêu đề cho bài kiểm tra" autocomplete="off" tabindex="1" required>
                       </div>
@@ -133,10 +133,13 @@
                     </div>
                   </div>
                   <hr class="border w-full my-3">
+
+
                   <div class="relative w-full px-4 max-w-full flex-flow flex-basis">
                     <p class="mx-3 my-3 text-gray-600 text-md text-blue-700 text-xl font-semibold">Thiết lập khác</p>
-                    <div class="-mx-3 md:flex mb-2 w-full">
-                      <div class="w-64 px-3">
+
+                    <div class="-mx-3 md:flex mb-2 w-full items-center">
+                      <div class="px-3 flex-1">
                         <div class="radio-type flex-1">
                           <div class="radio-btn">
                             <input type="checkbox" id="shuffle" name="shuffle" formControlName="isShuffle" />
@@ -144,7 +147,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="w-64 px-3">
+                      <div class="px-3 flex-1">
                         <div class="radio-type flex-1">
                           <div class="radio-btn">
                             <input type="checkbox" id="lockScreen" name="lockScreen" formControlName="isLockScreen" />
@@ -152,24 +155,26 @@
                           </div>
                         </div>
                       </div>
-                      <div class="w-64 px-3 flex flex-col justify-end">
-                        <label class="block uppercase tracking-wide text-gray-600 text-xs font-bold mb-2"
+                      <div class="px-3 flex flex-row justify-end ml-auto items-center" style="min-width: 300px;">
+                        <label class="block uppercase tracking-wide text-gray-600 text-xs font-bold mb-2 mr-2"
                           for="maxPoint">
                           Tổng điểm tối đa <span class="text-red-500">*</span>
                         </label>
                         <input type="number"
-                          class="appearance-none border rounded-md w-full py-2 px-3 my-1 text-gray-600 bg-gray-200 leading-tight outline-none focus:border-blue-500"
+                          class="appearance-none border rounded-md w-32 py-2 px-3 my-1 text-gray-600 bg-gray-200 leading-tight outline-none focus:border-blue-500"
                           id="maxPoint" formControlName="maxPoint" min="1" required
                           [ngModel]="rfAdd.get('maxPoint').value"
                           (ngModelChange)="rfAdd.get('maxPoint').setValue($event)" autocomplete="off"
                           placeholder="Nhập tổng điểm tối đa">
                         <div *ngIf="maxPoint.invalid && (maxPoint.dirty || maxPoint.touched)"
-                          class="text-red-500 text-xs italic">
+                          class="text-red-500 text-xs italic ml-2">
                           Tổng điểm tối đa phải lớn hơn hoặc bằng 1
                         </div>
                       </div>
                     </div>
                   </div>
+
+
                   <hr class="border w-full my-3">
                   <div class="relative w-full px-4 max-w-full flex-flow flex-basis">
                     <p class="mx-3 my-3 text-gray-600 text-md text-blue-700 text-xl font-semibold">Chọn câu hỏi</p>
