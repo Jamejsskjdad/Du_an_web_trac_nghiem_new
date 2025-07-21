@@ -36,7 +36,7 @@
                         <select formControlName="intake"
                           class="block appearance-none w-full bg-gray-200 py-2 px-3 my-1 mt-3 pr-4 rounded shadow leading-tight focus:outline-none"
                           (change)="changeIntake($event)">
-                          <option value="-1">-- vui lòng chọn khóa học --</option>
+                          <option value="-1">-- Vui lòng chọn khóa học --</option>
                           <option *ngFor="let intake of intakeList" [value]="intake.id">
                             {{intake.name}}
                           </option>
