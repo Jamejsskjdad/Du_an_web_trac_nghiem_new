@@ -63,7 +63,25 @@
 
               </div>
             </div>
-
+            <div class="-mx-3 md:flex mb-2 w-full">
+              <div class="md:w-full px-3">
+                <label class="block uppercase tracking-wide text-gray-600 text-xs font-bold mb-2">
+                  Chọn khoá thực tập (Intake)
+                </label>
+                <select
+                  formControlName="intakeId"
+                  class="block appearance-none w-full bg-gray-200 py-2 px-3 my-1 mt-3 pr-4 rounded shadow leading-tight focus:outline-none"
+                >
+                  <option [ngValue]="null">-- Chọn khóa --</option>
+                  <option *ngFor="let intake of intakeList" [value]="intake.id">{{ intake.name }}</option>
+                </select>
+                <p class="text-red-500 text-xs italic"
+                  *ngIf="!rfCreateCourse.get('intakeId').value && rfCreateCourse.get('intakeId').touched">
+                  Vui lòng chọn khoá thực tập
+                </p>
+              </div>
+            </div>
+            
           </div>
           <div
             class="my-4 px-8 text-gray-600 text-base leading-relaxed text-left flex-row flex flex-wrap justify-center lg:justify-start items-center">
@@ -72,7 +90,6 @@
               type="file" accept="image/*" placeholder="Chọn hình ảnh" autocomplete="off" required
               (change)="selectFile($event)">
           </div>
-
         </div>
         <!--footer-->
         <div class="flex items-center justify-end p-6 border-t border-solid border-gray-300 rounded-b">

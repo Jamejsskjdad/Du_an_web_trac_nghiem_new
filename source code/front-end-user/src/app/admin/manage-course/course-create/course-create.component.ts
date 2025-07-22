@@ -6,7 +6,8 @@ import {switchMap} from 'rxjs/operators';
 import {ToastrService} from 'ngx-toastr';
 import {PageResult} from '../../../models/page-result';
 import {UploadFileService} from '../../../_services/upload-file.service';
-
+import {Intake} from '../../../models/intake'; // đã có rồi
+import {IntakeService} from '../../../_services/intake.service'; // cần tạo file này
 @Component({
   selector: 'app-course-create',
   templateUrl: './course-create.component.html',
@@ -19,11 +20,13 @@ export class CourseCreateComponent implements OnInit {
   @Output() outputCourse = new EventEmitter<PageResult<Course>>();
   selectedFiles: FileList;
   currentFileUpload: File;
-
+  intakeList: Intake[] = [];
+  selectedIntakeId: number;
   constructor(private fb: FormBuilder,
               private courseService: CourseService,
               private toast: ToastrService,
-              private uploadFileService: UploadFileService) {
+              private uploadFileService: UploadFileService,
+              private intakeService: IntakeService) {
   }
 
   get courseCode() {
@@ -41,9 +44,12 @@ export class CourseCreateComponent implements OnInit {
         asyncValidators: [this.courseService.validateCourseCode()],
         updateOn: 'blur'
       }],
-      courseName: ['', Validators.required]
+      courseName: ['', Validators.required],
+      intakeId: ['', Validators.required]
     });
+    this.intakeService.getIntakeList().subscribe(data => this.intakeList = data);
   }
+  
 
   toggleModalAdd() {
     this.showModal = !this.showModal;
@@ -51,9 +57,17 @@ export class CourseCreateComponent implements OnInit {
   }
 
   onSubmit() {
+    // 1. Lấy intakeId từ Form (nếu dùng Reactive Form)
+  const intakeId = this.rfCreateCourse.get('intakeId').value;
+
+  // 2. In ra console để kiểm tra
+  console.log('intakeId:', intakeId);
     this.uploadFileService.uploadCourseImg(this.currentFileUpload).subscribe(url => {
       const course: Course = new Course(this.courseCode.value, this.courseName.value, url);
-      this.courseService.createCourse(course).pipe(switchMap(res => this.courseService.getCourseListByPage()))
+      this.courseService.createCourse(course).pipe(switchMap(res => {
+        const courseId = res?.data?.id;
+        return this.intakeService.linkCourseToIntake(courseId, intakeId);
+      })).pipe(switchMap(() => this.courseService.getCourseListByPage()))
         .subscribe(res => {
           this.closeModal();
           this.toast.success('Môn học mới đã được tạo', 'Thành công');
@@ -61,12 +75,12 @@ export class CourseCreateComponent implements OnInit {
         }, error => {
           this.toast.error('Đã có vấn đề xảy ra', 'Lỗi');
         });
-
+  
     }, error => {
       this.toast.error('Không thể upload ảnh', 'Lỗi');
     });
-
   }
+  
 
   closeModal() {
     this.showModal = false;
