@@ -5,6 +5,7 @@ import { PaginationDetail } from '../../models/pagination/pagination-detail';
 import { delay, switchMap } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import { IntakeService } from '../../_services/intake.service';
+import { TokenStorageService } from '../../_services/token-storage.service';
 
 @Component({
   selector: 'app-manage-user',
@@ -26,10 +27,16 @@ export class ManageUserComponent implements OnInit, AfterContentInit {
   pageCountShowing = 20;
   selectedIntakeId: number | null = null;
   intakeList: any[] = [];
+  selectMode = false;               // Chế độ chọn/xóa user
+  selectedUserIds: number[] = [];   // Danh sách id user đã chọn
+  allChecked = false;               // Checkbox chọn tất cả
+  currentUsername = '';             // Username tài khoản đang đăng nhập
+
   constructor(
     private userService: UserService,
     private intakeService: IntakeService,
-    private toast: ToastrService
+    private toast: ToastrService,
+    private tokenStorageService: TokenStorageService // <-- Thêm dòng này!
   ) { }
 
 
@@ -40,6 +47,7 @@ export class ManageUserComponent implements OnInit, AfterContentInit {
       error: () => this.toast.error('Không lấy được danh sách lớp!')
     });
     this.fetchUserList();
+    this.currentUsername = this.tokenStorageService.getUser()?.username || '';
   }
 
 
@@ -181,6 +189,64 @@ export class ManageUserComponent implements OnInit, AfterContentInit {
   toggleForm() {
     this.showForm = !this.showForm;
   }
-
+  enterSelectMode() {
+    this.selectMode = true;
+    this.selectedUserIds = [];
+    this.allChecked = false;
+  }
+  
+  cancelSelectMode() {
+    this.selectMode = false;
+    this.selectedUserIds = [];
+    this.allChecked = false;
+  }
+  
+  // Chọn tất cả user (trừ chính mình)
+  toggleSelectAll(checked: boolean) {
+    this.allChecked = checked;
+    if (checked) {
+      this.selectedUserIds = this.userList
+        .filter(u => u.username !== this.currentUsername)
+        .map(u => u.id);
+    } else {
+      this.selectedUserIds = [];
+    }
+  }
+  
+  // Chọn từng user (trừ chính mình)
+  toggleSelectUser(userId: number, checked: boolean) {
+    if (checked) {
+      if (!this.selectedUserIds.includes(userId)) {
+        this.selectedUserIds.push(userId);
+      }
+    } else {
+      this.selectedUserIds = this.selectedUserIds.filter(id => id !== userId);
+    }
+    // Cập nhật trạng thái "chọn tất cả"
+    this.allChecked = this.selectedUserIds.length === this.userList.filter(u => u.username !== this.currentUsername).length;
+  }
+  
+  
+  onDeleteSelectedUsers() {
+    // Chặn xóa chính mình
+    const userSelf = this.userList.find(u => u.username === this.currentUsername);
+    if (userSelf && this.selectedUserIds.includes(userSelf.id)) {
+      this.toast.error('Bạn không thể xóa chính mình!');
+      return;
+    }
+    if (!confirm(`Bạn chắc chắn muốn xóa ${this.selectedUserIds.length} user?`)) return;
+  
+    this.userService.deleteManyUsers(this.selectedUserIds).subscribe(
+      res => {
+        this.toast.success('Đã xóa user thành công!');
+        this.fetchUserList();
+        this.cancelSelectMode();
+      },
+      err => {
+        this.toast.error('Xóa user thất bại!');
+      }
+    );
+  }
+  
 
 }

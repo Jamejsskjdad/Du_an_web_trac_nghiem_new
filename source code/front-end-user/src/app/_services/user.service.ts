@@ -126,5 +126,8 @@ export class UserService {
   updatePasswordsFromExcel(formData: FormData): Observable<any> {
     return this.http.post(`${this.baseUrl}/users/update-passwords-excel`, formData, { responseType: 'text' }); // responseType là 'text'
   }  
+  deleteManyUsers(userIds: number[]): Observable<any> {
+    return this.http.post(`${this.baseUrl}/users/delete-many`, userIds);
+  }  
   
 }

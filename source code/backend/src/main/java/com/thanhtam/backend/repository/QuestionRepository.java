@@ -1,16 +1,19 @@
 package com.thanhtam.backend.repository;
 
-import com.thanhtam.backend.entity.Part;
-import com.thanhtam.backend.entity.Question;
-import com.thanhtam.backend.entity.QuestionType;
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
+import com.thanhtam.backend.entity.Part;
+import com.thanhtam.backend.entity.Question;
+import com.thanhtam.backend.entity.QuestionType;
 
 @Repository
 public interface QuestionRepository extends JpaRepository<Question, Long> {
@@ -34,4 +37,8 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
 
     @Query(value = "select q.id from question q where q.id =:questionId", nativeQuery = true)
     String findQuestionTextById(Long questionId);
+    @Modifying
+    @Transactional
+    @Query("UPDATE Question q SET q.createdBy.id = :adminId WHERE q.createdBy.id = :oldUserId")
+    void updateCreatedByForQuestions(@Param("oldUserId") Long oldUserId, @Param("adminId") Long adminId);
 }

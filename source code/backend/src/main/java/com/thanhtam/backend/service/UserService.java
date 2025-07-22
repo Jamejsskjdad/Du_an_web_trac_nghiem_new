@@ -46,5 +46,7 @@ public interface UserService {
 
     public Page<User> findAllByUsernameContainsOrEmailContains(String username, String email, Pageable pageable);
     List<UserPasswordExportDTO> generatePasswordsForStudents(Long intakeId);
+    void deleteUserById(Long userId, Long currentAdminId);
+    void deleteManyUsersByIds(List<Long> userIds, Long currentAdminId);
 
 }

@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.thanhtam.backend.entity.Exam;
@@ -25,4 +26,8 @@ List<Exam> findByCanceledIsTrueOrderByCreatedDateDesc();
     @Query(value = "UPDATE exam set exam.canceled=true where exam.id=?" , nativeQuery = true)
     void cancelExam(Long id);
     List<Exam> findByIntake_Id(Long intakeId);
+    @Modifying
+    @Transactional
+    @Query("UPDATE Exam e SET e.createdBy.id = :adminId WHERE e.createdBy.id = :oldUserId")
+    void updateCreatedByForExams(@Param("oldUserId") Long oldUserId, @Param("adminId") Long adminId);
 }

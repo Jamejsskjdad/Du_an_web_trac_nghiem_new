@@ -106,22 +106,22 @@
                       </div>
                     </div>
                   </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                  <button *ngIf="!selectMode"
+                  class="bg-red-600 hover:bg-red-700 text-white font-bold px-3 py-1 rounded mx-1 mb-1"
+                  (click)="enterSelectMode()">
+                  Chọn để xóa user
+                  </button>
+                  <div *ngIf="selectMode" class="flex flex-row gap-2 my-2">
+                    <button class="bg-red-500 hover:bg-red-700 text-white px-3 py-1 rounded"
+                        [disabled]="selectedUserIds.length === 0"
+                        (click)="onDeleteSelectedUsers()">
+                        Xóa user đã chọn ({{selectedUserIds.length}})
+                    </button>
+                    <button class="bg-gray-500 hover:bg-gray-700 text-white px-3 py-1 rounded"
+                        (click)="cancelSelectMode()">
+                        Hủy chọn
+                    </button>
+                  </div>
                 </div>
               </div>
               <form (ngSubmit)="searchUser(searchKeyWord)">
@@ -138,7 +138,6 @@
                           class="fa fa-search bg-blue-500 text-white rounded-full p-1 pt-2 truncate hover:bg-blue-400 focus:outline-none w-8 h-8 flex items-center justify-center">
                         </i>
                       </button>
-
                     </div>
                   </div>
                 </div>
@@ -152,7 +151,11 @@
             class="items-center w-full bg-transparent border-collapse whitespace-no-wrap user-list block lg:table overflow-x-auto overflow-y-auto">
             <thead>
               <tr>
-
+                <th *ngIf="selectMode" class="px-4 py-3 bg-gray-100">
+                  <input type="checkbox"
+                    [checked]="allChecked"
+                    (change)="toggleSelectAll($event.target.checked)" />
+                </th>
                 <th
                   class="row-username px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">
                   Tên đăng nhập
@@ -176,11 +179,16 @@
                 </th>
               </tr>
             </thead>
-
             <tbody *ngIf="skeleton==false">
               <ng-container *ngFor="let user of userList; trackBy: trackById">
                 <tr class="border hover:bg-gray-300" [ngClass]="{'bg-gray-400': user?.deleted}">
-
+                  <!-- CHECKBOX CHỌN USER: chỉ hiển thị khi selectMode -->
+                  <td *ngIf="selectMode" class="px-4 py-2 text-center">
+                    <input type="checkbox"
+                      [checked]="selectedUserIds.includes(user.id)"
+                      (change)="toggleSelectUser(user.id, $event.target.checked)"
+                      [disabled]="user.username === currentUsername" />
+                  </td>
                   <th
                     class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4 text-left">
                     {{user.username}}

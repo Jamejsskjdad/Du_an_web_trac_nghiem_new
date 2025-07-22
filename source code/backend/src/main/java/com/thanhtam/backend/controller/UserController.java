@@ -1,5 +1,6 @@
 package com.thanhtam.backend.controller;
 
+import java.security.Principal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -55,6 +57,7 @@ import com.thanhtam.backend.service.UserService;
 import com.thanhtam.backend.ultilities.ERole;
 
 import lombok.extern.slf4j.Slf4j;
+
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping(value = "/api/users")
@@ -354,6 +357,32 @@ public UserController(UserService userService,
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(500).body("Lỗi cập nhật mật khẩu: " + e.getMessage());
+        }
+    }
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> deleteUser(@PathVariable Long id, Principal principal) {
+        // principal.getName() là username admin hiện tại
+        User currentAdmin = userService.getUserByUsername(principal.getName())
+            .orElseThrow(() -> new RuntimeException("Không tìm thấy admin hiện tại"));
+
+        userService.deleteUserById(id, currentAdmin.getId());
+        return ResponseEntity.ok(new ServiceResult(HttpStatus.OK.value(), "Xóa user thành công", id));
+    }
+    @PostMapping("/delete-many")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> deleteManyUsers(@RequestBody List<Long> userIds, Principal principal) {
+        try {
+            User currentAdmin = userService.getUserByUsername(principal.getName())
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy admin hiện tại"));
+            userService.deleteManyUsersByIds(userIds, currentAdmin.getId());
+            return ResponseEntity.ok(new ServiceResult(HttpStatus.OK.value(), "Đã xóa thành công!", userIds));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(new ServiceResult(HttpStatus.FORBIDDEN.value(), e.getMessage(), null));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ServiceResult(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Xóa thất bại: " + e.getMessage(), null));
         }
     }
 

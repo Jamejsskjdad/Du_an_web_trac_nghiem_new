@@ -26,7 +26,11 @@ import com.thanhtam.backend.dto.UserPasswordExportDTO;
 import com.thanhtam.backend.entity.PasswordResetToken;
 import com.thanhtam.backend.entity.Role;
 import com.thanhtam.backend.entity.User;
+import com.thanhtam.backend.repository.ExamRepository;
+import com.thanhtam.backend.repository.ExamUserRepository;
 import com.thanhtam.backend.repository.PasswordResetTokenRepository;
+import com.thanhtam.backend.repository.QuestionRepository;
+import com.thanhtam.backend.repository.RoleUserRepository;
 import com.thanhtam.backend.repository.UserRepository;
 import com.thanhtam.backend.ultilities.ERole;
 
@@ -35,12 +39,21 @@ import com.thanhtam.backend.ultilities.ERole;
 public class UserServiceImpl implements UserService {
     private static final String ROLE_ADMIN = "ROLE_ADMIN";
     private static final String ROLE_LECTURER = "ROLE_LECTURER";
-private Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+    private Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     private UserRepository userRepository;
     private RoleService roleService;
     private PasswordEncoder passwordEncoder;
     private PasswordResetTokenRepository passwordResetTokenRepository;
     private EmailService emailService;
+    @Autowired
+    private ExamUserRepository examUserRepository;
+    
+    @Autowired
+    private RoleUserRepository roleUserRepository;
+    @Autowired
+    private QuestionRepository questionRepository;
+    @Autowired
+    private ExamRepository examRepository;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository, RoleService roleService, PasswordEncoder passwordEncoder, PasswordResetTokenRepository passwordResetTokenRepository, EmailService emailService) {
@@ -254,5 +267,34 @@ private Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
         }
         return exportList;
     }
+    @Override
+    public void deleteManyUsersByIds(List<Long> userIds, Long currentAdminId) {
+        List<User> users = userRepository.findAllById(userIds);
+        for (User user : users) {
+            // Không cho phép tự xóa mình!
+            if (user.getId().equals(currentAdminId)) {
+                throw new IllegalArgumentException("Bạn không thể tự xóa chính mình!");
+            }
+
+            boolean isAdminOrLecturer = user.getRoles().stream()
+                    .anyMatch(role -> "ROLE_ADMIN".equals(role.getName()) || "ROLE_LECTURER".equals(role.getName()));
+            if (isAdminOrLecturer) {
+                // Cập nhật liên kết created_by_id của question, exam
+                questionRepository.updateCreatedByForQuestions(user.getId(), currentAdminId);
+                examRepository.updateCreatedByForExams(user.getId(), currentAdminId);
+            }
+        }
+        examUserRepository.deleteAllByUserIds(userIds);
+        roleUserRepository.deleteAllByUserIds(userIds);
+        userRepository.deleteAllById(userIds);
+    }
+    @Override
+    public void deleteUserById(Long userId, Long currentAdminId) {
+        // Có thể tái sử dụng logic của deleteManyUsersByIds cho 1 user
+        List<Long> ids = new ArrayList<>();
+        ids.add(userId);
+        deleteManyUsersByIds(ids, currentAdminId);
+    }
+    
 
 }
