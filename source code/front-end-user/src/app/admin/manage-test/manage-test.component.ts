@@ -1,8 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import {ExamService} from '../../_services/exam.service';
-import {Exam} from '../../models/exam';
-import {PaginationDetail} from '../../models/pagination/pagination-detail';
-import {delay} from 'rxjs/operators';
+import { Component, OnInit } from '@angular/core';
+import { ExamService } from '../../_services/exam.service';
+import { Exam } from '../../models/exam';
+import { PaginationDetail } from '../../models/pagination/pagination-detail';
+import { delay } from 'rxjs/operators';
 import * as moment from 'moment';
 
 @Component({
@@ -17,10 +17,10 @@ export class ManageTestComponent implements OnInit {
   now = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
 
   pageOptions: any = [
-    {display: 20, num: 20},
-    {display: 50, num: 50},
-    {display: 100, num: 100},
-    {display: 'Tất cả', num: ''},
+    { display: 20, num: 20 },
+    { display: 50, num: 50 },
+    { display: 100, num: 100 },
+    { display: 'Tất cả', num: '' },
   ];
   pageCountShowing = 20;
   selectMode = false; // Trạng thái chọn/xóa
@@ -124,7 +124,7 @@ export class ManageTestComponent implements OnInit {
       this.allChecked = true;
     }
   }
-  
+
   toggleSelectAll(checked: boolean) {
     this.allChecked = checked;
     if (checked) {
@@ -146,5 +146,5 @@ export class ManageTestComponent implements OnInit {
       );
     }
   }
-  
+
 }
