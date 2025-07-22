@@ -29,4 +29,7 @@ public interface ExamService {
 
     // ✅ Thêm hàm này
     List<Exam> findByIntakeId(Long intakeId);
+    
+    void deleteManyByIds(List<Long> examIds);
+
 }

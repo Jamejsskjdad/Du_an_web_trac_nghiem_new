@@ -14,10 +14,11 @@ import com.thanhtam.backend.dto.ChoiceCorrect;
 import com.thanhtam.backend.dto.ChoiceList;
 import com.thanhtam.backend.dto.ExamQuestionPoint;
 import com.thanhtam.backend.entity.Exam;
+import com.thanhtam.backend.entity.ExamUser;
 import com.thanhtam.backend.entity.Question;
 import com.thanhtam.backend.repository.ExamRepository;
+import com.thanhtam.backend.repository.ExamUserRepository;
 import com.thanhtam.backend.repository.IntakeRepository;
-
 @Service
 
 public class ExamServiceImpl implements ExamService {
@@ -28,15 +29,16 @@ public class ExamServiceImpl implements ExamService {
     private UserService userService;
     private QuestionService questionService;
     private ChoiceService choiceService;
-
+    private ExamUserRepository examUserRepository; // Thêm biến này
     @Autowired
-    public ExamServiceImpl(ExamRepository examRepository, IntakeRepository intakeRepository, PartService partService, UserService userService, QuestionService questionService, ChoiceService choiceService) {
+    public ExamServiceImpl(ExamRepository examRepository, IntakeRepository intakeRepository, PartService partService, UserService userService, QuestionService questionService, ChoiceService choiceService, ExamUserRepository examUserRepository ) {
         this.examRepository = examRepository;
         this.intakeRepository = intakeRepository;
         this.partService = partService;
         this.userService = userService;
         this.questionService = questionService;
         this.choiceService = choiceService;
+        this.examUserRepository = examUserRepository; // Gán giá trị
     }
 
     @Override
@@ -156,5 +158,17 @@ public class ExamServiceImpl implements ExamService {
     public List<Exam> findByIntakeId(Long intakeId) {
         return examRepository.findByIntake_Id(intakeId);
     }
-
+    @Override
+    public void deleteManyByIds(List<Long> examIds) {
+        // 1. Xóa tất cả ExamUser có exam_id nằm trong danh sách
+        for (Long examId : examIds) {
+            List<ExamUser> relatedExamUsers = examUserRepository.findAllByExam_Id(examId);
+            if (!relatedExamUsers.isEmpty()) {
+                examUserRepository.deleteAll(relatedExamUsers);
+            }
+        }
+        // 2. Xóa luôn các Exam tương ứng
+        examRepository.deleteAllById(examIds); // hoặc .deleteAllByIdInBatch(examIds) nếu JPA 2.4+
+    }
+    
 }

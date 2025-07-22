@@ -34,20 +34,30 @@
                         <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
                       </svg>
                     </div>
-                  </div>
-                  <!--                  <button-->
-                  <!--                    class="bg-white shadow-md hover:bg-green-500 hover:text-green-200 transition duration-200 ease-in-out text-xs font-bold uppercase px-3 py-1 md:mb-0 rounded outline-none focus:outline-none mx-1 mb-1"-->
-                  <!--                    type="button"-->
-                  <!--                    (click)="exportUserToExcel()">-->
-                  <!--                    <span><i class="fa fa-file-excel-o mx-1"></i>Export file</span>-->
-                  <!--                  </button>-->
-                  <!--                  <ng-container *ngIf="checkedAll">-->
-                  <!--                    <app-delete-list-user></app-delete-list-user>-->
-                  <!--                  </ng-container>-->
-                  <!--                                    <app-add-user (courseOutput)="fetchUsersAfterCRUD($event)"></app-add-user>-->
+                  </div>                  
                   <a class="bg-white shadow-md hover:bg-blue-500 hover:text-blue-200 transition duration-200 ease-in-out text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mx-1 mb-1"
                     type="button" [routerLink]="['./add-test']"><span><i class="fa fa-book mr-1"></i>Thêm mới</span>
                   </a>
+                  <button
+                    *ngIf="!selectMode"
+                    class="bg-yellow-500 text-white px-3 py-1 rounded ml-2"
+                    (click)="enterSelectMode()">
+                    Chọn bài thi để xóa
+                  </button>
+                  <div *ngIf="selectMode" class="inline-block">
+                    <button
+                      class="bg-red-500 text-white px-3 py-1 rounded ml-2"
+                      [disabled]="selectedExamIds.length === 0"
+                      (click)="onDeleteSelectedExams()">
+                      Xóa bài thi
+                    </button>
+                    <button
+                      class="bg-gray-400 text-white px-3 py-1 rounded ml-2"
+                      (click)="cancelSelectMode()">
+                      Hủy chọn
+                    </button>
+                  </div>
+                  
                 </div>
               </div>
               <!--              <form (ngSubmit)="searchUser(searchKeyWord)">-->
@@ -79,7 +89,12 @@
             class="items-center w-full bg-transparent border-collapse whitespace-no-wrap user-list block lg:table overflow-x-auto overflow-y-auto">
             <thead>
               <tr>
-
+                <th *ngIf="selectMode">
+                  <input type="checkbox"
+                         [(ngModel)]="allChecked"
+                         (change)="toggleSelectAll($event.target.checked)">
+                         Chọn tất cả
+                </th>                
                 <th
                   class="row-title px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">
                   Tiêu đề
@@ -107,6 +122,11 @@
             <tbody>
               <ng-container *ngFor="let exam of examList; trackBy: trackById">
                 <tr class="border hover:bg-gray-300">
+                  <td *ngIf="selectMode">
+                    <input type="checkbox"
+                           [checked]="selectedExamIds.includes(exam.id)"
+                           (change)="toggleExamSelection(exam.id, $event.target.checked)">
+                  </td>                  
                   <td
                     class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-md font-semibold text-gray-800 whitespace-no-wrap p-4">
                     <a [routerLink]="[exam.id, 'preview']" [tooltip]="'Xem chi tiết'" class="hover:text-blue-700"><span
