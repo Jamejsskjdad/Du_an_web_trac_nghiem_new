@@ -1,9 +1,9 @@
-import {AfterContentInit, AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {UserService} from '../../_services/user.service';
-import {UserAccount} from '../../models/user-account';
-import {PaginationDetail} from '../../models/pagination/pagination-detail';
-import {delay, switchMap} from 'rxjs/operators';
-import {ToastrService} from 'ngx-toastr';
+import { AfterContentInit, AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { UserService } from '../../_services/user.service';
+import { UserAccount } from '../../models/user-account';
+import { PaginationDetail } from '../../models/pagination/pagination-detail';
+import { delay, switchMap } from 'rxjs/operators';
+import { ToastrService } from 'ngx-toastr';
 import { IntakeService } from '../../_services/intake.service';
 
 @Component({
@@ -17,21 +17,21 @@ export class ManageUserComponent implements OnInit, AfterContentInit {
   paginationDetail: PaginationDetail;
   skeleton = true;
   pageOptions: any = [
-    {display: 20, num: 20},
-    {display: 50, num: 50},
-    {display: 100, num: 100},
-    {display: 'Tất cả', num: ''},
+    { display: 20, num: 20 },
+    { display: 50, num: 50 },
+    { display: 100, num: 100 },
+    { display: 'Tất cả', num: '' },
   ];
   searchKeyWord = '';
   pageCountShowing = 20;
   selectedIntakeId: number | null = null;
   intakeList: any[] = [];
   constructor(
-    private userService: UserService, 
+    private userService: UserService,
     private intakeService: IntakeService,
     private toast: ToastrService
   ) { }
-  
+
 
 
   ngOnInit(): void {
@@ -41,7 +41,7 @@ export class ManageUserComponent implements OnInit, AfterContentInit {
     });
     this.fetchUserList();
   }
-  
+
 
   fetchUserList() {
     // this.userService.searchUserListDeletedByPage(0, 20, this.searchKeyWord, false).subscribe(res => {
@@ -74,7 +74,7 @@ export class ManageUserComponent implements OnInit, AfterContentInit {
       this.toast.error('Không thể xuất file!');
     });
   }
-  
+
 
   goPreviousPage() {
     const isFirstPage: boolean = this.paginationDetail.isFirstPage;
@@ -171,7 +171,16 @@ export class ManageUserComponent implements OnInit, AfterContentInit {
       err => {
         this.toast.error('Lỗi cập nhật mật khẩu!');
       }
-    );    
+    );
   }
-  
+
+
+
+  showForm = false;
+
+  toggleForm() {
+    this.showForm = !this.showForm;
+  }
+
+
 }
