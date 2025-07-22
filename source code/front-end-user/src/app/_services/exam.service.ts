@@ -92,5 +92,8 @@ export class ExamService {
   public cancelExam(id: number): Observable<any> {
     return this.http.get(`${this.baseUrl}/exams/${id}/cancel`);
   }
-
+  deleteManyExams(ids: number[]): Observable<any> {
+    return this.http.post(`${this.baseUrl}/exams/delete-many`, ids, { responseType: 'text' });
+  }
+  
 }

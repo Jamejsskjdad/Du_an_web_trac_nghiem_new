@@ -1,13 +1,11 @@
 package com.thanhtam.backend.repository;
 
-import com.thanhtam.backend.entity.Exam;
-import com.thanhtam.backend.entity.ExamUser;
-import com.thanhtam.backend.entity.User;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import com.thanhtam.backend.entity.ExamUser;
 
 @Repository
 public interface ExamUserRepository extends JpaRepository<ExamUser, Long> {

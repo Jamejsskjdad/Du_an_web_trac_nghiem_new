@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+// Thêm import cần thiết
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
@@ -31,6 +32,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import org.springframework.http.ResponseEntity;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -610,6 +613,12 @@ public ResponseEntity getResultExamQuestionsReport(@PathVariable Long examId) th
 
         }
     }
+    @PostMapping("/exams/delete-many")
+    public ResponseEntity<?> deleteManyExams(@RequestBody List<Long> examIds) {
+        examService.deleteManyByIds(examIds);
+        return ResponseEntity.ok().body("Đã xóa thành công!");
+    }
+
 
 }
 

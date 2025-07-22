@@ -23,7 +23,9 @@ export class ManageTestComponent implements OnInit {
     {display: 'Tất cả', num: ''},
   ];
   pageCountShowing = 20;
-
+  selectMode = false; // Trạng thái chọn/xóa
+  selectedExamIds: number[] = []; // Danh sách id các bài thi được chọn
+  allChecked = false; // Trạng thái checkbox "chọn tất cả"  
   constructor(private examService: ExamService) {
   }
 
@@ -97,4 +99,52 @@ export class ManageTestComponent implements OnInit {
       });
     }
   }
+  enterSelectMode() {
+    this.selectMode = true;
+    this.selectedExamIds = [];
+    this.allChecked = false;
+  }
+  cancelSelectMode() {
+    this.selectMode = false;
+    this.selectedExamIds = [];
+    this.allChecked = false;
+  }
+  toggleExamSelection(examId: number, checked: boolean) {
+    if (checked) {
+      if (!this.selectedExamIds.includes(examId)) {
+        this.selectedExamIds.push(examId);
+      }
+    } else {
+      this.selectedExamIds = this.selectedExamIds.filter(id => id !== examId);
+    }
+    // Nếu bỏ chọn bất kỳ checkbox, bỏ chọn "chọn tất cả"
+    if (!checked) {
+      this.allChecked = false;
+    } else if (this.selectedExamIds.length === this.examList.length) {
+      this.allChecked = true;
+    }
+  }
+  
+  toggleSelectAll(checked: boolean) {
+    this.allChecked = checked;
+    if (checked) {
+      this.selectedExamIds = this.examList.map(e => e.id);
+    } else {
+      this.selectedExamIds = [];
+    }
+  }
+  onDeleteSelectedExams() {
+    if (confirm(`Bạn chắc chắn muốn xóa ${this.selectedExamIds.length} bài thi đã chọn?`)) {
+      this.examService.deleteManyExams(this.selectedExamIds).subscribe(
+        res => {
+          this.fetchExamList();
+          this.cancelSelectMode();
+        },
+        err => {
+          alert('Xóa thất bại!');
+        }
+      );
+    }
+  }
+  
 }
