@@ -17,9 +17,10 @@
             <div class="flex flex-wrap flex-col w-full">
               <div class="flex flex-wrap flex-row">
 
-                <div class="relative w-full px-4 max-w-full flex-flow flex-basis">
+                <!-- <div class="relative w-full px-4 max-w-full flex-flow flex-basis"> -->
+                <div class="relative w-full px-4 max-w-full flex-row flex-nowrap flex items-center">
 
-                  <span class="mx-3 text-gray-600 text-sm">Hiển thị tối đa</span>
+                  <span class="mx-3 text-gray-600 text-sm">Hiển thị </span>
                   <div class="inline-block relative max-w-xs w-20 mr-2">
                     <select
                       class="block appearance-none w-full bg-white px-3 py-1 pr-4 rounded shadow leading-tight focus:outline-none text-sm"
@@ -36,16 +37,17 @@
                     </div>
                   </div>
                   <button
-                    class="bg-white shadow-md hover:bg-green-500 hover:text-green-200 transition duration-200 ease-in-out text-xs font-bold uppercase px-3 py-1 md:mb-0 rounded outline-none focus:outline-none mx-1 mb-1"
+                    class="bg-white shadow-md hover:bg-green-500 hover:text-white transition duration-200 ease-in-out text-xs font-bold uppercase px-3 py-2 rounded outline-none focus:outline-none mx-1 mb-1"
                     type="button" (click)="exportUserToExcel()">
                     <span><i class="fa fa-file-excel-o mx-1"></i>Xuất file</span>
                   </button>
 
                   <button (click)="toggleForm()"
-                    class="bg-white shadow-md hover:bg-blue-500 hover:text-blue-200 transition duration-200 ease-in-out text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mx-1 mb-1"
+                    class="bg-white shadow-md hover:bg-blue-500 hover:text-white transition duration-200 ease-in-out text-xs font-bold uppercase px-3 py-2 rounded outline-none focus:outline-none mx-1 mb-1"
                     type="button">
                     Cập nhật mật khẩu học viên
                   </button>
+                  <!-- Thêm -->
                   <app-add-user (usersAddOutput)="fetchUsersAfterCRUD($event)"></app-add-user>
 
 
@@ -107,21 +109,25 @@
                       </div>
                     </div>
                   </div>
+
                   <button *ngIf="!selectMode"
-                  class="bg-red-600 hover:bg-red-700 text-white font-bold px-3 py-1 rounded mx-1 mb-1"
-                  (click)="enterSelectMode()">
-                  Chọn để xóa user
+                    class="bg-white shadow-md hover:bg-red-700 hover:text-white transition duration-200 ease-in-out text-xs font-bold uppercase px-3 py-2 rounded outline-none focus:outline-none mx-1 mb-1"
+                    (click)="enterSelectMode()">
+                    Xóa người dùng
                   </button>
-                  <div *ngIf="selectMode" class="flex flex-row gap-2 my-2">
-                    <button class="bg-red-500 hover:bg-red-700 text-white px-3 py-1 rounded"
-                        [disabled]="selectedUserIds.length === 0"
-                        (click)="onDeleteSelectedUsers()">
-                        Xóa user đã chọn ({{selectedUserIds.length}})
+                  <div *ngIf="selectMode" class="flex flex-row gap-2 my-2 ">
+                    <button
+                      class="bg-red-600 shadow-md hover:bg-red-700 text-white transition duration-200 ease-in-out text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mx-1 mb-1"
+                      [disabled]="selectedUserIds.length === 0" (click)="onDeleteSelectedUsers()">
+                      Xóa ({{selectedUserIds.length}}) người dùng
                     </button>
-                    <button class="bg-gray-500 hover:bg-gray-700 text-white px-3 py-1 rounded"
-                        (click)="cancelSelectMode()">
-                        Hủy chọn
+                    <button
+                      class="bg-smoke-light shadow-md hover:bg-smoke-light hover:text-white transition duration-200 ease-in-out text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mx-1 mb-1"
+                      (click)="cancelSelectMode()">
+                      Hủy
                     </button>
+
+
                   </div>
                 </div>
               </div>
@@ -152,11 +158,10 @@
             class="items-center w-full bg-transparent border-collapse whitespace-no-wrap user-list block lg:table overflow-x-auto overflow-y-auto">
             <thead>
               <tr>
-                <th *ngIf="selectMode" class="px-4 py-3 bg-gray-100">
-                  <input type="checkbox"
-                    [checked]="allChecked"
-                    (change)="toggleSelectAll($event.target.checked)" />
-                    Chọn tất cả
+                <th *ngIf="selectMode" class="px-4 py-3 bg-gray-100"
+                  class="row-title px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left w-40">
+                  <input type="checkbox" [checked]="allChecked" (change)="toggleSelectAll($event.target.checked)" />
+                  Chọn tất cả
                 </th>
                 <th
                   class="row-username px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">
@@ -186,8 +191,7 @@
                 <tr class="border hover:bg-gray-300" [ngClass]="{'bg-gray-400': user?.deleted}">
                   <!-- CHECKBOX CHỌN USER: chỉ hiển thị khi selectMode -->
                   <td *ngIf="selectMode" class="px-4 py-2 text-center">
-                    <input type="checkbox"
-                      [checked]="selectedUserIds.includes(user.id)"
+                    <input type="checkbox" [checked]="selectedUserIds.includes(user.id)"
                       (change)="toggleSelectUser(user.id, $event.target.checked)"
                       [disabled]="user.username === currentUsername" />
                   </td>
