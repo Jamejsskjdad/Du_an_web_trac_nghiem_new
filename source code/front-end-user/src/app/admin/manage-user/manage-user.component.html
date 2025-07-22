@@ -52,7 +52,7 @@
                   <!-- Modal overlay + form -->
                   <div *ngIf="showForm" class="fixed inset-0 flex items-center justify-center z-50">
                     <!-- Overlay mờ nền -->
-                    <div class="fixed inset-0 bg-black opacity-30 backdrop-blur-sm"></div>
+                    <div class="fixed inset-0" style="background:rgba(22, 22, 22, 0.5);"></div>
 
                     <!-- Modal content -->
                     <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl p-8 relative z-10">
@@ -100,7 +100,7 @@
                       <!-- Nút Đóng ở dưới cùng form -->
                       <div class="flex justify-end mt-8">
                         <button type="button" (click)="toggleForm()"
-                          class="bg-gray-400 hover:bg-gray-500 text-white font-bold px-6 py-2 rounded shadow transition">
+                          class="bg-gray-400 hover:bg-red-400 text-white font-bold px-6 py-2 rounded shadow transition">
                           Đóng
                         </button>
                       </div>
