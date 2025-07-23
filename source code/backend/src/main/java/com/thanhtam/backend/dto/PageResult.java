@@ -1,19 +1,27 @@
 package com.thanhtam.backend.dto;
 
-import com.thanhtam.backend.dto.pagination.PaginationDetails;
-import lombok.Data;
-import org.springframework.data.domain.Page;
-
 import java.util.List;
 
-@Data
-public class PageResult {
-    private List<Object> data;
+import org.springframework.data.domain.Page;
 
+import com.thanhtam.backend.dto.pagination.PaginationDetails;
+
+import lombok.Data;
+
+@Data
+public class PageResult<T> {
+    private List<T> data;
     private PaginationDetails paginationDetails;
 
-    public PageResult(Page page) {
+    // Constructor cho Page<T>
+    public PageResult(Page<T> page) {
         this.data = page.getContent();
-        paginationDetails = new PaginationDetails(page);
+        this.paginationDetails = new PaginationDetails(page);
+    }
+
+    // Constructor cho List<T> + PaginationDetails (tùy trường hợp bạn muốn tự set)
+    public PageResult(List<T> data, PaginationDetails paginationDetails) {
+        this.data = data;
+        this.paginationDetails = paginationDetails;
     }
 }

@@ -1,29 +1,40 @@
 package com.thanhtam.backend.controller;
 
-import com.google.common.io.Files;
-import com.thanhtam.backend.dto.PageResult;
-import com.thanhtam.backend.dto.ServiceResult;
-import com.thanhtam.backend.entity.Course;
-import com.thanhtam.backend.entity.User;
-import com.thanhtam.backend.service.CourseService;
-import com.thanhtam.backend.service.S3Services;
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import javax.persistence.EntityNotFoundException;
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.persistence.EntityNotFoundException;
-import javax.validation.Valid;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import com.thanhtam.backend.dto.CourseDto;
+import com.thanhtam.backend.dto.PageResult;
+import com.thanhtam.backend.dto.ServiceResult;
+import com.thanhtam.backend.dto.pagination.PaginationDetails;
+import com.thanhtam.backend.entity.Course;
+import com.thanhtam.backend.mapper.CourseMapper;
+import com.thanhtam.backend.service.CourseService;
+import com.thanhtam.backend.service.S3Services;
+
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -41,18 +52,16 @@ public class CourseController {
 
 
     @GetMapping(value = "/course-list")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('LECTURER')")
-    public List<Course> getAllCourse() {
+    public List<CourseDto> getAllCourse() {
         List<Course> courseList = courseService.getCourseList();
-        return courseList;
-
+        return courseList.stream().map(CourseMapper::toDto).collect(Collectors.toList());
     }
 
     @GetMapping(value = "/courses")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('LECTURER')")
     public PageResult getCourseListByPage(@PageableDefault(page = 0, size = 10, sort = "id") Pageable pageable) {
-        Page<Course> courseListByPage = courseService.getCourseListByPage(pageable);
-        return new PageResult(courseListByPage);
+        Page<Course> page = courseService.getCourseListByPage(pageable);
+        List<CourseDto> dtos = page.getContent().stream().map(CourseMapper::toDto).collect(Collectors.toList());
+        return new PageResult<>(dtos, new PaginationDetails(page));
     }
 
     @GetMapping(value = "/courses/{id}/check-course-code")
