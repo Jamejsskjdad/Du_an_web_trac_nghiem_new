@@ -30,4 +30,6 @@ List<Exam> findByCanceledIsTrueOrderByCreatedDateDesc();
     @Transactional
     @Query("UPDATE Exam e SET e.createdBy.id = :adminId WHERE e.createdBy.id = :oldUserId")
     void updateCreatedByForExams(@Param("oldUserId") Long oldUserId, @Param("adminId") Long adminId);
+    List<Exam> findByPart_Id(Long partId);
+
 }

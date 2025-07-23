@@ -37,8 +37,12 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
 
     @Query(value = "select q.id from question q where q.id =:questionId", nativeQuery = true)
     String findQuestionTextById(Long questionId);
+
     @Modifying
     @Transactional
     @Query("UPDATE Question q SET q.createdBy.id = :adminId WHERE q.createdBy.id = :oldUserId")
     void updateCreatedByForQuestions(@Param("oldUserId") Long oldUserId, @Param("adminId") Long adminId);
+
+    // ---- Bổ sung hàm truy vấn dùng cho xóa course theo partId ----
+    List<Question> findAllByPartId(Long partId);
 }

@@ -171,4 +171,9 @@ public class ExamServiceImpl implements ExamService {
         examRepository.deleteAllById(examIds); // hoặc .deleteAllByIdInBatch(examIds) nếu JPA 2.4+
     }
     
+    @Override
+    public List<Exam> findByPartId(Long partId) {
+        return examRepository.findByPart_Id(partId);
+    }
+
 }

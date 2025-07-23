@@ -31,5 +31,6 @@ public interface ExamService {
     List<Exam> findByIntakeId(Long intakeId);
     
     void deleteManyByIds(List<Long> examIds);
+    List<Exam> findByPartId(Long partId);
 
 }

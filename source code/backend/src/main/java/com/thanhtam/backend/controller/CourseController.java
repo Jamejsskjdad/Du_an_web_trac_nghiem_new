@@ -147,6 +147,12 @@ public class CourseController {
     public List<Course> findAllByIntakeId(@PathVariable Long intakeId) {
         return courseService.findAllByIntakeId(intakeId);
     }
-
+    @PostMapping("/courses/delete-many")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('LECTURER')")
+    public ResponseEntity<?> deleteManyCourses(@RequestBody List<Long> courseIds) {
+        courseService.deleteManyByIds(courseIds);
+        return ResponseEntity.ok().body("Đã xóa thành công các môn học đã chọn!");
+    }
+    
 
 }

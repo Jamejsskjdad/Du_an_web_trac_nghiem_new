@@ -77,5 +77,8 @@ export class CourseService {
     }
       ;
   }
-
+  deleteManyCourses(ids: number[]): Observable<any> {
+    return this.http.post(`${this.baseUrl}/courses/delete-many`, ids, { responseType: 'text' });
+  }
+  
 }

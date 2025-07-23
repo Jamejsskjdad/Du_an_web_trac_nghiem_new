@@ -19,10 +19,24 @@
 
                 <div class="relative w-full px-4 max-w-full flex-flow flex-basis">
                   <app-course-create (outputCourse)="fetchCourseAfterCRUD($event)"></app-course-create>
-
                 </div>
+                <button class="bg-red-600 hover:bg-red-800 text-white px-3 py-1 rounded font-semibold"
+                  (click)="toggleSelectMode()" *ngIf="!selectMode">
+                  Xóa môn học
+                </button>
+                <div *ngIf="selectMode" class="flex gap-2 mt-3 justify-end">
+                  <button class="bg-red-600 hover:bg-red-800 text-white px-4 py-1 rounded font-semibold"
+                    (click)="onDeleteSelectedCourses()" [disabled]="selectedCourseIds.length === 0">
+                    Xóa các môn học đã chọn
+                  </button>
+                  <button class="bg-gray-400 hover:bg-gray-500 text-white px-4 py-1 rounded font-semibold"
+                    (click)="toggleSelectMode()">
+                    Hủy
+                  </button>
+                </div>
+                
               </div>
-            </div>
+            </div>           
           </div>
         </div>
         <div class="block w-full">
@@ -31,6 +45,7 @@
             class="items-center w-full bg-transparent border-collapse whitespace-no-wrap user-list block lg:table overflow-x-auto overflow-y-auto">
             <thead>
               <tr>
+                             
                 <th
                   class="row-checkbox px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">
                   Id
@@ -52,6 +67,10 @@
                   class="row-action px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">
                   Chức năng
                 </th>
+                <th *ngIf="selectMode" class="px-2 bg-gray-100 ...">
+                  <input type="checkbox" [(ngModel)]="selectAllChecked" (change)="onToggleSelectAll($event.target.checked)">
+                </th>
+                <!-- các th khác -->   
               </tr>
             </thead>
 
@@ -85,7 +104,11 @@
 
 
                   </td>
-
+                  <td *ngIf="selectMode" class="px-2 ...">
+                    <input type="checkbox"
+                      [checked]="selectedCourseIds.includes(course.id)"
+                      (change)="onToggleCourseSelect(course.id, $event.target.checked)">
+                  </td>
                 </tr>
               </ng-container>
 

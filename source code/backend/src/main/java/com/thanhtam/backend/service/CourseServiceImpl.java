@@ -2,6 +2,7 @@ package com.thanhtam.backend.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -10,7 +11,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.thanhtam.backend.entity.Course;
+import com.thanhtam.backend.entity.Exam;
+import com.thanhtam.backend.entity.Part;
+import com.thanhtam.backend.entity.Question;
 import com.thanhtam.backend.repository.CourseRepository;
+import com.thanhtam.backend.repository.PartRepository;
+import com.thanhtam.backend.repository.QuestionRepository;
 
 @Service
 public class CourseServiceImpl implements CourseService {
@@ -66,6 +72,44 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Course findCourseByPartId(Long partId) {
         return courseRepository.findCourseByPartId(partId);
+    }
+    @Autowired
+    private PartRepository partRepository;
+    @Autowired
+    private QuestionRepository questionRepository;
+    @Autowired
+    private ExamService examService; // đã có sẵn
+
+    @Override
+    @Transactional // nhớ thêm để đảm bảo atomic
+    public void deleteManyByIds(List<Long> courseIds) {
+        for (Long courseId : courseIds) {
+            // Lấy tất cả part thuộc course
+            List<Part> parts = partRepository.findAllByCourseId(courseId);
+
+            for (Part part : parts) {
+                Long partId = part.getId();
+
+                // 1. Lấy tất cả exam thuộc part, xóa qua service đã có
+                List<Exam> exams = examService.findByPartId(partId);
+                if (!exams.isEmpty()) {
+                    List<Long> examIds = exams.stream().map(Exam::getId).collect(Collectors.toList());
+                    examService.deleteManyByIds(examIds);
+                }
+
+                // 2. Xóa toàn bộ question theo part
+                List<Question> questions = questionRepository.findAllByPartId(partId);
+
+                if (!questions.isEmpty()) {
+                    questionRepository.deleteAll(questions);
+                }
+
+                // 3. Xóa part
+                partRepository.deleteById(partId);
+            }
+            // 4. Xóa course
+            courseRepository.deleteById(courseId);
+        }
     }
 
 }

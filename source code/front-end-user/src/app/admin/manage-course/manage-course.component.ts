@@ -41,5 +41,49 @@ export class ManageCourseComponent implements OnInit {
     this.courseList = page.data;
     this.paginationDetail = page.paginationDetails;
   }
-
+  selectMode = false;
+  selectedCourseIds: number[] = [];
+  selectAllChecked = false;
+  
+  toggleSelectMode() {
+    this.selectMode = !this.selectMode;
+    if (!this.selectMode) {
+      this.selectedCourseIds = [];
+      this.selectAllChecked = false;
+    }
+  }
+  
+  onToggleCourseSelect(id: number, checked: boolean) {
+    if (checked) {
+      this.selectedCourseIds.push(id);
+    } else {
+      this.selectedCourseIds = this.selectedCourseIds.filter(i => i !== id);
+    }
+    this.selectAllChecked = this.selectedCourseIds.length === this.courseList.length;
+  }
+  
+  onToggleSelectAll(checked: boolean) {
+    this.selectAllChecked = checked;
+    if (checked) {
+      this.selectedCourseIds = this.courseList.map(c => c.id);
+    } else {
+      this.selectedCourseIds = [];
+    }
+  }
+  
+  onDeleteSelectedCourses() {
+    if (this.selectedCourseIds.length === 0) return;
+    if (confirm(`Bạn chắc chắn muốn xóa ${this.selectedCourseIds.length} môn học đã chọn? Hành động này không thể hoàn tác!`)) {
+      this.courseService.deleteManyCourses(this.selectedCourseIds).subscribe(
+        res => {
+          this.fetchCourseListByPage();
+          this.toggleSelectMode();
+        },
+        err => {
+          alert('Xóa thất bại!');
+        }
+      );
+    }
+  }
+  
 }
