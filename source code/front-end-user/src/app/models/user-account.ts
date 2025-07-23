@@ -1,7 +1,7 @@
 import {UserRole} from './user-role';
 import {UserProfile} from './user-profile';
 import {Intake} from './intake';
-
+import { Role } from './role';
 export class UserAccount {
   id?: number;
   username: string;
@@ -9,12 +9,11 @@ export class UserAccount {
   enabled?: boolean;
   deleted?: boolean;
   createdDate?: Date;
-  roles?: any[]; // hoặc UserRole[] nếu có
   profile: any; // hoặc UserProfile
   intake?: any; // hoặc Intake
   password?: string;
   roleId?: number; // THÊM DÒNG NÀY!
-
+  roles: Role[]; // Thêm dòng này!
   constructor(
     username: string,
     email: string,

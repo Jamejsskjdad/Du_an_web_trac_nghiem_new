@@ -247,6 +247,13 @@ export class ManageUserComponent implements OnInit, AfterContentInit {
       }
     );
   }
-  
+  getVietRoleName(roleName: string): string {
+    switch (roleName) {
+      case 'ROLE_ADMIN': return 'Quản trị viên';
+      case 'ROLE_LECTURER': return 'Giáo viên';
+      case 'ROLE_STUDENT': return 'Học sinh';
+      default: return roleName;
+    }
+  }
 
 }
