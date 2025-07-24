@@ -91,10 +91,6 @@
               </th>
 
               <th
-                class="row-difficulty text-center px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 font-semibold text-left">
-                Độ khó
-              </th>
-              <th
                 class="row-type px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 font-semibold text-left">
                 Loại câu
               </th>
@@ -111,21 +107,7 @@
 
                 >
                   <div class="cursor-pointer" (click)="goDetail(ques.id)" [innerHTML]="ques.questionText"></div>
-                </th>
-
-                <td class="border-t-0 text-center px-6 align-middle border-l-0 border-r-0 text-xs p-4">
-                  <ng-container [ngSwitch]="ques.difficultyLevel">
-                    <ng-template [ngSwitchCase]="'EASY'">
-                      <span class="px-2 py-1 bg-green-200 cursor-pointer font-medium hover:bg-green-300 transition duration-300 ease-in-out font-light text-green-600 text-xs rounded-md">{{ques.difficultyLevel}}</span>
-                    </ng-template>
-                    <ng-template [ngSwitchCase]="'MEDIUM'">
-                      <span class="px-2 py-1 bg-gray-200 cursor-pointer font-medium hover:bg-gray-400 transition duration-300 ease-in-out font-light text-gray-600 text-xs rounded-md">{{ques.difficultyLevel}}</span>
-                    </ng-template>
-                    <ng-template [ngSwitchCase]="'HARD'">
-                      <span class="px-2 py-1 bg-red-200 cursor-pointer font-medium hover:bg-red-300 transition duration-300 ease-in-out font-light text-red-600 text-xs rounded-md">{{ques.difficultyLevel}}</span>
-                    </ng-template>
-                  </ng-container>
-                </td>
+                </th>               
                 <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs p-4">
                   {{ques.questionType.description}}
                 </td>

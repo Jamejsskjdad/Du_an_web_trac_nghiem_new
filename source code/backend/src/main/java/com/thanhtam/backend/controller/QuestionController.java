@@ -161,21 +161,30 @@ public class QuestionController {
     Question questionCreated = questionService.getQuestionById(question.getId()).get();
     log.info(questionCreated.toString());
     return questionCreated;
-}
-
+    }
 
     @PutMapping(value = "/questions/{id}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('LECTURER')")
-
     public ResponseEntity<?> updateQuestion(@Valid @RequestBody Question question, @PathVariable Long id) {
         Optional<Question> questionReq = questionService.getQuestionById(id);
         if (!questionReq.isPresent()) {
             return ResponseEntity.ok().body(new ServiceResult(HttpStatus.NOT_FOUND.value(), "Not found with id: " + id, null));
         }
-        question.setId(id);
-        questionService.save(question);
-        return ResponseEntity.ok().body(new ServiceResult(HttpStatus.OK.value(), "Get question with id: " + id, question));
+        Question q = questionReq.get();
+        // Update các trường muốn giữ lại
+        q.setQuestionText(question.getQuestionText());
+        q.setChoices(question.getChoices());
+        q.setQuestionType(question.getQuestionType());
+        q.setPart(question.getPart());
+        q.setPoint(question.getPoint());   // <- CHỈ DÙNG POINT
+        // Các trường createdBy, createdDate giữ nguyên!
+        questionService.save(q);
+
+        Question updated = questionService.getQuestionById(q.getId()).get();
+        return ResponseEntity.ok().body(new ServiceResult(HttpStatus.OK.value(), "Get question with id: " + id, updated));
     }
+
+
 
     @PreAuthorize("hasRole('ADMIN') or hasRole('LECTURER')")
     @GetMapping(value = "/questions/{id}/deleted/{deleted}")

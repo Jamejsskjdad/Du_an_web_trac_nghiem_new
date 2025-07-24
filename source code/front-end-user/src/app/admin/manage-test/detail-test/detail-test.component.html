@@ -172,22 +172,7 @@
                         <div [innerHTML]="ques.questionText"></div>
                       </div>
 
-                      <div class="border-t-0 md:w-1/6 px-6 align-middle border-l-0 border-r-0 text-xs  p-4">
-                        <ng-container [ngSwitch]="ques.difficultyLevel">
-                          <ng-template [ngSwitchCase]="'EASY'">
-                            <span
-                              class="px-2 py-1 bg-green-200 cursor-pointer font-medium hover:bg-green-300 transition duration-300 ease-in-out font-light text-green-600 text-xs rounded-md">{{ques.difficultyLevel}}</span>
-                          </ng-template>
-                          <ng-template [ngSwitchCase]="'MEDIUM'">
-                            <span
-                              class="px-2 py-1 bg-gray-200 cursor-pointer font-medium hover:bg-gray-400 transition duration-300 ease-in-out font-light text-gray-600 text-xs rounded-md">{{ques.difficultyLevel}}</span>
-                          </ng-template>
-                          <ng-template [ngSwitchCase]="'HARD'">
-                            <span
-                              class="px-2 py-1 bg-red-200 cursor-pointer font-medium hover:bg-red-300 transition duration-300 ease-in-out font-light text-red-600 text-xs rounded-md">{{ques.difficultyLevel}}</span>
-                          </ng-template>
-                        </ng-container>
-                      </div>
+                      
                       <div class="border-t-0 px-6 md:w-1/6 align-middle text-center border-l-0 border-r-0 text-xs  p-4">
                         {{ques.questionType}}
                       </div>

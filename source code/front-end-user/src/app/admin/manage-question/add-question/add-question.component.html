@@ -76,15 +76,14 @@
                       <div class="-mx-3 md:flex mb-2 w-full">
                         <div class="md:w-full px-3">
                           <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2">
-                            Độ khó
+                            Điểm
                           </label>
-                          <select formControlName="difficultyLevel"
-                            class="block appearance-none w-full bg-gray-200 py-2 px-3 my-1 mt-3 pr-4 rounded shadow leading-tight focus:outline-none">
-                            <option value="-1">-- Vui lòng chọn mức độ --</option>
-                            <option value="0" class="text-green-600">Dễ - 5pts</option>
-                            <option value="1" class="text-gray-600">Trung bình - 10pts</option>
-                            <option value="2" class="text-red-600">Khó - 15pts</option>
-                          </select>
+                          <input type="number"
+                            formControlName="point"
+                            class="block appearance-none w-full bg-gray-200 py-2 px-3 my-1 mt-3 pr-4 rounded shadow leading-tight focus:outline-none"
+                            min="0"
+                            required
+                            placeholder="Nhập điểm cho câu hỏi" />
                         </div>
 
                       </div>

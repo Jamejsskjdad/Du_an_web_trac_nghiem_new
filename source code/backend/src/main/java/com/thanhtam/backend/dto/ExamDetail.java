@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ExamDetail {
     private String questionText;
-    private String difficultyLevel;
     private int point;
     private String questionType;
 }

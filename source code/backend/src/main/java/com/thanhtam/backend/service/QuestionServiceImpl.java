@@ -110,27 +110,8 @@ public class QuestionServiceImpl implements QuestionService {
         return questionRepository.findQuestionsByCreatedBy_Username(pageable, username);
     }
 
-
     @Override
     public void save(Question question) {
-        int point;
-        switch (question.getDifficultyLevel()) {
-            case EASY: {
-                point = 5;
-                break;
-            }
-            case MEDIUM: {
-                point = 10;
-                break;
-            }
-            case HARD: {
-                point = 15;
-                break;
-            }
-            default:
-                point = 0;
-        }
-        question.setPoint(point);    
         questionRepository.save(question);
     }
 
@@ -139,11 +120,8 @@ public class QuestionServiceImpl implements QuestionService {
         questionRepository.save(question);
     }
 
-
-
     @Override
     public void delete(Long id) {
         questionRepository.deleteById(id);
     }
-
 }

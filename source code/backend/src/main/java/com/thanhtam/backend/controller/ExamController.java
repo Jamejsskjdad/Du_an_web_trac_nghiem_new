@@ -539,12 +539,12 @@ public ResponseEntity getResultExamQuestionsReport(@PathVariable Long examId) th
             Question question = questionService.getQuestionById(examQuestionPoint.getQuestionId()).get();
             examDetail.setQuestionText(question.getQuestionText());
             examDetail.setPoint(examQuestionPoint.getPoint());
-            examDetail.setDifficultyLevel(question.getDifficultyLevel().toString());
             examDetail.setQuestionType(question.getQuestionType().getDescription());
             questions.add(examDetail);
         });
         return questions;
     }
+    
 
     public List<ExamQuestionPoint> convertQuestionJsonToObject(Optional<Exam> exam) throws IOException {
 //        ObjectMapper mapper = new ObjectMapper();

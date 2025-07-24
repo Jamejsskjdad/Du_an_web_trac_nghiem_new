@@ -1,7 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { PageResult } from '../../../models/page-result';
 import { Question } from '../../../models/question';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CourseService } from '../../../_services/course.service';
 import { Course } from '../../../models/course';
 import { Part } from '../../../models/part';
@@ -30,7 +30,6 @@ export class AddQuestionComponent implements OnInit {
   questionTypeList: QuestionType[] = [];
   selectedCourseId = -1;
   selectedPartId = -1;
-  selectedMC = 1;
   answerChoicesTF: Choice[] = [];
   currentQuestionType = QTYPE.TF;
   multipleChoice: Choice[] = [];
@@ -50,76 +49,85 @@ export class AddQuestionComponent implements OnInit {
     private toast: ToastrService) {
   }
 
-  get course() {
-    return this.rfAdd.get('course');
-  }
-
-  get questionType() {
-    return this.rfAdd.get('questionType');
-  }
-
-  get difficultyLevel() {
-    return this.rfAdd.get('difficultyLevel');
-  }
-
-  get part() {
-    return this.rfAdd.get('part');
-  }
-
-  get choices() {
-    return this.rfAdd.get('choices');
-  }
-
+  get course() { return this.rfAdd.get('course'); }
+  get questionType() { return this.rfAdd.get('questionType'); }
+  get part() { return this.rfAdd.get('part'); }
+  get choices() { return this.rfAdd.get('choices'); }
+  get point() { return this.rfAdd.get('point'); }
 
   ngOnInit(): void {
     this.rfAdd = this.fb.group({
       course: ['-1'],
       questionType: [this.currentQuestionType],
-      difficultyLevel: ['-1'],
       part: [''],
       choices: ['True'],
-
+      point: [null, [Validators.required, Validators.min(0)]], // Điểm là trường bắt buộc
     });
   }
 
-
   onSubmit() {
+    const pointValue = this.point.value;
+    if (pointValue === null || isNaN(pointValue) || pointValue < 0) {
+      this.toast.error('Điểm không hợp lệ', 'Lỗi');
+      return;
+    }
+    if (!this.questionText || this.questionText.trim() === '') {
+      this.toast.error('Bạn phải nhập nội dung câu hỏi!', 'Lỗi');
+      return;
+    }
+
+    let questionPayload: any = {
+      questionText: this.questionText,
+      point: pointValue,
+      choices: []
+    };
+
     switch (this.questionType.value) {
       case QTYPE.TF: {
-        const choices: Choice[] = [];
-        choices.push(new Choice(this.choices.value, 1));
-        const newQuestion = new Question(this.questionText, this.difficultyLevel.value, choices);
-        this.questionService.createQuestion(newQuestion, this.questionType.value, this.part.value).subscribe(res1 => {
-          this.toast.success('1 câu hỏi true/false đã được tạo', 'Thành công');
-          this.resetFormAfterSubmit();
-        }, error => {
-          this.toast.error('Kiểm tra lại thông tin cần tạo', 'Lỗi');
-
-        });
-        return;
+        // Đúng/Sai: phải truyền đủ 2 đáp án
+        questionPayload.choices = [
+          new Choice('Đúng', this.choices.value === 'True' ? 1 : 0),
+          new Choice('Sai', this.choices.value === 'False' ? 1 : 0),
+        ];
+        break;
       }
       case QTYPE.MC: {
-        const newQuestion = new Question(this.questionText, this.difficultyLevel.value, this.multipleChoice);
-        this.questionService.createQuestion(newQuestion, this.questionType.value, this.part.value).subscribe(res2 => {
-          this.toast.success('1 câu hỏi multiple choice đã được tạo', 'Thành công');
-          this.resetFormAfterSubmit();
-        }, error => {
-          this.toast.error('Kiểm tra lại thông tin cần tạo', 'Lỗi');
-
-        });
-        return;
+        // Một đáp án đúng
+        if (this.multipleChoice.length < 2) {
+          this.toast.error('Phải có ít nhất 2 đáp án!', 'Lỗi');
+          return;
+        }
+        questionPayload.choices = this.multipleChoice.map(c => ({ choiceText: c.choiceText, isCorrected: c.isCorrected }));
+        break;
       }
       case QTYPE.MS: {
-        const newQuestion = new Question(this.questionText, this.difficultyLevel.value, this.multipleSelect);
-        this.questionService.createQuestion(newQuestion, this.questionType.value, this.part.value).subscribe(res2 => {
-          this.toast.success('1 câu hỏi multiple select đã được tạo', 'Thành công');
-          this.resetFormAfterSubmit();
-        }, error => {
-          this.toast.error('Kiểm tra lại thông tin cần tạo', 'Lỗi');
-        });
-        return;
+        // Nhiều đáp án đúng
+        if (this.multipleSelect.length < 2) {
+          this.toast.error('Phải có ít nhất 2 đáp án!', 'Lỗi');
+          return;
+        }
+        questionPayload.choices = this.multipleSelect.map(c => ({ choiceText: c.choiceText, isCorrected: c.isCorrected }));
+        break;
       }
+      default:
+        this.toast.error('Loại câu hỏi không hợp lệ!', 'Lỗi');
+        return;
     }
+
+    // Gọi API
+    this.questionService.createQuestion(
+      questionPayload, 
+      this.questionType.value, 
+      this.part.value
+    ).subscribe(
+      res => {
+        this.toast.success('Tạo câu hỏi thành công');
+        this.resetFormAfterSubmit();
+      },
+      error => {
+        this.toast.error('Kiểm tra lại thông tin cần tạo', 'Lỗi');
+      }
+    );
   }
 
   toggleModal() {
@@ -131,31 +139,31 @@ export class AddQuestionComponent implements OnInit {
     this.questionTypeService.getQuestionTypeList().subscribe(res => {
       this.questionTypeList = res;
     });
-
     this.initChoice();
   }
 
   initChoice() {
+    this.multipleChoice.length = 0;
+    this.multipleSelect.length = 0;
     this.multipleChoice.push(
       new Choice('<p>Đáp án 1</p>', 1),
-      new Choice('<p>Đáp án 2</p>', 0),
+      new Choice('<p>Đáp án 2</p>', 0)
     );
     this.multipleSelect.push(
       new Choice('<p>Đáp án 1</p>', 1),
-      new Choice('<p>Đáp án 2</p>', 1),
+      new Choice('<p>Đáp án 2</p>', 0)
     );
   }
 
   refreshModal() {
     this.course.setValue(-1);
     this.questionType.setValue(QTYPE.TF);
-    this.difficultyLevel.setValue(-1);
     this.part.setValue(-1);
+    this.rfAdd.get('point').setValue(null);
     this.multipleChoice.length = 0;
     this.multipleSelect.length = 0;
     this.currentQuestionType = QTYPE.TF;
     this.questionText = '';
-
   }
 
   closeModal() {
@@ -169,58 +177,38 @@ export class AddQuestionComponent implements OnInit {
     });
   }
 
-
   changeQuestionType(typeCode: string) {
     this.currentQuestionType = QTYPE[typeCode];
   }
 
   changeChoiceTF(value: string) {
-    if (this.answerChoicesTF.length > 0) {
-      this.answerChoicesTF.length = 0;
-    }
-    const answer = new Choice(value, 1);
-    return this.answerChoicesTF.push(answer);
-
+    this.rfAdd.get('choices').setValue(value);
   }
 
   addMCAnswer() {
-    const newAnswer = new Choice(``, 0);
-    this.multipleChoice.push(newAnswer);
+    this.multipleChoice.push(new Choice('', 0));
   }
 
   changeChoiceMC(i: number) {
-    this.multipleChoice.map(item => item.isCorrected = 0);
-    this.multipleChoice[i].isCorrected = 1;
+    this.multipleChoice.forEach((item, idx) => item.isCorrected = (i === idx ? 1 : 0));
   }
 
   removeMCChoice(i: number) {
-    if (this.multipleChoice.length === 3) {
-      // this.selectedMCAnswer = this.multipleChoice[0].choiceText;
-      this.multipleChoice[0].isCorrected = 1;
-    }
+    if (this.multipleChoice.length <= 2) return;
     this.multipleChoice.splice(i, 1);
   }
 
-  changeChoiceMS(ms: Choice) {
-    this.multipleSelect.map(item => {
-      if (!!item.isCorrected) {
-        item.isCorrected = 1;
-      } else {
-        item.isCorrected = 0;
-      }
-    });
+  changeChoiceMS(i: number) {
+    this.multipleSelect[i].isCorrected = this.multipleSelect[i].isCorrected ? 0 : 1;
   }
 
   removeMSChoice(index: number) {
-    if (this.multipleSelect.length === 3) {
-      this.multipleSelect[0].isCorrected = 1;
-    }
+    if (this.multipleSelect.length <= 2) return;
     this.multipleSelect.splice(index, 1);
   }
 
   addMSAnswer() {
-    const newAnswer = new Choice(``, 0);
-    this.multipleSelect.push(newAnswer);
+    this.multipleSelect.push(new Choice('', 0));
   }
 
   resetFormAfterSubmit() {
@@ -228,7 +216,7 @@ export class AddQuestionComponent implements OnInit {
     this.multipleSelect.length = 0;
     this.multipleChoice.length = 0;
     this.selectedPartId = -1;
+    this.rfAdd.get('point').setValue(null);
     this.initChoice();
-
   }
 }

@@ -1,30 +1,31 @@
-import {UserAccount} from './user-account';
-import {QuestionType} from './question-type';
-import {Choice} from './choice';
-import {Part} from './part';
+import { UserAccount } from './user-account';
+import { QuestionType } from './question-type';
+import { Choice } from './choice';
+import { Part } from './part';
+
+// File: question.ts
 
 export class Question {
-  id: number;
-  createdDate: string;
-  lastModifiedDate: string;
-  createdBy: UserAccount;
-  lastModifiedBy: UserAccount;
+  id?: number;
+  createdDate?: string;
+  lastModifiedDate?: string;
+  createdBy?: UserAccount;
+  lastModifiedBy?: UserAccount;
   questionText: string;
-  difficultyLevel: string;
-  questionType: QuestionType;
+  questionType?: QuestionType;
   choices: Choice[];
-  part: Part;
-  point: number;
-  isSelected: boolean;
-  deleted: boolean;
+  part?: Part;
+  point: number;      // GIỮ point
+  isSelected?: boolean;
+  deleted?: boolean;
 
   constructor(
     questionText: string,
-    difficultyLevel: string,
-    choices: Choice[]) {
+    choices: Choice[],
+    point: number,
+  ) {
     this.questionText = questionText;
-    this.difficultyLevel = difficultyLevel;
     this.choices = choices;
-
+    this.point = point;
   }
 }

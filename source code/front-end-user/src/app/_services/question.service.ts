@@ -37,5 +37,8 @@ export class QuestionService {
     console.log(deleted);
     return this.http.get(`${this.baseUrl}/questions/${id}/deleted/${deleted}`);
   }
-
+  updateQuestion(id: number, question: Question): Observable<any> {
+    return this.http.put(`${this.baseUrl}/questions/${id}`, question);
+  }
+  
 }
