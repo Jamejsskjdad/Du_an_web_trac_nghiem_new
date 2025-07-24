@@ -15,28 +15,33 @@
               </h3>
             </div>
             <div class="flex flex-wrap flex-col w-full">
-              <div class="flex flex-wrap flex-row">
-
-                <div class="relative w-full px-4 max-w-full flex-flow flex-basis">
+              <div class="flex flex-wrap flex-row items-center"> <!-- Thêm items-center để căn giữa theo trục dọc -->
+                <!-- Nút Thêm môn học -->
+                <div class="mr-2"> <!-- Thêm margin phải để cách nút xoá -->
                   <app-course-create (outputCourse)="fetchCourseAfterCRUD($event)"></app-course-create>
                 </div>
-                <button class="bg-red-600 hover:bg-red-800 text-white px-3 py-1 rounded font-semibold"
+                <!-- Nút Xóa môn học -->
+                <button
+                  class="bg-white shadow-md hover:bg-red-700 hover:text-white transition duration-200 ease-in-out text-xs font-bold uppercase px-3 py-2 rounded outline-none focus:outline-none mx-1 mb-1"
                   (click)="toggleSelectMode()" *ngIf="!selectMode">
                   Xóa môn học
                 </button>
-                <div *ngIf="selectMode" class="flex gap-2 mt-3 justify-end">
-                  <button class="bg-red-600 hover:bg-red-800 text-white px-4 py-1 rounded font-semibold"
+                <!-- Các nút khi ở chế độ select -->
+                <div *ngIf="selectMode" class="flex gap-2 ml-2">
+                  <button
+                    class="bg-red-600 shadow-md hover:bg-red-700 text-white transition duration-200 ease-in-out text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mx-1 mb-1"
                     (click)="onDeleteSelectedCourses()" [disabled]="selectedCourseIds.length === 0">
-                    Xóa các môn học đã chọn
+                    Xóa sửa số vào đây môn học
                   </button>
-                  <button class="bg-gray-400 hover:bg-gray-500 text-white px-4 py-1 rounded font-semibold"
+                  <button
+                    class="bg-smoke-light shadow-md hover:bg-smoke-light hover:text-white transition duration-200 ease-in-out text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mx-1 mb-1"
                     (click)="toggleSelectMode()">
-                    Hủy
+                    Hủy chọn
                   </button>
                 </div>
-                
               </div>
-            </div>           
+            </div>
+
           </div>
         </div>
         <div class="block w-full">
@@ -45,7 +50,15 @@
             class="items-center w-full bg-transparent border-collapse whitespace-no-wrap user-list block lg:table overflow-x-auto overflow-y-auto">
             <thead>
               <tr>
-                             
+                <!-- Checkbox header -->
+                <th *ngIf="selectMode" class="px-4 py-3 bg-gray-100 text-center align-middle w-16">
+                  <input type="checkbox" [(ngModel)]="selectAllChecked" class="h-4 w-4"
+                    (change)="onToggleSelectAll($event.target.checked)">
+                  <span
+                    class="row-checkbox px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">
+                    Chọn tất cả
+                  </span>
+                </th>
                 <th
                   class="row-checkbox px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">
                   Id
@@ -67,16 +80,19 @@
                   class="row-action px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">
                   Chức năng
                 </th>
-                <th *ngIf="selectMode" class="px-2 bg-gray-100 ...">
-                  <input type="checkbox" [(ngModel)]="selectAllChecked" (change)="onToggleSelectAll($event.target.checked)">
-                </th>
-                <!-- các th khác -->   
+
+                <!-- các th khác -->
               </tr>
             </thead>
 
             <tbody>
               <ng-container *ngFor="let course of courseList; trackBy: trackById; let i=index">
                 <tr class="border hover:bg-gray-300 align-middle">
+                  <!-- Checkbox từng dòng -->
+                  <td *ngIf="selectMode" class="px-4 py-3 text-center align-middle w-16">
+                    <input type="checkbox" [checked]="selectedCourseIds.includes(course.id)" class="h-4 w-4"
+                      (change)="onToggleCourseSelect(course.id, $event.target.checked)">
+                  </td>
                   <td
                     class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-md text-gray-500 whitespace-no-wrap p-4">
                     {{i + 1}}
@@ -101,14 +117,11 @@
                   <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4">
                     <app-course-update [courseInfo]="course"
                       (courseOutput)="fetchCourseAfterCRUD($event)"></app-course-update>
-
-
                   </td>
-                  <td *ngIf="selectMode" class="px-2 ...">
-                    <input type="checkbox"
-                      [checked]="selectedCourseIds.includes(course.id)"
+                  <!-- <td *ngIf="selectMode" class="px-2 ...">
+                    <input type="checkbox" [checked]="selectedCourseIds.includes(course.id)"
                       (change)="onToggleCourseSelect(course.id, $event.target.checked)">
-                  </td>
+                  </td> -->
                 </tr>
               </ng-container>
 
