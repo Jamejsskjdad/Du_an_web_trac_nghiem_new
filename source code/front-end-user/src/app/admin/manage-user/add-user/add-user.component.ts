@@ -90,10 +90,6 @@ export class AddUserComponent implements OnInit {
     const roleId = this.rfAddUser.get('roleId').value;
     const password = this.rfAddUser.get('password').value;
     const intakeId = this.rfAddUser.get('intakeId').value; // lấy intakeId nếu là student
-
-    // Debug password
-    console.log("Password khi tạo user:", password);
-
     const user: any = {
       username: this.username.value,
       email: this.email.value,
@@ -102,14 +98,8 @@ export class AddUserComponent implements OnInit {
       roleId,
       intakeId: roleId == 3 ? intakeId : null // chỉ gửi intakeId nếu là học viên
     };
-    // Debug:
-    console.log(user);
 
     this.userService.addUser(user).subscribe((res: any) => {
-      // Log password gốc và hash trả về từ backend
-      console.log("Password gốc:", res.data.rawPassword);
-      console.log("Password hash:", res.data.passwordHash);
-
       // Sau khi tạo xong, lấy lại danh sách user
       this.userService.getUserList(0, 20).subscribe(res2 => {
         this.closeModal();

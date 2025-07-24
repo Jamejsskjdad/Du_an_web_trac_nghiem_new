@@ -58,10 +58,6 @@ public class AuthenticationController {
     @PostMapping("/signin")
     @Transactional
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginUser loginUser) {
-
-        // Log password nhận từ FE
-        System.out.println("Password nhận từ FE (login): " + loginUser.getPassword());
-
         String username = loginUser.getUsername();
         Optional<User> user = userService.getUserByUsername(username);
         if (!user.isPresent()) {

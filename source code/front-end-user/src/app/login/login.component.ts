@@ -48,7 +48,6 @@ export class LoginComponent implements OnInit {
     if (this.isLoggedIn) {
       const user = this.tokenStorageService.getUser();
       this.roles = user.roles;
-      console.log(user);
       if (this.roles.includes(UserRole.ROLE_ADMIN)) {
         this.toLogin(UserRole.ROLE_ADMIN);
       } else if (this.roles.includes(UserRole.ROLE_LECTURER)) {

@@ -21,9 +21,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
-        System.out.println("Đăng nhập với username: " + username);
-        System.out.println("Password mã hóa trong DB: " + user.getPassword());
-        // Nếu muốn kiểm tra roles, profile v.v cũng log luôn ở đây
         return UserDetailsImpl.build(user);
     }
 

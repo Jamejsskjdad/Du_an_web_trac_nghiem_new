@@ -130,7 +130,6 @@ export class ManageUserComponent implements OnInit, AfterContentInit {
   }
 
   searchUser(searchKeyWord: string) {
-    console.log(searchKeyWord);
     this.userService.searchUserList(0, 20, searchKeyWord).subscribe(res => {
       this.userList = res.data;
       this.paginationDetail = res.paginationDetails;

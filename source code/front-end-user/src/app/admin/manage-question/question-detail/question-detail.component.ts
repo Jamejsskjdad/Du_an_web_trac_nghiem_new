@@ -142,8 +142,6 @@ export class QuestionDetailComponent implements OnInit {
           }];
         }
       }
-      // debug:
-      console.log('Dữ liệu gửi lên:', this.tempQuestion);
       this.questionService.updateQuestion(this.questionInfo.id, this.tempQuestion).subscribe(
         res => {
           alert('Cập nhật thành công!');

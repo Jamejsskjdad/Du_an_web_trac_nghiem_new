@@ -217,9 +217,6 @@ public UserController(UserService userService,
     @PostMapping()
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> createUser(@Valid @RequestBody UserCreateRequest req) {
-        // Log password nhận từ FE
-        System.out.println("Password nhận từ FE (tạo user): " + req.getPassword());
-
         if (userService.existsByUsername(req.getUsername())) {
             return ResponseEntity.badRequest().body(new ServiceResult(HttpStatus.CONFLICT.value(), "Tên đăng nhập đã có người sử dụng!", ""));
         }

@@ -98,8 +98,6 @@ export class AddTestComponent implements OnInit {
 
     this.intakeService.getIntakeList().subscribe(res => {
       this.intakeList = res;
-      // Thêm dòng này để debug
-      console.log('✅ DANH SÁCH INTAKE:', this.intakeList);
     });
   }
 

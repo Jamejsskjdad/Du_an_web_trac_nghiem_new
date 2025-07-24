@@ -29,7 +29,6 @@ export class ManagePartComponent implements OnInit {
     });
     this.partService.getPartListByCourse(this.courseId).subscribe(res => {
       this.parts = res.data;
-      console.log(this.parts);
     });
   }
 

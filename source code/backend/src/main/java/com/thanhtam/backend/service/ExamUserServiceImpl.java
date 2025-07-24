@@ -27,7 +27,6 @@ public class ExamUserServiceImpl implements ExamUserService {
     @Override
     public void create(Exam exam, List<User> userSet) {
         List<ExamUser> examUserList = new ArrayList<>();
-        System.out.println("size: " + examUserList.size());
         userSet.forEach(user -> {
             ExamUser examUser = new ExamUser();
             examUser.setUser(user);

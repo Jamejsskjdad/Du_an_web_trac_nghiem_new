@@ -79,17 +79,10 @@ public class ExamController {
 
         Page<Exam> examPage;
 
-        // Log ra để kiểm tra quyền
-        System.out.println("==> Username: " + username);
-        System.out.println("==> Roles: " + user.getRoles());
-        System.out.println("==> isAdmin: " + isAdmin);
-
         if (isAdmin) {
-            System.out.println("==> Gọi examService.findAll(), ADMIN xem tất cả bài thi");
             examPage = examService.findAll(pageable);
             return new PageResult(examPage);
         } else {
-            System.out.println("==> Gọi examService.findAllByCreatedBy_Username(), LECTURER chỉ xem bài do mình tạo");
             examPage = examService.findAllByCreatedBy_Username(pageable, username);
             return new PageResult(examPage);
         }

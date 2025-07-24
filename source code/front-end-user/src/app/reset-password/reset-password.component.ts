@@ -50,7 +50,6 @@ export class ResetPasswordComponent implements OnInit {
 
   onSubmit() {
     this.preLoading = true;
-    console.log(this.tokenString);
     const data = {
       token: this.tokenString,
       password: this.password.value,

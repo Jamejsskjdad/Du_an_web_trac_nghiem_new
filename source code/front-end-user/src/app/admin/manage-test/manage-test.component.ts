@@ -38,7 +38,6 @@ export class ManageTestComponent implements OnInit {
       this.examList = res.data;
       this.paginationDetail = res.paginationDetails;
       this.skeleton = false;
-      console.log(this.examList);
     });
   }
 

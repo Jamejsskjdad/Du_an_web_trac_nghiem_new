@@ -65,7 +65,6 @@ export class QuestionBankComponent implements OnInit {
 
   toggleModalAdd() {
     this.showAddModal = !this.showAddModal;
-    console.log(this.showAddModal);
   }
 
   trackById(index: number, item) {
@@ -88,7 +87,6 @@ export class QuestionBankComponent implements OnInit {
   }
 
   goNextPage() {
-    console.log(this.pageCountShowing);
     const isLastPage = !this.paginationDetail.nextPage.available;
     if (!isLastPage) {
       this.skeleton = true;

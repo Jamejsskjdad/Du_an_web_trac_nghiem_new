@@ -59,9 +59,6 @@ export class CourseCreateComponent implements OnInit {
   onSubmit() {
     // 1. Lấy intakeId từ Form (nếu dùng Reactive Form)
   const intakeId = this.rfCreateCourse.get('intakeId').value;
-
-  // 2. In ra console để kiểm tra
-  console.log('intakeId:', intakeId);
     this.uploadFileService.uploadCourseImg(this.currentFileUpload).subscribe(url => {
       const course: Course = new Course(this.courseCode.value, this.courseName.value, url);
       this.courseService.createCourse(course).pipe(switchMap(res => {
