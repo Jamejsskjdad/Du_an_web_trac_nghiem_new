@@ -97,13 +97,12 @@
                               *ngIf="firstName?.hasError('required') && (firstName.dirty || firstName.touched)">
                               Tên không được bỏ trống</p>
                           </div>
-
                         </div>
 
                         <div class="-mx-3 md:flex mb-2 w-full">
-                          <div class="md:w-full px-3">
+                          <div class="md:w-1/2 px-3">
                             <label class="block uppercase tracking-wide text-gray-600 text-xs font-bold mb-2"
-                              for="frm-add-username">
+                              for="frm-add-email">
                               Email
                             </label>
                             <input
@@ -120,32 +119,27 @@
                               *ngIf="email?.hasError('emailExists') && (email?.dirty || email.touched)">
                               Email đã tồn tại</p>
                           </div>
-
-
-                          <div class="-mx-3 md:flex mb-2 w-full">
-                            <div class="md:w-full px-3">
-                              <label class="block uppercase tracking-wide text-gray-600 text-xs font-bold mb-2"
-                                for="frm-add-password">
-                                Mật khẩu
-                              </label>
-                              <input
-                                class="appearance-none border rounded-md w-full py-2 px-3 my-1 text-gray-600 bg-gray-200 leading-tight outline-none focus:border-green-500"
-                                id="frm-add-password" type="password" placeholder="Nhập mật khẩu"
-                                formControlName="password" required>
-                              <p class="text-red-500 text-xs italic"
-                                *ngIf="rfAddUser.get('password').hasError('required') && (rfAddUser.get('password').dirty || rfAddUser.get('password').touched)">
-                                Mật khẩu không được bỏ trống
-                              </p>
-                              <p class="text-red-500 text-xs italic"
-                                *ngIf="rfAddUser.get('password').hasError('minlength') && (rfAddUser.get('password').dirty || rfAddUser.get('password').touched)">
-                                Mật khẩu phải có ít nhất 6 ký tự
-                              </p>
-                            </div>
+                          <div class="md:w-1/2 px-3">
+                            <label class="block uppercase tracking-wide text-gray-600 text-xs font-bold mb-2"
+                              for="frm-add-password">
+                              Mật khẩu
+                            </label>
+                            <input
+                              class="appearance-none border rounded-md w-full py-2 px-3 my-1 text-gray-600 bg-gray-200 leading-tight outline-none focus:border-green-500"
+                              id="frm-add-password" type="password" placeholder="Nhập mật khẩu"
+                              formControlName="password" required>
+                            <p class="text-red-500 text-xs italic"
+                              *ngIf="rfAddUser.get('password').hasError('required') && (rfAddUser.get('password').dirty || rfAddUser.get('password').touched)">
+                              Mật khẩu không được bỏ trống
+                            </p>
+                            <p class="text-red-500 text-xs italic"
+                              *ngIf="rfAddUser.get('password').hasError('minlength') && (rfAddUser.get('password').dirty || rfAddUser.get('password').touched)">
+                              Mật khẩu phải có ít nhất 6 ký tự
+                            </p>
                           </div>
-
-                          <!-- div cho khối quyền người dùng xuống dòng-->
                         </div>
 
+                        <!-- div cho khối quyền người dùng xuống dòng-->
                         <div class="-mx-3 md:flex mb-2 w-full">
                           <div class="md:w-full px-3">
                             <label class="block uppercase tracking-wide text-gray-600 text-xs font-bold mb-2">
