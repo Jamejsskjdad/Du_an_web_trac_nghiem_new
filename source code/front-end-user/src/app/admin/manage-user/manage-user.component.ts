@@ -194,13 +194,13 @@ export class ManageUserComponent implements OnInit, AfterContentInit {
     this.selectedUserIds = [];
     this.allChecked = false;
   }
-  
+
   cancelSelectMode() {
     this.selectMode = false;
     this.selectedUserIds = [];
     this.allChecked = false;
   }
-  
+
   // Chọn tất cả user (trừ chính mình)
   toggleSelectAll(checked: boolean) {
     this.allChecked = checked;
@@ -212,7 +212,7 @@ export class ManageUserComponent implements OnInit, AfterContentInit {
       this.selectedUserIds = [];
     }
   }
-  
+
   // Chọn từng user (trừ chính mình)
   toggleSelectUser(userId: number, checked: boolean) {
     if (checked) {
@@ -225,8 +225,8 @@ export class ManageUserComponent implements OnInit, AfterContentInit {
     // Cập nhật trạng thái "chọn tất cả"
     this.allChecked = this.selectedUserIds.length === this.userList.filter(u => u.username !== this.currentUsername).length;
   }
-  
-  
+
+
   onDeleteSelectedUsers() {
     // Chặn xóa chính mình
     const userSelf = this.userList.find(u => u.username === this.currentUsername);
@@ -235,7 +235,7 @@ export class ManageUserComponent implements OnInit, AfterContentInit {
       return;
     }
     if (!confirm(`Bạn chắc chắn muốn xóa ${this.selectedUserIds.length} user?`)) return;
-  
+
     this.userService.deleteManyUsers(this.selectedUserIds).subscribe(
       res => {
         this.toast.success('Đã xóa user thành công!');
@@ -255,5 +255,8 @@ export class ManageUserComponent implements OnInit, AfterContentInit {
       default: return roleName;
     }
   }
+
+
+  showSearchBar = false;
 
 }
