@@ -14,15 +14,20 @@
           <div class="rounded-t mb-0 px-4 py-3 border-0 flex justify-between items-center">
             <h3 class="font-semibold text-2xl text-gray-800">Chi tiết câu hỏi</h3>
             <div class="flex justify-end mt-3">
-              <button *ngIf="!isEditMode" (click)="enableEdit()" class="bg-blue-600 text-white px-4 py-2 rounded">Sửa</button>
-              <button *ngIf="isEditMode" (click)="saveEdit()" class="bg-green-600 text-white px-4 py-2 rounded">Lưu</button>
-              <button *ngIf="isEditMode" (click)="cancelEdit()" class="bg-gray-500 text-white px-4 py-2 rounded">Hủy</button>
+              <!-- <button *ngIf="!isEditMode" (click)="enableEdit()" class="bg-blue-600 text-white px-4 py-2 rounded">Sửa</button> -->
+              <button *ngIf="!isEditMode" (click)="enableEdit()"
+                class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-0.5 px-10 rounded">Sửa</button>
+              <button *ngIf="isEditMode" (click)="saveEdit()"
+                class="bg-green-600 text-white py-0.5 px-10 rounded">Lưu</button>
+              <button *ngIf="isEditMode" (click)="cancelEdit()"
+                class="bg-gray-500 text-white py-0.5 px-10 ml-2 rounded">Hủy</button>
             </div>
           </div>
         </div>
         <div class="rounded-t mb-0 px-4 py-3 border-0">
           <div class="mx-4 flex flex-row" *ngIf="questionInfo">
-            <div class="my-4 px-8 text-gray-600 text-base leading-relaxed text-left flex-row flex flex-wrap justify-center lg:justify-start items-center">
+            <div
+              class="my-4 px-8 text-gray-600 text-base leading-relaxed text-left flex-row flex flex-wrap justify-center lg:justify-start items-center">
               <div class="flex justify-between w-full mb-4 text-gray-700">
                 <div>
                   <div class="mb-2 block uppercase tracking-wide text-grey-darker text-xs font-bold">Người tạo</div>
@@ -65,10 +70,7 @@
                   <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2">
                     Điểm
                   </label>
-                  <input *ngIf="isEditMode"
-                    type="number"
-                    min="0"
-                    [(ngModel)]="tempQuestion.point"
+                  <input *ngIf="isEditMode" type="number" min="0" [(ngModel)]="tempQuestion.point"
                     class="block appearance-none w-full bg-gray-200 py-2 px-3 my-1 mt-3 pr-4 rounded shadow leading-tight focus:outline-none"
                     placeholder="Nhập điểm cho câu hỏi">
                   <div *ngIf="!isEditMode"
@@ -76,7 +78,7 @@
                     {{ questionInfo?.point }}
                   </div>
                 </div>
-              </div>              
+              </div>
               <div class="-mx-3 md:flex my-3 w-full">
                 <div class="md:w-full px-3">
                   <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2">
@@ -99,8 +101,8 @@
                     Nội dung câu hỏi
                   </label>
                   <div *ngIf="!isEditMode" class="mx-2" [innerHTML]="questionInfo?.questionText"></div>
-                  <textarea *ngIf="isEditMode" [(ngModel)]="tempQuestion.questionText"
-                            class="w-full border rounded p-2" rows="3"></textarea>
+                  <textarea *ngIf="isEditMode" [(ngModel)]="tempQuestion.questionText" class="w-full border rounded p-2"
+                    rows="3"></textarea>
                 </div>
               </div>
 
@@ -110,7 +112,8 @@
                   <label class="block uppercase tracking-wide text-gray-600 text-xs font-bold mb-2">
                     Đáp án
                   </label>
-                  <div [ngSwitch]="isEditMode ? tempQuestion?.questionType.typeCode : questionInfo?.questionType.typeCode">
+                  <div
+                    [ngSwitch]="isEditMode ? tempQuestion?.questionType.typeCode : questionInfo?.questionType.typeCode">
                     <!-- TF -->
                     <div *ngSwitchCase="'TF'">
                       <div class="flex">
@@ -118,21 +121,17 @@
                         <ng-container *ngIf="isEditMode">
                           <div class="radio-type flex-1">
                             <div class="radio-btn flex items-center">
-                              <input type="radio"
-                                     id="T"
-                                     name="choices"
-                                     [checked]="tempQuestion.choices && tempQuestion.choices[0] && tempQuestion.choices[0].isCorrected==1"
-                                     (change)="setCorrectChoice(0)" />
+                              <input type="radio" id="T" name="choices"
+                                [checked]="tempQuestion.choices && tempQuestion.choices[0] && tempQuestion.choices[0].isCorrected==1"
+                                (change)="setCorrectChoice(0)" />
                               <label for="T" class="ml-2">True</label>
                             </div>
                           </div>
                           <div class="radio-type flex-1">
                             <div class="radio-btn flex items-center">
-                              <input type="radio"
-                                     id="F"
-                                     name="choices"
-                                     [checked]="tempQuestion.choices && tempQuestion.choices[1] && tempQuestion.choices[1].isCorrected==1"
-                                     (change)="setCorrectChoice(1)" />
+                              <input type="radio" id="F" name="choices"
+                                [checked]="tempQuestion.choices && tempQuestion.choices[1] && tempQuestion.choices[1].isCorrected==1"
+                                (change)="setCorrectChoice(1)" />
                               <label for="F" class="ml-2">False</label>
                             </div>
                           </div>
@@ -159,25 +158,17 @@
                     <!-- MC -->
                     <div *ngSwitchCase="'MC'">
                       <div class="flex flex-col">
-                        <div *ngFor="let mc of (isEditMode ? tempQuestion.choices : questionInfo.choices); let i=index" class="flex my-2 items-center">
-                          <input type="radio"
-                                 name="mcChoices"
-                                 [disabled]="!isEditMode"
-                                 [checked]="mc && mc.isCorrected==1"
-                                 (change)="isEditMode ? setCorrectChoice(i) : null"/>
-                          <input *ngIf="isEditMode"
-                                 class="ml-2 border p-1 rounded"
-                                 [(ngModel)]="mc.choiceText"
-                                 />
+                        <div *ngFor="let mc of (isEditMode ? tempQuestion.choices : questionInfo.choices); let i=index"
+                          class="flex my-2 items-center">
+                          <input type="radio" name="mcChoices" [disabled]="!isEditMode"
+                            [checked]="mc && mc.isCorrected==1" (change)="isEditMode ? setCorrectChoice(i) : null" />
+                          <input *ngIf="isEditMode" class="ml-2 border p-1 rounded" [(ngModel)]="mc.choiceText" />
                           <span *ngIf="!isEditMode" class="ml-2 select-none" [innerHTML]="mc.choiceText"></span>
-                          <button *ngIf="isEditMode"
-                                  class="ml-2 text-red-600 px-2"
-                                  (click)="removeChoice(i)" 
-                                  [disabled]="tempQuestion.choices.length <= 2">X</button>
+                          <button *ngIf="isEditMode" class="ml-2 text-red-600 px-2" (click)="removeChoice(i)"
+                            [disabled]="tempQuestion.choices.length <= 2">X</button>
                         </div>
-                        <button *ngIf="isEditMode"
-                                (click)="addChoice()"
-                                class="bg-gray-300 px-2 py-1 rounded mt-1 w-max">
+                        <button *ngIf="isEditMode" (click)="addChoice()"
+                          class="bg-gray-300 px-2 py-1 rounded mt-1 w-max">
                           + Thêm đáp án
                         </button>
                       </div>
@@ -185,25 +176,18 @@
                     <!-- MS -->
                     <div *ngSwitchCase="'MS'">
                       <div class="flex flex-col">
-                        <div *ngFor="let ms of (isEditMode ? tempQuestion.choices : questionInfo.choices); let i=index" class="flex my-2 items-center">
-                          <input type="checkbox"
-                                 name="msChoices"
-                                 [disabled]="!isEditMode"
-                                 [checked]="ms && ms.isCorrected==1"
-                                 (change)="isEditMode ? setCorrectChoice(i,true) : null"/>
-                          <input *ngIf="isEditMode"
-                                 class="ml-2 border p-1 rounded"
-                                 [(ngModel)]="ms.choiceText"
-                                 />
+                        <div *ngFor="let ms of (isEditMode ? tempQuestion.choices : questionInfo.choices); let i=index"
+                          class="flex my-2 items-center">
+                          <input type="checkbox" name="msChoices" [disabled]="!isEditMode"
+                            [checked]="ms && ms.isCorrected==1"
+                            (change)="isEditMode ? setCorrectChoice(i,true) : null" />
+                          <input *ngIf="isEditMode" class="ml-2 border p-1 rounded" [(ngModel)]="ms.choiceText" />
                           <span *ngIf="!isEditMode" class="ml-2 select-none" [innerHTML]="ms.choiceText"></span>
-                          <button *ngIf="isEditMode"
-                                  class="ml-2 text-red-600 px-2"
-                                  (click)="removeChoice(i)"
-                                  [disabled]="tempQuestion.choices.length <= 2">X</button>
+                          <button *ngIf="isEditMode" class="ml-2 text-red-600 px-2" (click)="removeChoice(i)"
+                            [disabled]="tempQuestion.choices.length <= 2">X</button>
                         </div>
-                        <button *ngIf="isEditMode"
-                                (click)="addChoice()"
-                                class="bg-gray-300 px-2 py-1 rounded mt-1 w-max">
+                        <button *ngIf="isEditMode" (click)="addChoice()"
+                          class="bg-gray-300 px-2 py-1 rounded mt-1 w-max">
                           + Thêm đáp án
                         </button>
                       </div>
