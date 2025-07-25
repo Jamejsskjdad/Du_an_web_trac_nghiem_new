@@ -117,7 +117,58 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public void update(Question question) {
-        questionRepository.save(question);
+        Optional<Question> oldQuestionOpt = questionRepository.findById(question.getId());
+        if (!oldQuestionOpt.isPresent()) return;
+    
+        Question oldQuestion = oldQuestionOpt.get();
+    
+        oldQuestion.setQuestionText(question.getQuestionText());
+        oldQuestion.setQuestionType(question.getQuestionType());
+        oldQuestion.setPart(question.getPart());
+        oldQuestion.setPoint(question.getPoint());
+    
+        // Kiểm tra nếu là câu hỏi SA (Short Answer)
+        if ("SA".equals(question.getQuestionType().getTypeCode().name())) {
+            // Xóa toàn bộ đáp án cũ, chỉ giữ lại 1 đáp án mới
+            oldQuestion.getChoices().clear();
+            if (question.getChoices() != null && !question.getChoices().isEmpty()) {
+                // Nếu entity Choice có setQuestion thì gán lại ở đây!
+                question.getChoices().forEach(c -> {
+                    c.setId(null); // để force insert mới, tránh update nhầm choice cũ
+                    // Nếu Choice có setQuestion thì thêm: c.setQuestion(oldQuestion);
+                });
+                oldQuestion.setChoices(question.getChoices());
+            }
+        } else {
+            // Các loại khác (MC, MS, TF)
+            oldQuestion.setChoices(question.getChoices());
+        }
+    
+        questionRepository.save(oldQuestion);
+    }
+    @Override
+    public void updateQuestion(Long id, Question updatedQuestion) {
+        Optional<Question> questionOpt = questionRepository.findById(id);
+        if (!questionOpt.isPresent()) return;
+        Question q = questionOpt.get();
+
+        // Update các trường đơn giản
+        q.setQuestionText(updatedQuestion.getQuestionText());
+        q.setQuestionType(updatedQuestion.getQuestionType());
+        q.setPart(updatedQuestion.getPart());
+        q.setPoint(updatedQuestion.getPoint());
+
+        // ---- XỬ LÝ CHOICE: XÓA DANH SÁCH CŨ, GÁN DANH SÁCH MỚI ----
+        q.getChoices().clear(); // Xóa hết choice cũ (sẽ được orphanRemoval=true xóa ở DB)
+        // Gán lại choices mới (nên tạo mới Choice entity nếu là thêm)
+        for (Choice c : updatedQuestion.getChoices()) {
+            // reset id = null để Hibernate biết đây là choice mới, hoặc giữ id cũ để update
+            if (c.getId() == null || c.getId() == 0) c.setId(null);
+            // Nếu có logic gì nữa thì xử lý ở đây
+            q.getChoices().add(c);
+        }
+
+        questionRepository.save(q);
     }
 
     @Override

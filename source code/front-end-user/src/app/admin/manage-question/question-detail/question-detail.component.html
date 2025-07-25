@@ -151,8 +151,6 @@
                             </div>
                           </div>
                         </ng-container>
-
-
                       </div>
                     </div>
                     <!-- MC -->
@@ -192,6 +190,18 @@
                         </button>
                       </div>
                     </div>
+                    <div *ngSwitchCase="'SA'">
+                      <div *ngIf="!isEditMode" class="bg-gray-100 rounded p-2 border">
+                        <span class="text-gray-700 font-semibold">Đáp án đúng:</span>
+                        <span class="ml-2">{{ (questionInfo.choices && questionInfo.choices[0]?.choiceText) || 'Chưa có đáp án' }}</span>
+                      </div>
+                      <div *ngIf="isEditMode">
+                        <input type="text"
+                          class="block appearance-none w-full bg-gray-200 py-2 px-3 rounded shadow leading-tight focus:outline-none"
+                          [(ngModel)]="tempQuestion.choices[0].choiceText"
+                          placeholder="Nhập đáp án đúng (ví dụ: 42)" />
+                      </div>
+                    </div>                    
                   </div>
                 </div>
               </div>
