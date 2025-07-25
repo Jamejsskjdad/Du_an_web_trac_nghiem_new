@@ -58,22 +58,22 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  toLogin(role: string) {
-    switch (role) {
-      case UserRole.ROLE_STUDENT: {
-        this.router.navigateByUrl(this.returnUrl);
-        break;
-      }
-      case UserRole.ROLE_ADMIN: {
-        this.router.navigateByUrl(this.returnUrl);
-        break;
-      }
-      case UserRole.ROLE_LECTURER: {
-        this.router.navigateByUrl(this.returnUrl);
-        break;
-      }
+toLogin(role: string) {
+  switch (role) {
+    case UserRole.ROLE_STUDENT: {
+      this.router.navigate(['/user/dashboard']);
+      break;
+    }
+    case UserRole.ROLE_ADMIN: {
+      this.router.navigate(['/admin/dashboard']);
+      break;
+    }
+    case UserRole.ROLE_LECTURER: {
+      this.router.navigate(['/lecturer/dashboard']);
+      break;
     }
   }
+}
 
   onSubmit() {
     this.preLoading = true;
