@@ -34,6 +34,7 @@ export class AddQuestionComponent implements OnInit {
   currentQuestionType = QTYPE.TF;
   multipleChoice: Choice[] = [];
   questionText = '';
+  shortAnswer = '';
   Editor = BalloonEditor;
   editorConfig = {
     placeholder: 'Nhập nội dung!',
@@ -109,10 +110,21 @@ export class AddQuestionComponent implements OnInit {
         questionPayload.choices = this.multipleSelect.map(c => ({ choiceText: c.choiceText, isCorrected: c.isCorrected }));
         break;
       }
+      case QTYPE.SA: { // <<<<< THÊM CASE NÀY
+        if (!this.shortAnswer || this.shortAnswer.trim() === '') {
+          this.toast.error('Bạn phải nhập đáp án cho câu trả lời ngắn!', 'Lỗi');
+          return;
+        }
+        questionPayload.choices = [
+          new Choice(this.shortAnswer, 1) // Đáp án đúng duy nhất
+        ];
+        break;
+      }
       default:
         this.toast.error('Loại câu hỏi không hợp lệ!', 'Lỗi');
         return;
     }
+    
 
     // Gọi API
     this.questionService.createQuestion(

@@ -157,19 +157,18 @@ export class ExamQuestionComponent implements OnInit, OnDestroy {
     this.choicesSelected.length = 0;
     this.toggleModal = true;
     this.questions.forEach(value => {
-      let selectedCount = 0;
-      value.choices.filter(x => {
-        if (x.isCorrected === 1) {
-          selectedCount++;
-        }
-      });
-      if (selectedCount > 0) {
-        this.choicesSelected.push({ selected: true });
+      let selected = false;
+      if (value.questionType.typeCode === 'SA') {
+        // Nếu là câu trả lời ngắn thì kiểm tra userAnswer có nội dung không
+        selected = value.userAnswer && value.userAnswer.trim() !== '';
       } else {
-        this.choicesSelected.push({ selected: false });
+        // Câu khác: đã chọn đáp án
+        selected = value.choices.some(x => x.isCorrected === 1);
       }
+      this.choicesSelected.push({ selected });
     });
   }
+  
 
   closeModal() {
     this.toggleModal = false;
@@ -178,13 +177,23 @@ export class ExamQuestionComponent implements OnInit, OnDestroy {
   submit() {
     const answerSheets: AnswerSheet[] = [];
     this.questions.forEach(value => {
+      // Nếu là câu hỏi Short Answer (SA), đóng gói đáp án người dùng vào choices[0].choiceText
+      if (value.questionType.typeCode === 'SA') {
+        value.choices = [
+          {
+            ...value.choices[0], // giữ id (nếu có), trường hợp backend cần id để so sánh
+            choiceText: value.userAnswer || '', // userAnswer là property bạn phải binding từ ô input ở HTML cho từng câu SA
+            isCorrected: 1 // đánh dấu là đã điền đáp án
+          }
+        ];
+      }
       answerSheets.push(new AnswerSheet(value.id, value.choices, value.point));
     });
-
-    this.examFinished = true; // ✅ Không xử lý nữa sau khi nộp
+  
+    this.examFinished = true;
     this.countDown?.unsubscribe();
     this.subscription?.unsubscribe();
-    this.removeSecurityListeners(); // ✅ Gỡ đúng
+    this.removeSecurityListeners();
     this.exitFullscreen();
     this.sidebarService.setSidebarCollapsed(false);
     this.examService.submitExamUser(this.examId, true, this.counter, answerSheets).subscribe(res => {
@@ -193,6 +202,7 @@ export class ExamQuestionComponent implements OnInit, OnDestroy {
       console.log('error');
     });
   }
+  
   exitFullscreen() {
     const doc: any = document;
     if (doc.exitFullscreen) {

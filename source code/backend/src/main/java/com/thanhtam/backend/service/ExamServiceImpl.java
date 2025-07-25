@@ -74,85 +74,85 @@ public class ExamServiceImpl implements ExamService {
 
 
     @Override
-    public List<ChoiceList> getChoiceList(List<AnswerSheet> userChoices, List<ExamQuestionPoint> examQuestionPoints) {
-        List<ChoiceList> choiceLists = new ArrayList<>();
-        userChoices.forEach(userChoice -> {
-            ChoiceList choiceList = new ChoiceList();
-            Question question = questionService.getQuestionById(userChoice.getQuestionId()).get();
-            choiceList.setQuestion(question);
-            choiceList.setPoint(userChoice.getPoint());
+public List<ChoiceList> getChoiceList(List<AnswerSheet> userChoices, List<ExamQuestionPoint> examQuestionPoints) {
+    List<ChoiceList> choiceLists = new ArrayList<>();
+    userChoices.forEach(userChoice -> {
+        ChoiceList choiceList = new ChoiceList();
+        Question question = questionService.getQuestionById(userChoice.getQuestionId()).get();
+        choiceList.setQuestion(question);
+        choiceList.setPoint(userChoice.getPoint());
 
-            List<ChoiceCorrect> choiceCorrects = new ArrayList<>();
-            switch (question.getQuestionType().getTypeCode()) {
-                case TF: {
-                    // 1. Lấy lựa chọn của người dùng (TF chỉ có 1 choice duy nhất)
-                    String selectedText = userChoice.getChoices().get(0).getChoiceText();
-                    int userSelected = userChoice.getChoices().get(0).getIsCorrected();
-                
-                    // 2. Lấy danh sách đáp án đúng từ DB
-                    List<String> correctChoiceTexts = new ArrayList<>();
-                    question.getChoices().forEach(c -> {
-                        if (c.getIsCorrected() == 1) {
-                            correctChoiceTexts.add(c.getChoiceText());
-                        }
-                    });
-                
-                    // 3. Nếu người dùng không chọn thì không tính điểm
-                    boolean isCorrect = false;
-                    if (userSelected == 1 && selectedText != null && !selectedText.trim().isEmpty()) {
-                        isCorrect = correctChoiceTexts.contains(selectedText);
+        List<ChoiceCorrect> choiceCorrects = new ArrayList<>();
+        switch (question.getQuestionType().getTypeCode()) {
+            case TF: {
+                String selectedText = userChoice.getChoices().get(0).getChoiceText();
+                int userSelected = userChoice.getChoices().get(0).getIsCorrected();
+                List<String> correctChoiceTexts = new ArrayList<>();
+                question.getChoices().forEach(c -> {
+                    if (c.getIsCorrected() == 1) {
+                        correctChoiceTexts.add(c.getChoiceText());
                     }
-                
-                    // 4. Gán kết quả chấm điểm
-                    choiceList.setIsSelectedCorrected(isCorrect);
-                
-                    // 5. Dùng để hiển thị icon
-                    userChoice.getChoices().forEach(choice -> {
-                        ChoiceCorrect choiceCorrect = new ChoiceCorrect();
-                        choiceCorrect.setChoice(choice);
-                        choiceCorrect.setIsRealCorrect(correctChoiceTexts.contains(choice.getChoiceText()) ? 1 : 0);
-                        choiceCorrects.add(choiceCorrect);
-                    });
-                    break;
+                });
+                boolean isCorrect = false;
+                if (userSelected == 1 && selectedText != null && !selectedText.trim().isEmpty()) {
+                    isCorrect = correctChoiceTexts.contains(selectedText);
                 }
-                               
-                case MC: {
-                    choiceList.setIsSelectedCorrected(false);
-                    userChoice.getChoices().forEach(choice -> {
-                        ChoiceCorrect choiceCorrect = new ChoiceCorrect();
-                        choiceCorrect.setChoice(choice);
-                        Integer isRealCorrect = choiceService.findIsCorrectedById(choice.getId());
-                        choiceCorrect.setIsRealCorrect(isRealCorrect);
-                        if (choice.getIsCorrected() == isRealCorrect && isRealCorrect == 1) {
-                            choiceList.setIsSelectedCorrected(true);
-                        }
-                        choiceCorrects.add(choiceCorrect);
-                    });
-                    break;
-                }
-                case MS: {
-                    choiceList.setIsSelectedCorrected(true);
-                    userChoice.getChoices().forEach(choice -> {
-                        ChoiceCorrect choiceCorrect = new ChoiceCorrect();
-                        choiceCorrect.setChoice(choice);
-                        Integer isRealCorrect = choiceService.findIsCorrectedById(choice.getId());
-                        choiceCorrect.setIsRealCorrect(isRealCorrect);
-                        if (choice.getIsCorrected() == 0 && isRealCorrect == 1) {
-                            choiceList.setIsSelectedCorrected(false);
-                        }
-                        choiceCorrects.add(choiceCorrect);
-                    });
-                    break;
-                }
+                choiceList.setIsSelectedCorrected(isCorrect);
+                userChoice.getChoices().forEach(choice -> {
+                    ChoiceCorrect choiceCorrect = new ChoiceCorrect();
+                    choiceCorrect.setChoice(choice);
+                    choiceCorrect.setIsRealCorrect(correctChoiceTexts.contains(choice.getChoiceText()) ? 1 : 0);
+                    choiceCorrects.add(choiceCorrect);
+                });
+                break;
             }
+            case MC: {
+                choiceList.setIsSelectedCorrected(false);
+                userChoice.getChoices().forEach(choice -> {
+                    ChoiceCorrect choiceCorrect = new ChoiceCorrect();
+                    choiceCorrect.setChoice(choice);
+                    Integer isRealCorrect = choiceService.findIsCorrectedById(choice.getId());
+                    choiceCorrect.setIsRealCorrect(isRealCorrect);
+                    if (choice.getIsCorrected() == isRealCorrect && isRealCorrect == 1) {
+                        choiceList.setIsSelectedCorrected(true);
+                    }
+                    choiceCorrects.add(choiceCorrect);
+                });
+                break;
+            }
+            case MS: {
+                choiceList.setIsSelectedCorrected(true);
+                userChoice.getChoices().forEach(choice -> {
+                    ChoiceCorrect choiceCorrect = new ChoiceCorrect();
+                    choiceCorrect.setChoice(choice);
+                    Integer isRealCorrect = choiceService.findIsCorrectedById(choice.getId());
+                    choiceCorrect.setIsRealCorrect(isRealCorrect);
+                    if (choice.getIsCorrected() == 0 && isRealCorrect == 1) {
+                        choiceList.setIsSelectedCorrected(false);
+                    }
+                    choiceCorrects.add(choiceCorrect);
+                });
+                break;
+            }
+            case SA: {
+                String userAnswer = userChoice.getChoices().get(0).getChoiceText();
+                String correctAnswer = question.getChoices().get(0).getChoiceText();
+                boolean isCorrect = userAnswer != null && userAnswer.trim().equals(correctAnswer.trim());
+                choiceList.setIsSelectedCorrected(isCorrect);
+                // Đáp án thực tế cho review kết quả
+                ChoiceCorrect choiceCorrect = new ChoiceCorrect();
+                choiceCorrect.setChoice(userChoice.getChoices().get(0));
+                choiceCorrect.setIsRealCorrect(isCorrect ? 1 : 0);
+                choiceCorrects.add(choiceCorrect);
+                break;
+            }
+        }
+        choiceList.setChoices(choiceCorrects);
+        choiceLists.add(choiceList);
+    });
+    return choiceLists;
+}
 
-            //set choices
-            choiceList.setChoices(choiceCorrects);
-
-            choiceLists.add(choiceList);
-        });
-        return choiceLists;
-    }
 
     @Override
     public List<Exam> findByIntakeId(Long intakeId) {

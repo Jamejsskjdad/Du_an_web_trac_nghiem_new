@@ -18,7 +18,7 @@ export class Question {
   point: number;      // GIỮ point
   isSelected?: boolean;
   deleted?: boolean;
-
+  userAnswer?: string; // <-- Thêm dòng này (cho phép undefined cũng được)
   constructor(
     questionText: string,
     choices: Choice[],

@@ -218,6 +218,12 @@
                                 </button>
                               </div>
                             </div>
+                            <div *ngSwitchCase="'SA'">                             
+                              <input type="text"
+                                class="block appearance-none w-full bg-gray-200 py-2 px-3 my-1 mt-3 pr-4 rounded shadow leading-tight focus:outline-none"
+                                [(ngModel)]="shortAnswer" [ngModelOptions]="{standalone: true}"
+                                placeholder="Nhập đáp án đúng (ví dụ: 42)" />
+                            </div>
                           </div>
                         </div>
                       </div>

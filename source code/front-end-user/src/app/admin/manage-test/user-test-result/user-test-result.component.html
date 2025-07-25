@@ -155,6 +155,33 @@
                             </div>
                           </div>
                         </ng-template>
+                        <ng-template [ngSwitchCase]="'SA'">
+                          <div class="flex flex-col">
+                            <div class="w-full my-1">
+                              <div class="flex items-center">
+                                <span class="text-2xl pr-2 w-8">
+                                  <ng-container>
+                                    <i *ngIf="ques.isSelectedCorrected" class="fa fa-check text-green-600"></i>
+                                    <i *ngIf="!ques.isSelectedCorrected" class="fa fa-close text-red-600"></i>
+                                  </ng-container>
+                                </span>
+                                <div class="w-full">
+                                  <label class="block text-gray-600">Đáp án của bạn:</label>
+                                  <span class="block bg-white px-2 py-1 rounded border"
+                                    [ngClass]="ques.isSelectedCorrected ? 'border-green-500 text-green-700' : 'border-red-500 text-red-700'">
+                                    {{userChoice.choice.choiceText}}
+                                  </span>
+                                </div>
+                              </div>
+                              <div class="flex items-center mt-2">
+                                <span class="text-gray-500 text-xs mr-2">Đáp án đúng:</span>
+                                <span class="bg-blue-100 px-2 py-1 rounded font-bold">
+                                  {{ ques.question.choices[0]?.choiceText }}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </ng-template>
                       </ng-container>
                     </ng-container>
 

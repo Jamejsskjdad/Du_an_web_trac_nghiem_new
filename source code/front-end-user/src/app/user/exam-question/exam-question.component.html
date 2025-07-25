@@ -24,78 +24,83 @@
           <p class="select-none" [innerHTML]="ques.questionText"></p>
         </div>
         <div class="h-auto">
-          <div class="my-5 font-semibold text-blue-600 select-none">Chọn câu trả lời của bạn<span
-              *ngIf="ques.questionType.typeCode==='MS'">s</span>
+          <div class="my-5 font-semibold text-blue-600 select-none">
+            Chọn câu trả lời của bạn
+            <span *ngIf="ques.questionType.typeCode==='MS'">s</span>
           </div>
-
-          <!--        Answer-->
-          <ng-container *ngFor="let choice of ques.choices">
-            <ng-container [ngSwitch]="ques.questionType.typeCode">
-              <ng-template [ngSwitchCase]="'TF'">
-                <div class="flex">
-                  <div class="radio-type flex-1">
-                    <div class="radio-btn">
-                      <input type="radio" id="true-{{choice.id}}" name="choicesTF-{{ques.id}}" value="True"
-                        (change)="selectAnswerTF($event, ques.id)"
-                        [checked]="choice.choiceText=='True' && choice.isCorrected==1" />
-                      <label class="select-none" for="true-{{choice.id}}">Đúng</label>
-                    </div>
-                  </div>
-
-                  <div class="radio-type flex-1">
-                    <div class="radio-btn">
-                      <input type="radio" id="false-{{choice.id}}" name="choicesTF-{{ques.id}}" value="False"
-                        (click)="selectAnswerTF($event, ques.id)"
-                        [checked]="choice.choiceText=='False' && choice.isCorrected==1" />
-                      <label class="select-none" for="false-{{choice.id}}">Sai</label>
-                    </div>
-                  </div>
-                </div>
-              </ng-template>
-              <ng-template [ngSwitchCase]="'MC'">
-                <div class="flex flex-col">
-                  <div class="w-full my-1">
-                    <div class="flex">
-                      <div class="radio-type w-full">
-                        <div class="radio-btn">
-                          <input type="radio" name="mcChoices-{{ques.id}}"
-                            (change)="selectedAnswerMC($event, ques.id, choice.id)" id="mc-{{choice.id}}"
-                            [checked]="choice.isCorrected==1">
-                          <label class="select-none" for="mc-{{choice.id}}" [innerHTML]="choice.choiceText"></label>
-                        </div>
+          
+          <!-- Đáp án cho Short Answer (SA) -->
+          <div *ngIf="ques.questionType.typeCode === 'SA'">
+            <input type="text"
+              class="w-full border rounded p-2"
+              [(ngModel)]="ques.userAnswer"
+              placeholder="Nhập đáp án của bạn..."
+              [ngModelOptions]="{standalone: true}" />
+          </div>
+  
+          <!-- Đáp án cho các loại khác -->
+          <ng-container *ngIf="ques.questionType.typeCode !== 'SA'">
+            <ng-container *ngFor="let choice of ques.choices">
+              <ng-container [ngSwitch]="ques.questionType.typeCode">
+                <ng-template [ngSwitchCase]="'TF'">
+                  <div class="flex">
+                    <div class="radio-type flex-1">
+                      <div class="radio-btn">
+                        <input type="radio" id="true-{{choice.id}}" name="choicesTF-{{ques.id}}" value="True"
+                          (change)="selectAnswerTF($event, ques.id)"
+                          [checked]="choice.choiceText=='True' && choice.isCorrected==1" />
+                        <label class="select-none" for="true-{{choice.id}}">Đúng</label>
                       </div>
-
                     </div>
-
+                    <div class="radio-type flex-1">
+                      <div class="radio-btn">
+                        <input type="radio" id="false-{{choice.id}}" name="choicesTF-{{ques.id}}" value="False"
+                          (click)="selectAnswerTF($event, ques.id)"
+                          [checked]="choice.choiceText=='False' && choice.isCorrected==1" />
+                        <label class="select-none" for="false-{{choice.id}}">Sai</label>
+                      </div>
+                    </div>
                   </div>
-
-                </div>
-              </ng-template>
-              <ng-template [ngSwitchCase]="'MS'">
-                <div class="flex flex-col">
-                  <div class="w-full my-1">
-                    <div class="flex my-1">
-                      <div class="radio-type w-full">
-                        <div class="check-box-btn">
-                          <input type="checkbox" name="msChoices-{{choice.id}}" id="ms-{{choice.id}}"
-                            (change)="selectedAnswerMS($event, ques.id, choice.id)" [checked]="choice.isCorrected==1">
-                          <label for="ms-{{choice.id}}" class="check-box select-none"
-                            [innerHTML]="choice.choiceText"></label>
+                </ng-template>
+                <ng-template [ngSwitchCase]="'MC'">
+                  <div class="flex flex-col">
+                    <div class="w-full my-1">
+                      <div class="flex">
+                        <div class="radio-type w-full">
+                          <div class="radio-btn">
+                            <input type="radio" name="mcChoices-{{ques.id}}"
+                              (change)="selectedAnswerMC($event, ques.id, choice.id)" id="mc-{{choice.id}}"
+                              [checked]="choice.isCorrected==1">
+                            <label class="select-none" for="mc-{{choice.id}}" [innerHTML]="choice.choiceText"></label>
+                          </div>
                         </div>
                       </div>
                     </div>
-
                   </div>
-                </div>
-              </ng-template>
+                </ng-template>
+                <ng-template [ngSwitchCase]="'MS'">
+                  <div class="flex flex-col">
+                    <div class="w-full my-1">
+                      <div class="flex my-1">
+                        <div class="radio-type w-full">
+                          <div class="check-box-btn">
+                            <input type="checkbox" name="msChoices-{{choice.id}}" id="ms-{{choice.id}}"
+                              (change)="selectedAnswerMS($event, ques.id, choice.id)" [checked]="choice.isCorrected==1">
+                            <label for="ms-{{choice.id}}" class="check-box select-none"
+                              [innerHTML]="choice.choiceText"></label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-template>
+              </ng-container>
             </ng-container>
           </ng-container>
-
-
         </div>
       </div>
     </div>
-  </ng-container>
+  </ng-container>  
   <hr class="w-full my-3">
   <p class="text-center font-bold end-text">Kết thúc</p>
 </div>

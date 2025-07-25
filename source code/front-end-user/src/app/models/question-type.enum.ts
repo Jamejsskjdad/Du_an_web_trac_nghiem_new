@@ -1,5 +1,6 @@
 export enum QTYPE {
   TF = 'TF',
   MC = 'MC',
-  MS = 'MS'
+  MS = 'MS',
+  SA = 'SA', // <--- Thêm dòng này
 }
