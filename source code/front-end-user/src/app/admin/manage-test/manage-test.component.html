@@ -41,18 +41,18 @@
                   <button *ngIf="!selectMode"
                     class="bg-white shadow-md hover:bg-red-500 hover:text-white transition duration-200 ease-in-out text-xs font-bold uppercase px-3 py-2 rounded outline-none focus:outline-none mx-1 mb-1"
                     (click)=" enterSelectMode()">
-                    Chọn bài thi để xóa
+                    <i class="fa fa-trash mr-1"></i> Chọn bài thi để xóa
                   </button>
                   <div *ngIf="selectMode" class="inline-block">
                     <button
                       class="bg-red-600 shadow-md hover:bg-red-700 text-white transition duration-200 ease-in-out text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mx-1 mb-1"
                       [disabled]="selectedExamIds.length === 0" (click)="onDeleteSelectedExams()">
-                      Xóa bài thi
+                      <i class="fa fa-trash mr-1"></i> Xóa bài thi
                     </button>
                     <button
                       class="bg-smoke-light shadow-md hover:bg-smoke-light hover:text-white transition duration-200 ease-in-out text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mx-1 mb-1"
                       (click)="cancelSelectMode()">
-                      Hủy chọn
+                      <i class="fa fa-times mr-1"></i> Hủy chọn
                     </button>
                   </div>
 

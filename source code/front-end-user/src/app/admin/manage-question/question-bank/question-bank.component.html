@@ -18,9 +18,11 @@
               <div class="flex flex-wrap flex-row items-center px-4 mb-3">
                 <span class="mr-2 text-gray-600 text-sm">Hiển thị tối đa</span>
                 <div class="inline-block relative max-w-xs w-20 mr-4">
-                  <select class="block appearance-none w-full bg-white px-3 py-1 pr-4 rounded shadow leading-tight focus:outline-none text-sm"
-                          (change)="changePageShow($event.target.value)">
-                    <option *ngFor="let item of pageOptions" [value]="item.num" [selected]="item.num == pageCountShowing">{{item.display}}</option>
+                  <select
+                    class="block appearance-none w-full bg-white px-3 py-1 pr-4 rounded shadow leading-tight focus:outline-none text-sm"
+                    (change)="changePageShow($event.target.value)">
+                    <option *ngFor="let item of pageOptions" [value]="item.num"
+                      [selected]="item.num == pageCountShowing">{{item.display}}</option>
                   </select>
                   <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                     <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -28,36 +30,45 @@
                     </svg>
                   </div>
                 </div>
+                <app-add-question (questionsAddOutput)="fetchQuestionsAfterCRUD($event)">
+                </app-add-question>
 
-                <button *ngIf="!deletionMode" (click)="enterDeleteMode()" class="bg-red-500 text-white rounded px-3 py-1 mr-2">
+                <button *ngIf="!deletionMode" (click)="enterDeleteMode()"
+                  class="bg-white  shadow-md hover:bg-red-500 hover:text-white transition duration-200 ease-in-out text-xs font-bold uppercase px-3 py-2 rounded outline-none focus:outline-none mx-2 mb-2">
                   <i class="fa fa-trash mr-1"></i> Xóa câu hỏi
                 </button>
                 <div *ngIf="deletionMode" class="space-x-2">
-                  <button (click)="cancelDeleteMode()" class="bg-gray-500 text-white rounded px-3 py-1">
-                    <i class="fa fa-times mr-1"></i> Hủy chọn
-                  </button>
                   <button (click)="confirmDelete()" [disabled]="getSelectedQuestionIds().length === 0"
-                          class="bg-red-600 text-white rounded px-3 py-1">
+                    class="bg-red-600 shadow-md hover:bg-red-700 text-white transition duration-200 ease-in-out text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mx-1 mb-1">
                     <i class="fa fa-trash mr-1"></i> Xóa câu hỏi đã chọn
                   </button>
+                  <button (click)="cancelDeleteMode()"
+                    class="bg-smoke-light shadow-md hover:bg-smoke-light hover:text-white transition duration-200 ease-in-out text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mx-1 mb-1">
+                    <i class="fa fa-times mr-1"></i> Hủy chọn
+                  </button>
+
                 </div>
 
-                <app-add-question (questionsAddOutput)="fetchQuestionsAfterCRUD($event)" class="ml-auto"></app-add-question>
+
               </div>
 
               <div class="flex mt-4 px-4">
                 <div class="md:w-1/2 px-3">
                   <label class="block uppercase tracking-wide text-gray-600 text-xs font-bold mb-2">Môn học</label>
-                  <select (change)="changeCourse($event)" name="course" class="block appearance-none w-full bg-gray-200 py-2 px-3 my-1 mt-3 pr-4 rounded shadow leading-tight focus:outline-none">
+                  <select (change)="changeCourse($event)" name="course"
+                    class="block appearance-none w-full bg-gray-200 py-2 px-3 my-1 mt-3 pr-4 rounded shadow leading-tight focus:outline-none">
                     <option value="0">-- Vui lòng chọn khóa học --</option>
-                    <option *ngFor="let course of courseList" [value]="course.id" [selected]="course.id === selectedCourseId">{{course.name}}</option>
+                    <option *ngFor="let course of courseList" [value]="course.id"
+                      [selected]="course.id === selectedCourseId">{{course.name}}</option>
                   </select>
                 </div>
                 <div class="md:w-1/2 px-3">
                   <label class="block uppercase tracking-wide text-gray-600 text-xs font-bold mb-2">Nội dung</label>
-                  <select (change)="changePart($event)" name="part" class="block appearance-none w-full bg-gray-200 py-2 px-3 my-1 mt-3 pr-4 rounded shadow leading-tight focus:outline-none">
+                  <select (change)="changePart($event)" name="part"
+                    class="block appearance-none w-full bg-gray-200 py-2 px-3 my-1 mt-3 pr-4 rounded shadow leading-tight focus:outline-none">
                     <option value="0">-- Vui lòng chọn phần --</option>
-                    <option *ngFor="let part of partList" [selected]="part.id===selectedPartId" [value]="part.id">{{part.name}}</option>
+                    <option *ngFor="let part of partList" [selected]="part.id===selectedPartId" [value]="part.id">
+                      {{part.name}}</option>
                   </select>
                 </div>
               </div>
@@ -66,19 +77,24 @@
         </div>
 
         <div class="block w-full">
-          <table class="items-center table-fixed w-full bg-transparent border-collapse user-list block lg:table overflow-x-auto overflow-y-auto">
+          <table
+            class="items-center table-fixed w-full bg-transparent border-collapse user-list block lg:table overflow-x-auto overflow-y-auto">
             <thead>
               <tr>
-                <th *ngIf="deletionMode" class="p-3">
-                  <input type="checkbox" [(ngModel)]="selectAll" (change)="toggleAll()"> Chọn tất cả
+                <th *ngIf="deletionMode"
+                  class="w-32 px-3 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 font-semibold text-left">
+                  <input type="checkbox" [(ngModel)]="selectAll" (change)="toggleAll()" class="h-4 w-4"> Chọn tất cả
                 </th>
-                <th class="row-question px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 font-semibold text-left">
+                <th
+                  class="px-3 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 font-semibold text-left">
                   Câu hỏi
                 </th>
-                <th class="row-status px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 font-semibold text-left">
+                <th
+                  class="row-status px-3 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 font-semibold text-left">
                   Ẩn/Hiện
                 </th>
-                <th class="row-type px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 font-semibold text-left">
+                <th
+                  class="row-type px-3 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 font-semibold text-left">
                   Loại câu
                 </th>
               </tr>
@@ -86,16 +102,19 @@
             <tbody *ngIf="skeleton==false">
               <ng-container *ngFor="let ques of questionList; trackBy: trackById">
                 <tr class="border hover:bg-gray-300">
-                  <td *ngIf="deletionMode" class="p-3">
-                    <input type="checkbox" [(ngModel)]="selectedIds[ques.id]">
+                  <td *ngIf="deletionMode" class="w-22 align-middle px-3 text-center">
+                    <input type="checkbox" [(ngModel)]="selectedIds[ques.id]" class="h-4 w-4">
                   </td>
-                  <th class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs p-4 text-left">
-                    <div [innerHTML]="ques.questionText" class="cursor-pointer hover:text-blue-800 text-md" (click)="goDeTail(ques.id)"></div>
+                  <th class="border-t-0 px-3 align-middle border-l-0 border-r-0 text-xs p-4 text-left">
+                    <div [innerHTML]="ques.questionText" class="cursor-pointer hover:text-blue-800 text-md"
+                      (click)="goDeTail(ques.id)"></div>
                   </th>
-                  <td class="border-t-0 text-center px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4 w-1/3">
-                    <span class="text-2xl cursor-pointer" (click)="changeDeleted(ques)"><i [ngClass]="ques.deleted ? 'fa fa-toggle-off text-gray-700' : 'fa fa-toggle-on text-green-700'"></i></span>
+                  <td
+                    class="border-t-0 text-center px-3 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4 w-1/3">
+                    <span class="text-2xl cursor-pointer" (click)="changeDeleted(ques)"><i
+                        [ngClass]="ques.deleted ? 'fa fa-toggle-off text-gray-700' : 'fa fa-toggle-on text-green-700'"></i></span>
                   </td>
-                  <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs p-4 italic font-semibold">
+                  <td class="border-t-0 px-3 align-middle border-l-0 border-r-0 text-xs p-4 italic font-semibold">
                     #{{ques.questionType.description}}
                   </td>
                 </tr>
@@ -104,24 +123,32 @@
           </table>
         </div>
 
-        <div *ngIf="questionList.length!==0" class="px-4 py-3 bg-white border-t flex flex-row justify-between xs:flex-row items-center xs:justify-between">
+        <div *ngIf="questionList.length!==0"
+          class="px-4 py-3 bg-white border-t flex flex-row justify-between xs:flex-row items-center xs:justify-between">
           <span class="text-xs xs:text-sm text-gray-700 px-4">
-            Hiển thị {{paginationDetail?.isLastPage ? paginationDetail?.totalCount - paginationDetail.pageCount + 1 : paginationDetail?.pageNumber * paginationDetail?.pageCount + 1}}
-            đến {{paginationDetail?.isLastPage ? paginationDetail.totalCount : (paginationDetail?.pageNumber + 1) * paginationDetail?.pageCount}}
+            Hiển thị {{paginationDetail?.isLastPage ? paginationDetail?.totalCount - paginationDetail.pageCount + 1 :
+            paginationDetail?.pageNumber * paginationDetail?.pageCount + 1}}
+            đến {{paginationDetail?.isLastPage ? paginationDetail.totalCount : (paginationDetail?.pageNumber + 1) *
+            paginationDetail?.pageCount}}
             trong số {{paginationDetail?.totalCount}} kết quả
           </span>
           <div class="inline-flex mt-2 px-4 xs:mt-0">
-            <button class="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-l focus:outline-none" (click)="goPreviousPage()">
+            <button
+              class="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-l focus:outline-none"
+              (click)="goPreviousPage()">
               <span><i class="fa fa-arrow-left"></i></span><span class="hidden md:inline ml-1">Trước</span>
             </button>
-            <button class="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-r focus:outline-none" (click)="goNextPage()">
+            <button
+              class="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-r focus:outline-none"
+              (click)="goNextPage()">
               <span class="hidden md:inline mr-1">Sau</span><span><i class="fa fa-arrow-right"></i></span>
             </button>
           </div>
         </div>
 
         <ng-container *ngIf="questionList.length==0 && skeleton==false">
-          <div class="px-4 py-3 bg-white border-t flex flex-row justify-between xs:flex-row items-center xs:justify-between">
+          <div
+            class="px-4 py-3 bg-white border-t flex flex-row justify-between xs:flex-row items-center xs:justify-between">
             <p class="mx-auto text-gray-700 text-sm">Nội dung không có để hiển thị</p>
           </div>
         </ng-container>

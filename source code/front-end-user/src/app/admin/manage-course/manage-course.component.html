@@ -24,19 +24,19 @@
                 <button
                   class="bg-white shadow-md hover:bg-red-700 hover:text-white transition duration-200 ease-in-out text-xs font-bold uppercase px-3 py-2 rounded outline-none focus:outline-none mx-1 mb-1"
                   (click)="toggleSelectMode()" *ngIf="!selectMode">
-                  Xóa môn học
+                  <i class="fa fa-trash mr-1"></i> Xóa môn học
                 </button>
                 <!-- Các nút khi ở chế độ select -->
                 <div *ngIf="selectMode" class="flex gap-2 ml-2">
                   <button
                     class="bg-red-600 shadow-md hover:bg-red-700 text-white transition duration-200 ease-in-out text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mx-1 mb-1"
                     (click)="onDeleteSelectedCourses()" [disabled]="selectedCourseIds.length === 0">
-                    Xóa sửa số vào đây môn học
+                    <i class="fa fa-trash mr-1"></i> Xóa () môn học
                   </button>
                   <button
                     class="bg-smoke-light shadow-md hover:bg-smoke-light hover:text-white transition duration-200 ease-in-out text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mx-1 mb-1"
                     (click)="toggleSelectMode()">
-                    Hủy chọn
+                    <i class="fa fa-times mr-1"></i> Hủy chọn
                   </button>
                 </div>
               </div>
@@ -72,7 +72,8 @@
                   class="row-name px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">
                   Tên môn
                 </th>
-                <th class="row-intake px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">
+                <th
+                  class="row-intake px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">
                   Khóa thực tập
                 </th>
                 <th
@@ -107,10 +108,10 @@
                     <a class="hover:text-green-700 hover:bg-green-300 px-2 py-1 bg-green-200 text-green-600 rounded"
                       [routerLink]="[course.id,'parts']" tooltip="Xem nội dung" placement="right" show-delay="100"
                       hide-delay="100">{{course.name}}</a>
-                  </td>      
+                  </td>
                   <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4">
                     {{ course.intakes.length === 0 ? 'Chưa có khóa thực tập' : course.intakes[0].name }}
-                  </td>                            
+                  </td>
                   <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4">
                     <app-course-update [courseInfo]="course"
                       (courseOutput)="fetchCourseAfterCRUD($event)"></app-course-update>
