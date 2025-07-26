@@ -39,6 +39,7 @@
                 </button>
                 <div *ngIf="deletionMode" class="space-x-2">
                   <button (click)="confirmDelete()" [disabled]="getSelectedQuestionIds().length === 0"
+<<<<<<< HEAD
                     class="bg-red-600 shadow-md hover:bg-red-700 text-white transition duration-200 ease-in-out text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mx-1 mb-1">
                     <i class="fa fa-trash mr-1"></i> Xóa câu hỏi đã chọn
                   </button>
@@ -47,6 +48,12 @@
                     <i class="fa fa-times mr-1"></i> Hủy chọn
                   </button>
 
+=======
+                  class="bg-red-600 text-white rounded px-3 py-1">
+                    <i class="fa fa-trash mr-1"></i> Xóa ({{ getSelectedQuestionIds().length }}) câu hỏi
+                  </button>
+                  
+>>>>>>> c241bcf36830e991d4b292cbd1c422d580f6a6ad
                 </div>
 
 
