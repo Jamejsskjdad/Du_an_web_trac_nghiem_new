@@ -18,8 +18,8 @@ export class CourseCreateComponent implements OnInit {
   showModal = false;
   rfCreateCourse: FormGroup;
   @Output() outputCourse = new EventEmitter<PageResult<Course>>();
-  selectedFiles: FileList;
-  currentFileUpload: File;
+  // selectedFiles: FileList;
+  // currentFileUpload: File;
   intakeList: Intake[] = [];
   selectedIntakeId: number;
   constructor(private fb: FormBuilder,
@@ -57,25 +57,20 @@ export class CourseCreateComponent implements OnInit {
   }
 
   onSubmit() {
-    // 1. Lấy intakeId từ Form (nếu dùng Reactive Form)
-  const intakeId = this.rfCreateCourse.get('intakeId').value;
-    this.uploadFileService.uploadCourseImg(this.currentFileUpload).subscribe(url => {
-      const course: Course = new Course(this.courseCode.value, this.courseName.value, url);
-      this.courseService.createCourse(course).pipe(switchMap(res => {
-        const courseId = res?.data?.id;
-        return this.intakeService.linkCourseToIntake(courseId, intakeId);
-      })).pipe(switchMap(() => this.courseService.getCourseListByPage()))
-        .subscribe(res => {
-          this.closeModal();
-          this.toast.success('Môn học mới đã được tạo', 'Thành công');
-          this.outputCourse.emit(res);
-        }, error => {
-          this.toast.error('Đã có vấn đề xảy ra', 'Lỗi');
-        });
-  
-    }, error => {
-      this.toast.error('Không thể upload ảnh', 'Lỗi');
-    });
+    const intakeId = this.rfCreateCourse.get('intakeId').value;
+    const course: Course = new Course(this.courseCode.value, this.courseName.value);
+    this.courseService.createCourse(course).pipe(switchMap(res => {
+      const courseId = res?.data?.id;
+      return this.intakeService.linkCourseToIntake(courseId, intakeId);
+    })).pipe(switchMap(() => this.courseService.getCourseListByPage()))
+      .subscribe(res => {
+        this.closeModal();
+        this.toast.success('Môn học mới đã được tạo', 'Thành công');
+        this.outputCourse.emit(res);
+      }, error => {
+        this.toast.error('Đã có vấn đề xảy ra', 'Lỗi');
+      });
+    
   }
   
 
@@ -83,9 +78,4 @@ export class CourseCreateComponent implements OnInit {
     this.showModal = false;
   }
 
-  selectFile(event) {
-    this.selectedFiles = event.target.files;
-    this.currentFileUpload = this.selectedFiles.item(0);
-    this.selectedFiles = undefined;
-  }
 }

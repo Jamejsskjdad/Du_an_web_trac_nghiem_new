@@ -18,7 +18,6 @@ public class CourseMapper {
             course.getId(),
             course.getCourseCode(),
             course.getName(),
-            course.getImgUrl(),
             intakeDtos
         );
     }

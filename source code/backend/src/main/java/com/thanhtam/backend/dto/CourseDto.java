@@ -11,6 +11,6 @@ public class CourseDto {
     private Long id;
     private String courseCode;
     private String name;
-    private String imgUrl;
+    //private String imgUrl;
     private List<IntakeDto> intakes;
 }

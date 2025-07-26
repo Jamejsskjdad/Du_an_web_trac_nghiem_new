@@ -1,12 +1,23 @@
 package com.thanhtam.backend.entity;
 
+import java.io.Serializable;
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
-import java.io.Serializable;
-import java.util.List;
 
 @Entity
 @Table(name = "course")
@@ -25,8 +36,8 @@ public class Course implements Serializable {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "img_url")
-    private String imgUrl;
+    // @Column(name = "img_url")
+    // private String imgUrl;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinTable(name = "course_intake", joinColumns = {@JoinColumn(name = "course_id", referencedColumnName = "id")},

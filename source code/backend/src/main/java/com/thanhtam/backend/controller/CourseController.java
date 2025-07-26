@@ -115,13 +115,12 @@ public class CourseController {
             throw new EntityNotFoundException("Not found with course id: " + id + " successfully!");
         }
         course.setId(id);
-        if(course.getImgUrl().isEmpty()){
-            course.setImgUrl(updateCourse.get().getImgUrl());
-        }
-        else{
-            course.setImgUrl(course.getImgUrl());
-
-        }
+        // if(course.getImgUrl().isEmpty()){
+        //     course.setImgUrl(updateCourse.get().getImgUrl());
+        // }
+        // else{
+        //     course.setImgUrl(course.getImgUrl());
+        // }
         course.setIntakes(updateCourse.get().getIntakes());
         courseService.saveCourse(course);
         log.error(course.toString());
