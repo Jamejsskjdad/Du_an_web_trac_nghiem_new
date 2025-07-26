@@ -31,7 +31,10 @@ export class QuestionBankComponent implements OnInit {
   selectedCourseId = 0;
   selectedPartId = 0;
   partList: Part[] = [];
-
+  deletionMode: boolean = false;
+  selectedIds: { [key: number]: boolean } = {};
+  selectAll = false;
+  
   constructor(private questionService: QuestionService,
               private courseService: CourseService,
               private partService: PartService,
@@ -156,4 +159,43 @@ export class QuestionBankComponent implements OnInit {
         this.toast.error('Không thể thay đổi trạng thái', 'Lỗi');
       });
   }
+  enterDeleteMode() {
+    this.deletionMode = true;
+    this.selectedIds = {};
+    this.selectAll = false;
+  }
+  
+  cancelDeleteMode() {
+    this.deletionMode = false;
+    this.selectedIds = {};
+    this.selectAll = false;
+  }
+  toggleAll() {
+    this.questionList.forEach(q => {
+      this.selectedIds[q.id] = this.selectAll;
+    });
+  }
+
+  getSelectedQuestionIds(): number[] {
+    return Object.keys(this.selectedIds)
+      .filter(id => this.selectedIds[+id])
+      .map(id => +id);
+  }
+
+  confirmDelete() {
+    const idsToDelete = this.getSelectedQuestionIds();
+    if (idsToDelete.length === 0) return;
+
+    if (!confirm('Bạn có chắc muốn xóa các câu hỏi đã chọn?')) return;
+
+    this.questionService.deleteMultipleQuestions(idsToDelete).subscribe(() => {
+      this.toast.success('Đã xóa các câu hỏi thành công', 'Thành công');
+      this.fetchQuestionList();
+      this.selectedIds = {};
+      this.selectAll = false;
+    }, err => {
+      this.toast.error('Xóa thất bại', 'Lỗi');
+    });
+  }
+
 }

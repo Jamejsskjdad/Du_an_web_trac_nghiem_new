@@ -40,5 +40,10 @@ export class QuestionService {
   updateQuestion(id: number, question: Question): Observable<any> {
     return this.http.put(`${this.baseUrl}/questions/${id}`, question);
   }
+  deleteMultipleQuestions(ids: number[]): Observable<any> {
+    return this.http.request('DELETE', `${this.baseUrl}/questions/delete-multiple`, {
+      body: ids
+    });
+  }
   
 }

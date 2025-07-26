@@ -45,5 +45,7 @@ public interface QuestionService {
     void delete(Long id);
     
     void updateQuestion(Long id, Question question);
+    
+    void deleteQuestionsAndUpdateRelatedData(List<Long> questionIds);
 
 }

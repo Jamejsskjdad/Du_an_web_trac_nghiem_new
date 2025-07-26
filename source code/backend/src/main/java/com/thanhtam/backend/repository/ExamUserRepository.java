@@ -1,6 +1,7 @@
 package com.thanhtam.backend.repository;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -20,7 +21,7 @@ public interface ExamUserRepository extends JpaRepository<ExamUser, Long> {
     List<ExamUser> findAllByExam_Id(Long examId);
     List<ExamUser> findExamUsersByOrderByTimeFinish();
     List<ExamUser> findExamUsersByIsFinishedIsTrueAndExam_Id(Long examId);
-    
+    List<ExamUser> findByExam_Part_IdIn(Set<Long> partIds);
     @Transactional
     @Modifying
     @Query("DELETE FROM ExamUser eu WHERE eu.user.id IN :userIds")

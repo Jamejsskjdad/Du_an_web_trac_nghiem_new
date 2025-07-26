@@ -1,6 +1,7 @@
 package com.thanhtam.backend.repository;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -31,5 +32,9 @@ List<Exam> findByCanceledIsTrueOrderByCreatedDateDesc();
     @Query("UPDATE Exam e SET e.createdBy.id = :adminId WHERE e.createdBy.id = :oldUserId")
     void updateCreatedByForExams(@Param("oldUserId") Long oldUserId, @Param("adminId") Long adminId);
     List<Exam> findByPart_Id(Long partId);
+    @Query("SELECT e FROM Exam e WHERE e.part.id IN :partIds")
+    List<Exam> findExamsByPartIds(@Param("partIds") Set<Long> partIds);
+    
+    List<Exam> findAllByPartIdIn(Set<Long> partIds);
 
 }

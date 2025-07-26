@@ -12,13 +12,30 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thanhtam.backend.dto.AnswerSheet;
 import com.thanhtam.backend.dto.ExamQuestionPoint;
 import com.thanhtam.backend.entity.Choice;
+import com.thanhtam.backend.entity.Exam;
+import com.thanhtam.backend.entity.ExamUser;
 import com.thanhtam.backend.entity.Part;
 import com.thanhtam.backend.entity.Question;
 import com.thanhtam.backend.entity.QuestionType;
+import com.thanhtam.backend.repository.ExamRepository;
+import com.thanhtam.backend.repository.ExamUserRepository;
 import com.thanhtam.backend.repository.QuestionRepository;
+import java.util.Set;
+import java.util.Map;
+import java.util.HashSet;
+import java.util.HashMap;
+import java.util.stream.Collectors;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Optional;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class QuestionServiceImpl implements QuestionService {
@@ -175,4 +192,59 @@ public class QuestionServiceImpl implements QuestionService {
     public void delete(Long id) {
         questionRepository.deleteById(id);
     }
+    @Autowired
+    private ExamRepository examRepository;
+
+    @Autowired
+    private ExamUserRepository examUserRepository;
+
+    @Override
+    public void deleteQuestionsAndUpdateRelatedData(List<Long> questionIds) {
+    List<Question> questionsToDelete = questionRepository.findAllById(questionIds);
+
+        // Lấy tất cả partId liên quan
+        Set<Long> partIds = questionsToDelete.stream()
+                .map(q -> q.getPart().getId())
+                .collect(Collectors.toSet());
+
+        // 1. Xóa question
+        questionRepository.deleteAll(questionsToDelete);
+
+        // 2. Update exam.question_data
+        List<Exam> affectedExams = examRepository.findExamsByPartIds(partIds);
+        for (Exam exam : affectedExams) {
+            List<Map<String, Object>> questionData = parseJsonArray(exam.getQuestionData());
+            questionData.removeIf(q -> questionIds.contains(((Number) q.get("questionId")).longValue()));
+            exam.setQuestionData(toJson(questionData));
+            examRepository.save(exam);
+        }
+
+        // 3. Update exam_user.answer_sheet
+        List<ExamUser> affectedExamUsers = examUserRepository.findByExam_Part_IdIn(partIds);
+        for (ExamUser examUser : affectedExamUsers) {
+            List<Map<String, Object>> sheet = parseJsonArray(examUser.getAnswerSheet());
+            sheet.removeIf(q -> questionIds.contains(((Number) q.get("questionId")).longValue()));
+            examUser.setAnswerSheet(toJson(sheet));
+            examUserRepository.save(examUser);
+        }
+    }
+    private List<Map<String, Object>> parseJsonArray(String json) {
+        if (json == null || json.isEmpty()) return new ArrayList<>();
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.readValue(json, new TypeReference<List<Map<String, Object>>>() {});
+        } catch (Exception e) {
+            return new ArrayList<>();
+        }
+    }
+
+    private String toJson(Object obj) {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.writeValueAsString(obj);
+        } catch (Exception e) {
+            return "[]";
+        }
+    }
+
 }
