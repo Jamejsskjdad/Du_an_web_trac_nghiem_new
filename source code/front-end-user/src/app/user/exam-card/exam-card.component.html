@@ -1,9 +1,9 @@
 <!-- Article -->
 <article class="overflow-hidden rounded-lg shadow-lg hover:shadow-2xl transition duration-700">
   <a [routerLink]="['/user/exams', examUser?.exam?.id]">
-    <div class="relative img-hover-zoom">
-      <img alt="image of {{examUser?.exam.part.course.name}}" class="bg-img block h-56 w-full"
-        src="{{examUser?.exam.part.course.imgUrl}}">
+    <div class="relative flex items-center justify-center h-56 bg-gradient-to-br from-blue-200 to-purple-300">
+      <!-- Animated Icon instead of Image -->
+      <i class="fa fa-graduation-cap fa-4x animate-bounce text-blue-700"></i>
       <i class="fa fa-circle absolute top-0 right-0 mt-4 mr-4" [ngClass]="icon"></i>
     </div>
   </a>
@@ -15,8 +15,8 @@
         <strong>{{examUser?.exam?.title}}</strong>
       </a>
     </h1>
-
   </header>
+
   <div class="text-gray-600 text-sm p-3 pb-0 flex justify-between">
     <p>
       <strong> {{examUser.exam.beginExam}}</strong>
@@ -48,7 +48,6 @@
         </p>
       </ng-template>
     </ng-container>
-
   </div>
 
   <footer class="flex items-center justify-between leading-none p-2 md:p-3">
@@ -59,11 +58,9 @@
       </p>
     </a>
     <div class="inline-block bg-gray-300 rounded-full px-3 py-1 text-sm font-semibold text-gray-700">
-
       <i class="fa fa-clock-o text-gray-700 lg:mr-1"></i>
       <span>{{examUser.exam.durationExam}} phút</span>
     </div>
   </footer>
-
 </article>
 <!-- END Article -->
