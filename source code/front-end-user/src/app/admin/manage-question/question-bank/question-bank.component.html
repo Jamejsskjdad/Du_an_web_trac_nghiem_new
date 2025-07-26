@@ -37,9 +37,10 @@
                     <i class="fa fa-times mr-1"></i> Hủy chọn
                   </button>
                   <button (click)="confirmDelete()" [disabled]="getSelectedQuestionIds().length === 0"
-                          class="bg-red-600 text-white rounded px-3 py-1">
-                    <i class="fa fa-trash mr-1"></i> Xóa câu hỏi đã chọn
+                  class="bg-red-600 text-white rounded px-3 py-1">
+                    <i class="fa fa-trash mr-1"></i> Xóa ({{ getSelectedQuestionIds().length }}) câu hỏi
                   </button>
+                  
                 </div>
 
                 <app-add-question (questionsAddOutput)="fetchQuestionsAfterCRUD($event)" class="ml-auto"></app-add-question>
