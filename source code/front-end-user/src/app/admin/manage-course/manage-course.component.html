@@ -72,6 +72,9 @@
                   class="row-name px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">
                   Tên môn
                 </th>
+                <th class="row-intake px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">
+                  Khóa thực tập
+                </th>
                 <th
                   class="row-action px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">
                   Chức năng
@@ -104,7 +107,10 @@
                     <a class="hover:text-green-700 hover:bg-green-300 px-2 py-1 bg-green-200 text-green-600 rounded"
                       [routerLink]="[course.id,'parts']" tooltip="Xem nội dung" placement="right" show-delay="100"
                       hide-delay="100">{{course.name}}</a>
-                  </td>                  
+                  </td>      
+                  <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4">
+                    {{ course.intakes.length === 0 ? 'Chưa có khóa thực tập' : course.intakes[0].name }}
+                  </td>                            
                   <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4">
                     <app-course-update [courseInfo]="course"
                       (courseOutput)="fetchCourseAfterCRUD($event)"></app-course-update>
