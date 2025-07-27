@@ -129,5 +129,10 @@ export class UserService {
   deleteManyUsers(userIds: number[]): Observable<any> {
     return this.http.post(`${this.baseUrl}/users/delete-many`, userIds);
   }  
+  updateUserIcon(profileId: number, icon: string): Observable<any> {
+    return this.http.patch(`${this.baseUrl}/profiles/${profileId}/icon`, icon, {
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
   
 }

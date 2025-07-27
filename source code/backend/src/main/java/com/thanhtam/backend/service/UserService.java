@@ -48,5 +48,6 @@ public interface UserService {
     List<UserPasswordExportDTO> generatePasswordsForStudents(Long intakeId);
     void deleteUserById(Long userId, Long currentAdminId);
     void deleteManyUsersByIds(List<Long> userIds, Long currentAdminId);
+    void updateUserIcon(Long id, String icon);
 
 }

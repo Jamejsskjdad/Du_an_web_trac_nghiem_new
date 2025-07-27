@@ -1,9 +1,9 @@
 package com.thanhtam.backend.controller;
 
-import com.google.common.io.Files;
-import com.thanhtam.backend.entity.User;
-import com.thanhtam.backend.service.S3Services;
-import com.thanhtam.backend.service.UserService;
+import java.io.ByteArrayOutputStream;
+import java.util.Date;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +12,18 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.ByteArrayOutputStream;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import com.thanhtam.backend.service.S3Services;
+import com.thanhtam.backend.service.UserService;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -41,31 +46,23 @@ public class FileAWSController {
     @Value("${isc.aws.endpointUrl}")
     private String endpointUrl;
 
+    // ❌ Đã bỏ: upload avatar ảnh đại diện (không cần nữa)
 
-    /**
-     * Upload file
-     *
-     * @param file
-     * @return keyName
-     */
+    @PostMapping("/file/upload/course")
+    public String uploadCourseImg(@RequestParam("file") MultipartFile file) {
+        String keyName = new Date().toString().concat(file.getOriginalFilename());
+        s3Services.uploadS3File(keyName, file);
+        return endpointUrl + "/" + bucketName + "/" + keyName;
+    }
 
     @PostMapping("/file/upload")
-    public String uploadMultipartFile(@RequestParam("file") MultipartFile file, @RequestParam String fileAs) {
-        String keyName = "";
+    public String uploadGenericFile(@RequestParam("file") MultipartFile file,
+                                    @RequestParam String fileAs) {
+        String keyName;
         switch (fileAs) {
-            case "avatar": {
-                String extension = Files.getFileExtension(file.getOriginalFilename());
-                String username = userService.getUserName();
-                keyName = username.concat("-avatar.").concat(extension);
-                s3Services.uploadS3File(keyName, file);
-                User user = userService.getUserByUsername(username).get();
-                String avatarUrl = endpointUrl + "/" + bucketName + "/" + keyName;
-                user.getProfile().setImage(avatarUrl);
-                return avatarUrl;
-            }
             case "course": {
                 keyName = new Date().toString().concat(file.getOriginalFilename());
-
+                break;
             }
             default: {
                 keyName = file.getOriginalFilename();
@@ -74,48 +71,9 @@ public class FileAWSController {
         }
 
         s3Services.uploadS3File(keyName, file);
-
         return endpointUrl + "/" + bucketName + "/" + keyName;
     }
 
-    @PostMapping("/file/upload/course")
-    public String uploadCourseImg(@RequestParam("file") MultipartFile file) {
-        String keyName = new Date().toString().concat(file.getOriginalFilename());
-
-        s3Services.uploadS3File(keyName, file);
-
-        return endpointUrl + "/" + bucketName + "/" + keyName;
-    }
-
-    @PostMapping("/file/upload/avatar")
-    public String uploadMultipartFile(@RequestParam("file") MultipartFile file) throws Exception {
-        String username = userService.getUserName();
-        /*
-        Get url image of user if exists
-         */
-        final String imgUrlUser = userService.getUserByUsername(username).get().getProfile().getImage();
-        String extension = Files.getFileExtension(file.getOriginalFilename());
-        String keyName = new Date().getTime() + "_" + username + "_avatar." + extension;
-        try {
-            s3Services.uploadS3File(keyName, file);
-//            if (!imgUrlUser.isEmpty()) {
-//                String fileName = imgUrlUser.replace(endpointUrl + "/" + bucketName + "/", "");
-//                s3Services.deleteFile(fileName);
-//            }
-            User user = userService.getUserByUsername(username).get();
-            String avatarUrl = endpointUrl + "/" + bucketName + "/" + keyName;
-            user.getProfile().setImage(avatarUrl);
-            userService.updateUser(user);
-            return avatarUrl;
-
-        } catch (Exception exception) {
-            throw new Exception(exception.getMessage());
-        }
-    }
-
-    /*
-     * Download Files
-     */
     @GetMapping("/file/{keyName}")
     public ResponseEntity<byte[]> downloadFile(@PathVariable String keyName) {
         ByteArrayOutputStream downloadInputStream = s3Services.downloadS3File(keyName);
@@ -126,9 +84,6 @@ public class FileAWSController {
                 .body(downloadInputStream.toByteArray());
     }
 
-    /*
-     * List ALL Files
-     */
     @GetMapping("/file/all")
     public List<String> listAllFiles() {
         return s3Services.listS3Files();
@@ -149,11 +104,6 @@ public class FileAWSController {
         }
     }
 
-
-    /**
-     * @param keyName
-     * @return
-     */
     @DeleteMapping(value = "/delete")
     public ResponseEntity<String> deleteFile(@RequestParam(value = "fileName") final String keyName) {
         s3Services.deleteFile(keyName);

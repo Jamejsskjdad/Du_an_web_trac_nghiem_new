@@ -18,11 +18,13 @@ export class AdminNavbarComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.userService.getUserInfo(this.tokenStorageService.getUser().username).subscribe(res => {
+    const currentUser = this.tokenStorageService.getUser();
+    this.userService.getUserInfo(currentUser.username).subscribe(res => {
       this.user = res.data;
-      this.avatarImg = this.user.profile.image || this.userService.getDefaultAvatar();
+      // ✅ Đảm bảo lấy icon mới nhất
     });
   }
+  
 
   signOut() {
     this.tokenStorageService.signOut();

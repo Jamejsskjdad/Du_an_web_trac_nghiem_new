@@ -24,11 +24,13 @@ import com.thanhtam.backend.config.JwtUtils;
 import com.thanhtam.backend.dto.UserExport;
 import com.thanhtam.backend.dto.UserPasswordExportDTO;
 import com.thanhtam.backend.entity.PasswordResetToken;
+import com.thanhtam.backend.entity.Profile;
 import com.thanhtam.backend.entity.Role;
 import com.thanhtam.backend.entity.User;
 import com.thanhtam.backend.repository.ExamRepository;
 import com.thanhtam.backend.repository.ExamUserRepository;
 import com.thanhtam.backend.repository.PasswordResetTokenRepository;
+import com.thanhtam.backend.repository.ProfileRepository;
 import com.thanhtam.backend.repository.QuestionRepository;
 import com.thanhtam.backend.repository.RoleUserRepository;
 import com.thanhtam.backend.repository.UserRepository;
@@ -54,6 +56,8 @@ public class UserServiceImpl implements UserService {
     private QuestionRepository questionRepository;
     @Autowired
     private ExamRepository examRepository;
+    @Autowired
+    private ProfileRepository profileRepository;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository, RoleService roleService, PasswordEncoder passwordEncoder, PasswordResetTokenRepository passwordResetTokenRepository, EmailService emailService) {
@@ -295,6 +299,10 @@ public class UserServiceImpl implements UserService {
         ids.add(userId);
         deleteManyUsersByIds(ids, currentAdminId);
     }
-    
-
+    @Override
+    public void updateUserIcon(Long profileId, String icon) {
+    Profile profile = profileRepository.findById(profileId).orElseThrow();
+    profile.setIcon(icon);
+    profileRepository.save(profile);
+    }
 }
