@@ -38,6 +38,26 @@
               class="fa fa-envelope mr-3"></i><span>{{userInfo.email ? userInfo.email : 'Chưa có email'}}</span></div>
             <div class="w-full my-1 px-2 bg-gray-200 rounded px-3 py-1"><i
               class="fa fa-calendar mr-3"></i><span>{{userInfo.createdDate}}</span></div>
+            <!-- Hiển thị Role -->
+            <ng-container *ngIf="userInfo.roles?.length">
+              <div class="w-full my-1 px-2 bg-gray-200 rounded px-3 py-1">
+                <i class="fa fa-graduation-cap mr-3"></i>
+                <span>
+                  {{
+                    userInfo.roles[0].name === 'ROLE_STUDENT' ? 'Học sinh' :
+                    userInfo.roles[0].name === 'ROLE_ADMIN' ? 'Quản trị viên' :
+                    userInfo.roles[0].name === 'ROLE_LECTURER' ? 'Giáo viên' :
+                    userInfo.roles[0].name
+                  }}
+                </span>
+              </div>
+              <!-- Nếu là học sinh thì hiện thêm Intake -->
+              <div class="w-full my-1 px-2 bg-gray-200 rounded px-3 py-1" *ngIf="userInfo.roles[0].name === 'ROLE_STUDENT' && userInfo.intake">
+                <i class="fa fa-building mr-3"></i>
+                <span>{{userInfo.intake.name}} ({{userInfo.intake.intakeCode}})</span>
+              </div>
+            </ng-container>
+
             <ng-container *ngIf="!userInfo.deleted else inactive">
               <div class="w-full my-1 px-2 bg-green-200 text-green-500 rounded px-3 py-1"><i
                 class="fa fa-toggle-on mr-3"></i><span>Đang hoạt động</span></div>

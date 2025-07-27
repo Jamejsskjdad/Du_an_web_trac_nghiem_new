@@ -24,4 +24,13 @@ export class DetailUserComponent implements OnInit {
   toggleModalDetail() {
     this.showModalDetail = !this.showModalDetail;
   }
+  getVietRoleName(role: string): string {
+    switch (role) {
+      case 'ROLE_ADMIN': return 'Quản trị viên';
+      case 'ROLE_LECTURER': return 'Giáo viên';
+      case 'ROLE_STUDENT': return 'Học sinh';
+      default: return role;
+    }
+  }
+  
 }
