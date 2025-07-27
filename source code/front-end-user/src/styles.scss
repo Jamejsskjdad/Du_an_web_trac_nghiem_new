@@ -1,8 +1,15 @@
+// body * {
+//   font-family: 'Poppins', sans-serif;
+// }
+
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+
 body * {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Open Sans', sans-serif;
 }
-a{
-  &:focus{
+
+a {
+  &:focus {
     outline: none
   }
 }
