@@ -28,6 +28,7 @@ export class AdminProfileComponent implements OnInit {
     'avt8.png'
   ];
   selectedIcon: string = 'avt1.png';
+  localizedRole: string = '';
 
   constructor(
     private userService: UserService,
@@ -50,7 +51,9 @@ export class AdminProfileComponent implements OnInit {
       } else {
         // Nếu chưa có thì dùng icon mặc định (không gọi API)
         this.selectedIcon = 'avt1.png';
-      }
+      }     
+    const roleName = this.userProfile.roles?.[0]?.name || '';
+    this.localizedRole = this.getLocalizedRole(roleName);
     });
   }
 
@@ -123,4 +126,17 @@ export class AdminProfileComponent implements OnInit {
       }
     );
   }
+  getLocalizedRole(roleName: string): string {
+    switch (roleName) {
+      case 'ROLE_ADMIN':
+        return 'Quản trị viên';
+      case 'ROLE_TEACHER':
+        return 'Giáo viên';
+      case 'ROLE_STUDENT':
+        return 'Học viên';
+      default:
+        return 'Người dùng';
+    }
+  }
+  
 }

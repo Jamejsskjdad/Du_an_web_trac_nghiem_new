@@ -33,6 +33,12 @@
                 <div class="px-3 my-2">
                   <label class="underline text-blue-500">{{userProfile.email}}</label>
                 </div>
+                <div class="px-3 my-2">
+                  <label class="text-sm text-gray-600 font-medium">
+                    Vai trò: <span class="text-blue-600">{{ localizedRole }}</span>
+                  </label>
+                </div>
+                
                 <div class="px-3 mt-2">
                   <label class="block text-sm text-gray-600 font-medium mb-1">Chọn icon đại diện</label>
                   <select [(ngModel)]="selectedIcon" (change)="changeIcon(selectedIcon)"
