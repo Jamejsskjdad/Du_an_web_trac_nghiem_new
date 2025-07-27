@@ -1,22 +1,25 @@
 package com.thanhtam.backend.controller;
 
-import com.thanhtam.backend.dto.UserExcel;
-import com.thanhtam.backend.entity.User;
-import com.thanhtam.backend.service.ExcelService;
-import com.thanhtam.backend.service.FilesStorageService;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.List;
+import com.thanhtam.backend.dto.UserExcel;
+import com.thanhtam.backend.entity.User;
+import com.thanhtam.backend.service.ExcelService;
+import com.thanhtam.backend.service.FilesStorageService;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -34,26 +37,40 @@ public class ExcelController {
 
     @PostMapping("/file/import/users")
     public ResponseEntity<UserExcel> uploadUserToDB(@RequestParam("file") MultipartFile file) throws IOException {
-        String message = "";
+        String uploadDir = System.getProperty("user.dir") + File.separator + "uploads";
+        String filePath = uploadDir + "/user-import-" + System.currentTimeMillis() + ".xlsx";
+    
         try {
-            String filePath = "excel-import-user";
-            //Save file to local storage
-            filesStorageService.save(file, filePath);
-
-            //Read file
-            List<User> userList = excelService.readUserFromExcelFile(filePath + "\\" + file.getOriginalFilename());
-            //Insert list of user into database
+            // ✅ Tạo thư mục nếu chưa tồn tại
+            File dir = new File(uploadDir);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+    
+            // ✅ Ghi file
+            File savedFile = new File(filePath);
+            file.transferTo(savedFile);
+    
+            // ✅ Đọc & xử lý
+            List<User> userList = excelService.readUserFromExcelFile(savedFile.getAbsolutePath());
             excelService.InsertUserToDB(userList);
-
-            message = "Uploaded the user list successfully: " + file.getOriginalFilename();
-            return ResponseEntity.ok().body(new UserExcel(HttpStatus.OK.value(), message, userList, userList.size()));
+    
+            return ResponseEntity.ok().body(
+                new UserExcel(HttpStatus.OK.value(), "Import thành công", userList, userList.size())
+            );
         } catch (Exception e) {
-            message = "Could not upload the user list: " + file.getOriginalFilename() + "!";
-            LOGGER.error(e.toString());
-            return ResponseEntity.badRequest().body(new UserExcel(HttpStatus.EXPECTATION_FAILED.value(), message, null, 0));
+            LOGGER.error("Import user thất bại: " + e.getMessage());
+            return ResponseEntity.badRequest().body(
+                new UserExcel(HttpStatus.EXPECTATION_FAILED.value(), "Import lỗi!", null, 0)
+            );
         } finally {
-            filesStorageService.deleteAllUserExcel(file.getOriginalFilename());
+            // ✅ Xóa file tạm nếu tồn tại
+            File tmp = new File(filePath);
+            if (tmp.exists()) {
+                tmp.delete();
+            }
         }
     }
+    
 
 }

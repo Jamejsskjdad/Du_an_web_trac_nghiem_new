@@ -1,14 +1,24 @@
 package com.thanhtam.backend.service;
 
-import com.thanhtam.backend.dto.UserExport;
-import com.thanhtam.backend.entity.Intake;
-import com.thanhtam.backend.entity.Profile;
-import com.thanhtam.backend.entity.Role;
-import com.thanhtam.backend.entity.User;
-import com.thanhtam.backend.repository.UserRepository;
-import com.thanhtam.backend.ultilities.ERole;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,10 +26,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.*;
+import com.thanhtam.backend.dto.UserExport;
+import com.thanhtam.backend.entity.Intake;
+import com.thanhtam.backend.entity.Profile;
+import com.thanhtam.backend.entity.Role;
+import com.thanhtam.backend.entity.User;
+import com.thanhtam.backend.repository.UserRepository;
+import com.thanhtam.backend.ultilities.ERole;
 
 @Service
 public class ExcelServiceImpl implements ExcelService {
@@ -44,95 +57,93 @@ public class ExcelServiceImpl implements ExcelService {
     public List<User> readUserFromExcelFile(String excelFilePath) throws IOException {
         List<User> userList = new ArrayList<>();
         FileInputStream inputStream = new FileInputStream(new File(excelFilePath));
-
-        Workbook workBook = getWorkbook(inputStream, excelFilePath);
-        Sheet firstSheet = workBook.getSheetAt(0);
-        LOGGER.info(firstSheet.getSheetName());
+    
+        Workbook workbook = getWorkbook(inputStream, excelFilePath);
+        Sheet firstSheet = workbook.getSheetAt(0);
         Iterator<Row> rows = firstSheet.iterator();
-
+    
+        int rowIndex = 0;
         while (rows.hasNext()) {
             Row row = rows.next();
-            Iterator<Cell> cells = row.cellIterator();
+    
+            // Bỏ qua dòng tiêu đề
+            if (rowIndex++ == 0) continue;
+    
             User user = new User();
             Profile profile = new Profile();
-
-            while (cells.hasNext()) {
-                Cell cell = cells.next();
-                int columnIndex = cell.getColumnIndex();
-
-                switch (columnIndex) {
-                    case 0: {
-                        user.setUsername((String) getCellValue(cell));
-                        user.setPassword(passwordEncoder.encode((String) getCellValue(cell)));
-
-                    }
-                    break;
-
-                    case 1: {
-                        user.setEmail((String) getCellValue(cell));
-                    }
-
-                    break;
-                    case 2: {
-                        profile.setFirstName((String) getCellValue(cell));
-                        user.setProfile(profile);
-
-                    }
-
-                    break;
-                    case 3: {
-                        profile.setLastName((String) getCellValue(cell));
-                        user.setProfile(profile);
-
-                    }
-
-                    break;
-
-                    case 4: {
-                        Intake intake = intakeService.findByCode((String) getCellValue(cell));
+    
+            String username = getStringCell(row.getCell(0));
+            String passwordRaw = getStringCell(row.getCell(1)); // vẫn lấy từ username nếu cần
+            String email = getStringCell(row.getCell(2));
+            String firstName = getStringCell(row.getCell(3));
+            String lastName = getStringCell(row.getCell(4));
+            String intakeCode = getStringCell(row.getCell(5));
+            String roleStr = getStringCell(row.getCell(6));
+    
+            if (username == null || email == null || roleStr == null) {
+                // Bỏ qua nếu thiếu thông tin bắt buộc
+                continue;
+            }
+    
+            user.setUsername(username);
+            user.setPassword(passwordEncoder.encode(passwordRaw != null ? passwordRaw : username)); // fallback nếu ô password trống
+            user.setEmail(email);
+    
+            profile.setFirstName(firstName);
+            profile.setLastName(lastName);
+            user.setProfile(profile);
+    
+            // Xử lý intake nếu có
+            // ↓ Trong xử lý intake, dùng lại luôn:
+            if (intakeCode != null && !intakeCode.isBlank()) {
+                try {
+                    Intake intake = intakeService.findByCode(intakeCode);
+                    if (intake != null) {
                         user.setIntake(intake);
-                        break;
+                    } else {
+                        LOGGER.warn("Intake code không tồn tại: " + intakeCode + " → bỏ qua user");
+                        continue;
                     }
-                    case 5: {
-                        switch ((String) getCellValue(cell)) {
-                            case "ADMIN": {
-                                Role userRole = roleService.findByName(ERole.ROLE_ADMIN).orElseThrow(() -> new RuntimeException("Error: Role is not found"));
-                                Set<Role> roles = new HashSet<>();
-                                roles.add(userRole);
-                                user.setRoles(roles);
-                                break;
-                            }
-
-                            case "LECTURER": {
-                                Role userRole = roleService.findByName(ERole.ROLE_LECTURER).orElseThrow(() -> new RuntimeException("Error: Role is not found"));
-                                Set<Role> roles = new HashSet<>();
-                                roles.add(userRole);
-                                user.setRoles(roles);
-                                break;
-                            }
-
-                            default: {
-                                Role userRole = roleService.findByName(ERole.ROLE_STUDENT).orElseThrow(() -> new RuntimeException("Error: Role is not found"));
-                                Set<Role> roles = new HashSet<>();
-                                roles.add(userRole);
-                                user.setRoles(roles);
-                                break;
-                            }
-                        }
-                    }
-                    break;
+                } catch (Exception e) {
+                    LOGGER.warn("Lỗi khi tìm Intake code " + intakeCode + ": " + e.getMessage());
+                    continue;
                 }
-
             }
 
+            // Xử lý role
+            Role userRole;
+            switch (roleStr.trim().toUpperCase()) {
+                case "ADMIN":
+                    userRole = roleService.findByName(ERole.ROLE_ADMIN)
+                            .orElseThrow(() -> new RuntimeException("Role ADMIN not found"));
+                    break;
+                case "LECTURER":
+                    userRole = roleService.findByName(ERole.ROLE_LECTURER)
+                            .orElseThrow(() -> new RuntimeException("Role LECTURER not found"));
+                    break;
+                default:
+                    userRole = roleService.findByName(ERole.ROLE_STUDENT)
+                            .orElseThrow(() -> new RuntimeException("Role STUDENT not found"));
+                    break;
+            }
+            user.setRoles(Set.of(userRole));
+    
             userList.add(user);
         }
-
-        workBook.close();
+    
+        workbook.close();
         inputStream.close();
-        LOGGER.error("List user: " + userList.toString());
+        LOGGER.info("Imported user list size: " + userList.size());
         return userList;
     }
+    
+    // Hàm lấy dữ liệu kiểu String từ cell
+    private String getStringCell(Cell cell) {
+        if (cell == null) return null;
+        cell.setCellType(org.apache.poi.ss.usermodel.CellType.STRING);
+        return cell.getStringCellValue().trim();
+    }
+    
 
     @Override
     public void writeUserToExcelFile(ArrayList<UserExport> userExports) throws IOException {
