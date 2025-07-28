@@ -1,17 +1,20 @@
-import {UserRole} from './user-role';
-import {UserProfile} from './user-profile';
+import { UserProfile } from './user-profile';
 
 export class UserUpdate {
   username: string;
-  email: string;
-  password: string;
+  password?: string;
   profile: UserProfile;
+  birthDate?: Date; // ✅ Thêm ngày sinh, kiểu ISO string
 
-
-  constructor(username: string, email: string, password: string, profile: UserProfile) {
+  constructor(
+    username: string,
+    profile: UserProfile,
+    birthDate?: Date,
+    password?: string
+  ) {
     this.username = username;
-    this.email = email;
-    this.password = password;
     this.profile = profile;
+    this.birthDate = birthDate;
+    this.password = password;
   }
 }

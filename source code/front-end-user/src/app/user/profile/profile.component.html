@@ -21,12 +21,20 @@
         </label>
       </div>
       <div class="px-3 my-1">
-        <label>{{userProfile.intake.name}}</label>
+        <label>{{userProfile.intake?.name}}</label>
       </div>
+      
+      <!-- ✅ Thêm ngày sinh -->
       <div class="px-3 my-2">
-        <label class="underline text-blue-500">{{userProfile.email}}</label>
+        <label class="text-sm text-gray-600 font-medium">
+          Ngày sinh:
+          <span class="text-blue-600">
+            {{ userProfile.birthDate ? (userProfile.birthDate | date:'dd/MM/yyyy') : 'Chưa cập nhật' }}
+          </span>
+        </label>
       </div>
 
+      <!-- ✅ Dropdown chọn icon -->
       <div class="px-3 mt-2">
         <label class="block text-sm text-gray-600 font-medium mb-1">Chọn icon đại diện</label>
         <select [(ngModel)]="selectedIcon" (change)="changeIcon(selectedIcon)"
@@ -34,29 +42,23 @@
           <option *ngFor="let icon of iconList" [value]="icon">{{icon}}</option>
         </select>
       </div>
-      
+
+      <!-- ✅ Nút đổi mật khẩu -->
       <div class="mx-3 my-3 flex justify-center">
         <div
           class="mx-2 w-8 h-8 flex justify-center items-center rounded-full bg-blue-500 hover:bg-blue-700 text-white text-lg cursor-pointer"
-          [tooltip]="'Change password'" show-delay="100" hide-delay="100"
+          [tooltip]="'Đổi mật khẩu'" show-delay="100" hide-delay="100"
           [ngClass]="{'bg-blue-700 shadow-lg': togglePwd}" (click)="toggleChangePwd()">
           <i class="fa fa-lock"></i>
         </div>
-        <div
-          class="mx-2 w-8 h-8 flex justify-center items-center rounded-full bg-blue-500 hover:bg-blue-700 text-white text-lg cursor-pointer"
-          [tooltip]="'Update email'" show-delay="100" hide-delay="100"
-          [ngClass]="{'bg-blue-700 shadow-lg': toggleEmail}" (click)="toggleUpdateEmail()">
-          <i class="fa fa-envelope"></i>
-        </div>
+        <!-- ❌ Đã loại bỏ cập nhật email -->
       </div>
     </div>
+
+    <!-- Form bên phải -->
     <div class="mx-8 md:w-1/2">
       <ng-template [ngIf]="togglePwd">
         <app-update-password (passwordUpdate)="updatePassword($event)"></app-update-password>
-      </ng-template>
-
-      <ng-template [ngIf]="toggleEmail">
-        <app-update-email [userProfile]="userProfile" (emailUpdate)="updateEmail($event)"></app-update-email>
       </ng-template>
     </div>
   </div>

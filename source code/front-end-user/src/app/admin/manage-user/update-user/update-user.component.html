@@ -71,22 +71,16 @@
 
             </div>
 
+            <!-- Thay thế block EMAIL cũ bằng ngày sinh -->
             <div class="-mx-3 md:flex mb-2 w-full">
               <div class="md:w-full px-3">
-                <label class="block uppercase tracking-wide text-gray-600 text-xs font-bold mb-2" for="email">
-                  Email
+                <label class="block uppercase tracking-wide text-gray-600 text-xs font-bold mb-2" for="birth-date">
+                  Ngày sinh
                 </label>
                 <input
                   class="appearance-none border rounded-md w-full py-2 px-3 my-1 text-gray-600 bg-gray-200 leading-tight outline-none focus:border-green-500"
-                  id="email" type="email" placeholder="Nhập thông tin email" autocomplete="off" formControlName="email"
-                  required>
-                <p class="text-red-500 text-xs italic"
-                  *ngIf="email?.hasError('required') && (email?.dirty || email?.touched)">Email không được bỏ trống</p>
-                <p class="text-red-500 text-xs italic"
-                  *ngIf="email?.hasError('pattern') && (email?.dirty || email?.touched)">Email không hợp lệ</p>
-                <p class="text-red-500 text-xs italic"
-                  *ngIf="email?.hasError('emailExists') && (email?.dirty || email.touched)">
-                  Email đang thuộc tài khoản khác</p>
+                  id="birth-date" type="date" formControlName="birthDate"
+                  max="{{ today | date: 'yyyy-MM-dd' }}" />
               </div>
             </div>
             <div class="-mx-3 md:flex mb-2 w-full">

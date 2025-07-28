@@ -89,7 +89,6 @@ export class ProfileComponent implements OnInit {
           break;
         case 200:
           this.toast.success('Done', res.message);
-          this.userProfile.email = res.data;
           break;
         default:
           this.toast.error('Error', 'Server error');

@@ -1,10 +1,10 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {AuthService} from '../_services/auth.service';
-import {TokenStorageService} from '../_services/token-storage.service';
-import {UserRole} from '../models/user-role.enum';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ToastrService} from 'ngx-toastr';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from '../_services/auth.service';
+import { TokenStorageService } from '../_services/token-storage.service';
+import { UserRole } from '../models/user-role.enum';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -13,33 +13,28 @@ import {ToastrService} from 'ngx-toastr';
 })
 export class LoginComponent implements OnInit {
 
-  form: any = {};
-  fEmail: FormGroup;
+  loginForm: FormGroup;
   isLoggedIn = false;
   isLoginFailed = false;
   errorMessage = '';
   roles: string[] = [];
   preLoading = false;
   returnUrl: string;
-  // tslint:disable-next-line:max-line-length
   openTab = 1;
 
-  constructor(private router: Router,
-              private activatedRoute: ActivatedRoute,
-              private authService: AuthService,
-              private tokenStorageService: TokenStorageService,
-              private fb: FormBuilder,
-              private toast: ToastrService) {
-  }
-
-  get email() {
-    return this.fEmail.get('email');
-  }
+  constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private authService: AuthService,
+    private tokenStorageService: TokenStorageService,
+    private fb: FormBuilder,
+    private toast: ToastrService
+  ) {}
 
   ngOnInit(): void {
-    this.fEmail = this.fb.group({
-      email: ['', Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')],
-      password: ['', Validators.required] // Thêm trường password vào form
+    this.loginForm = this.fb.group({
+      username: ['', Validators.required],
+      password: ['', Validators.required]
     });
 
     this.isLoggedIn = !!this.tokenStorageService?.getToken();
@@ -51,37 +46,34 @@ export class LoginComponent implements OnInit {
       if (this.roles.includes(UserRole.ROLE_ADMIN)) {
         this.toLogin(UserRole.ROLE_ADMIN);
       } else if (this.roles.includes(UserRole.ROLE_LECTURER)) {
-        this.toLogin(UserRole.ROLE_ADMIN);
+        this.toLogin(UserRole.ROLE_LECTURER);
       } else if (this.roles.includes(UserRole.ROLE_STUDENT)) {
         this.toLogin(UserRole.ROLE_STUDENT);
       }
     }
   }
 
-toLogin(role: string) {
-  switch (role) {
-    case UserRole.ROLE_STUDENT: {
-      this.router.navigate(['/user/dashboard']);
-      break;
-    }
-    case UserRole.ROLE_ADMIN: {
-      this.router.navigate(['/admin/dashboard']);
-      break;
-    }
-    case UserRole.ROLE_LECTURER: {
-      this.router.navigate(['/lecturer/dashboard']);
-      break;
+  toLogin(role: string) {
+    switch (role) {
+      case UserRole.ROLE_STUDENT:
+        this.router.navigate(['/user/dashboard']);
+        break;
+      case UserRole.ROLE_ADMIN:
+        this.router.navigate(['/admin/dashboard']);
+        break;
+      case UserRole.ROLE_LECTURER:
+        this.router.navigate(['/lecturer/dashboard']);
+        break;
     }
   }
-}
 
   onSubmit() {
+    if (this.loginForm.invalid) return;
+
     this.preLoading = true;
+    const { username, password } = this.loginForm.value;
 
-    // Debug password
-    console.log("Password khi đăng nhập:", this.fEmail.get('password').value);
-
-    this.authService.login(this.form).subscribe(
+    this.authService.login({ username, password }).subscribe(
       data => {
         this.tokenStorageService.saveToken(data.accessToken);
         this.tokenStorageService.saveUser(data);
@@ -99,26 +91,10 @@ toLogin(role: string) {
         }
       },
       err => {
-        if (err.Status === 400) {
-          this.errorMessage = '400';
-          return;
-        }
-        this.errorMessage = err;
+        this.errorMessage = err?.message || 'Lỗi đăng nhập';
         this.isLoginFailed = true;
         this.preLoading = false;
       }
     );
   }
-
-  onSubmitEmail() {
-    this.authService.sendRequest(this.email.value).subscribe(res => {
-      console.log(res);
-      if (res.operationResult === 'SUCCESS') {
-        this.toast.success('Kiểm tra email của bạn', 'Thành công');
-      } else if (res.operationResult === 'ERROR') {
-        this.toast.error('Email không tồn tại trong hệ thống', 'Lỗi');
-      }
-    });
-  }
-
 }

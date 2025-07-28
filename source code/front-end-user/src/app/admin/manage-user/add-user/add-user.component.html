@@ -101,23 +101,11 @@
 
                         <div class="-mx-3 md:flex mb-2 w-full">
                           <div class="md:w-1/2 px-3">
-                            <label class="block uppercase tracking-wide text-gray-600 text-xs font-bold mb-2"
-                              for="frm-add-email">
-                              Email
-                            </label>
-                            <input
-                              class="appearance-none border rounded-md w-full py-2 px-3 my-1 text-gray-600 bg-gray-200 leading-tight outline-none focus:border-green-500"
-                              id="frm-add-email" type="email" placeholder="Nhập thông tin email" autocomplete="off"
-                              formControlName="email" required>
-                            <p class="text-red-500 text-xs italic"
-                              *ngIf="email?.hasError('required') && (email?.dirty || email?.touched)">Email không được
-                              bỏ trống</p>
-                            <p class="text-red-500 text-xs italic"
-                              *ngIf="email?.hasError('pattern') && (email?.dirty || email?.touched)">Email không hợp lệ
-                            </p>
-                            <p class="text-red-500 text-xs italic"
-                              *ngIf="email?.hasError('emailExists') && (email?.dirty || email.touched)">
-                              Email đã tồn tại</p>
+                            <label class="block text-xs font-bold mb-2">Ngày sinh</label>
+                            <input type="date"
+                                  class="border rounded w-full px-3 py-2 bg-gray-200"
+                                  formControlName="birthDate"
+                                  max="{{ today | date:'yyyy-MM-dd' }}">
                           </div>
                           <div class="md:w-1/2 px-3">
                             <label class="block uppercase tracking-wide text-gray-600 text-xs font-bold mb-2"

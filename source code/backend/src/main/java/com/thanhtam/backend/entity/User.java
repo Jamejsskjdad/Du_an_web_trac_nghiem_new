@@ -1,19 +1,34 @@
 package com.thanhtam.backend.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
-import javax.persistence.*;
-import javax.validation.constraints.Email;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
@@ -34,9 +49,8 @@ public class User implements Serializable {
     @Column(name = "password")
     private String password;
 
-    @Email
-    @Column(name = "email", unique = true, nullable = false)
-    private String email;
+    @Column(name = "birth_date")
+    private Date birthDate;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "intake_id")
@@ -64,11 +78,11 @@ public class User implements Serializable {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "profile_id", referencedColumnName = "id")
     private Profile profile;
+
     // Các constructor tiện dụng
 
-    public User(String username, String email, Profile profile) {
+    public User(String username, Profile profile) {
         this.username = username;
-        this.email = email;
         this.profile = profile;
     }
 
@@ -76,15 +90,9 @@ public class User implements Serializable {
         this.deleted = deleted;
     }
 
-    public User(String username, String password, String email, Profile profile) {
+    public User(String username, String password, Profile profile) {
         this.username = username;
         this.password = password;
-        this.email = email;
-        this.profile = profile;
-    }
-
-    public User(String email, Profile profile) {
-        this.email = email;
         this.profile = profile;
     }
 }

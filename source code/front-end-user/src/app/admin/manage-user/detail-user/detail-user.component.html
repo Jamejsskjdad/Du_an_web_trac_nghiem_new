@@ -25,7 +25,7 @@
       <div class="relative p-6 ">
         <div class="my-4 px-8 text-gray-600 text-base leading-relaxed text-left flex-row flex flex-wrap justify-center lg:justify-start items-center">
           <div class="mx-3 mr-5 my-3 md-w-1/4">
-            <img [src]="userInfo.profile?.image || '../../assets/images/avatar-default.png'" class="rounded-full w-32 h-32 border">
+            <img [src]="'../../assets/my-icons/' + (userInfo.profile?.icon || 'avt1.png')" class="rounded-full w-32 h-32 border" />
 
           </div>
           <div class="w-2/3 flex flex-col">
@@ -34,8 +34,12 @@
             </div>
             <div class="w-full my-1 px-2 bg-gray-200 rounded px-3 py-1"><i
               class="fa fa-user-circle mr-3"></i><span>{{userInfo.username }}</span></div>
-            <div class="w-full my-1 px-2 bg-gray-200 rounded px-3 py-1"><i
-              class="fa fa-envelope mr-3"></i><span>{{userInfo.email ? userInfo.email : 'Chưa có email'}}</span></div>
+              <div class="w-full my-1 px-2 bg-gray-200 rounded px-3 py-1">
+                <i class="fa fa-calendar mr-3"></i>
+                <span>
+                  {{ userInfo.birthDate ? (userInfo.birthDate | date:'dd/MM/yyyy') : 'Chưa có ngày sinh' }}
+                </span>
+              </div>
             <div class="w-full my-1 px-2 bg-gray-200 rounded px-3 py-1"><i
               class="fa fa-calendar mr-3"></i><span>{{userInfo.createdDate}}</span></div>
             <!-- Hiển thị Role -->

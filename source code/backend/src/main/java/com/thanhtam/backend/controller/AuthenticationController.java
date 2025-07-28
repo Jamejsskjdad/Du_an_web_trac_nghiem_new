@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.mail.MessagingException;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
@@ -25,15 +24,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.thanhtam.backend.config.JwtUtils;
 import com.thanhtam.backend.dto.LoginUser;
-import com.thanhtam.backend.dto.OperationStatusDto;
-import com.thanhtam.backend.dto.PasswordResetDto;
-import com.thanhtam.backend.dto.PasswordResetRequest;
 import com.thanhtam.backend.entity.User;
 import com.thanhtam.backend.payload.response.JwtResponse;
 import com.thanhtam.backend.service.UserDetailsImpl;
 import com.thanhtam.backend.service.UserService;
-import com.thanhtam.backend.ultilities.RequestOperationName;
-import com.thanhtam.backend.ultilities.RequestOperationStatus;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -42,11 +36,9 @@ public class AuthenticationController {
 
     private Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
 
-    JwtUtils jwtUtils;
-
-    private AuthenticationManager authenticationManager;
-
-    private UserService userService;
+    private final JwtUtils jwtUtils;
+    private final AuthenticationManager authenticationManager;
+    private final UserService userService;
 
     @Autowired
     public AuthenticationController(JwtUtils jwtUtils, AuthenticationManager authenticationManager, UserService userService) {
@@ -60,14 +52,12 @@ public class AuthenticationController {
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginUser loginUser) {
         String username = loginUser.getUsername();
         Optional<User> user = userService.getUserByUsername(username);
-        if (!user.isPresent()) {
-            return ResponseEntity.badRequest().build();
-        } else if (user.get().isDeleted() == true) {
+        if (!user.isPresent() || user.get().isDeleted()) {
             return ResponseEntity.badRequest().build();
         }
 
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginUser.getUsername(), loginUser.getPassword()));
+                new UsernamePasswordAuthenticationToken(username, loginUser.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
@@ -76,44 +66,15 @@ public class AuthenticationController {
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
-        User userLog = userService.getUserByUsername(userDetails.getUsername()).get();
+
+        User userLog = user.get();
         userLog.setLastLoginDate(new Date());
         userService.updateUser(userLog);
         logger.warn(userLog.toString());
-        if (userLog.isDeleted() == true) {
-            return ResponseEntity.badRequest().build();
-        }
+
         return ResponseEntity.ok(new JwtResponse(jwt,
                 userDetails.getId(),
                 userDetails.getUsername(),
-                userDetails.getEmail(),
                 roles));
     }
-
-
-    @PostMapping(value = "/password-reset-request")
-    public OperationStatusDto resetPasswordRequest(@RequestBody PasswordResetRequest passwordResetRequest) throws MessagingException {
-        OperationStatusDto operationStatusDto = new OperationStatusDto();
-        boolean operationResult = userService.requestPasswordReset(passwordResetRequest.getEmail());
-        operationStatusDto.setOperationName(RequestOperationName.REQUEST_PASSWORD_RESET.name());
-        operationStatusDto.setOperationResult(RequestOperationStatus.ERROR.name());
-        if (operationResult) {
-            operationStatusDto.setOperationResult(RequestOperationStatus.SUCCESS.name());
-
-        }
-
-        return operationStatusDto;
-    }
-
-    @PostMapping(value = "/password-reset")
-    public OperationStatusDto resetPassword(@RequestBody PasswordResetDto passwordResetDto) {
-        OperationStatusDto operationStatusDto = new OperationStatusDto();
-        boolean operationResult = userService.resetPassword(passwordResetDto.getToken(), passwordResetDto.getPassword());
-        operationStatusDto.setOperationResult(RequestOperationStatus.ERROR.name());
-        operationStatusDto.setOperationName(RequestOperationName.PASSWORD_RESET.name());
-        if (operationResult) {
-            operationStatusDto.setOperationResult(RequestOperationStatus.SUCCESS.name());
-        }
-        return operationStatusDto;
-    }
-}
+} 

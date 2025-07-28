@@ -1,6 +1,7 @@
 package com.thanhtam.backend.service;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -19,19 +20,19 @@ public class UserDetailsImpl implements UserDetails {
 
     private Long id;
     private String username;
-    private String email;
+    private Date birthDate;
 
     @JsonIgnore
     private String password;
 
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(Long id, String username, String email, String password,
+    public UserDetailsImpl(Long id, String username, String password, Date birthDate,
                            Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
-        this.email = email;
         this.password = password;
+        this.birthDate = birthDate;
         this.authorities = authorities;
     }
 
@@ -43,8 +44,8 @@ public class UserDetailsImpl implements UserDetails {
         return new UserDetailsImpl(
                 user.getId(),
                 user.getUsername(),
-                user.getEmail(),
                 user.getPassword(),
+                user.getBirthDate(),
                 authorities);
     }
 
@@ -57,8 +58,8 @@ public class UserDetailsImpl implements UserDetails {
         return id;
     }
 
-    public String getEmail() {
-        return email;
+    public Date getBirthDate() {
+        return birthDate;
     }
 
     @Override
@@ -100,4 +101,4 @@ public class UserDetailsImpl implements UserDetails {
         UserDetailsImpl user = (UserDetailsImpl) o;
         return Objects.equals(id, user.id);
     }
-}
+} 
