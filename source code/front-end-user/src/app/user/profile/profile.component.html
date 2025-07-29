@@ -3,10 +3,11 @@
 <div class="py-3" *ngIf="userProfile">
   <h2 class="lg:text-2xl font-semibold text-gray-800 mb-6 px-4">Tài khoản của bạn</h2>
   <div class="my-2 flex w-full">
-    <div class="rounded-lg shadow-lg w-64 mx-2 px-3 py-2 bg-white text-gray-700 text-center">
-      <div class="my-3 my-1 flex justify-center items-center w-24 h-24 rounded-full border-2 border-blue-500 bg-white shadow-md mx-auto">
-        <img [src]="'assets/my-icons/' + selectedIcon" class="w-24 h-24 object-cover rounded-full">
+    <div class="rounded-lg shadow-lg w-64 mx-2 px-3 py-2 bg-white text-gray-700 text-center border-2 border-blue-500">
+      <div class="my-3 flex justify-center items-center w-40 h-40 rounded-full border-2 border-blue-500 bg-[#D6D4DA] shadow-md mx-auto overflow-hidden">
+        <img [src]="'assets/my-icons/' + selectedIcon" class="w-full h-full object-contain">
       </div>
+                 
       <div class="px-3 my-4">
         <label class="text-blue-700 text-xl font-semibold uppercase">
           {{userProfile.profile.lastName}} {{userProfile.profile.firstName}}
