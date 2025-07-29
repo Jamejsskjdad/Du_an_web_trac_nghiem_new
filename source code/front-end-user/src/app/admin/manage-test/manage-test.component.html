@@ -46,8 +46,7 @@
                   <div *ngIf="selectMode" class="inline-block">
                     <button
                       class="bg-red-600 shadow-md hover:bg-red-700 text-white transition duration-200 ease-in-out text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mx-1 mb-1"
-                      [disabled]="selectedExamIds.length === 0"
-                      (click)="onDeleteSelectedExams()">
+                      [disabled]="selectedExamIds.length === 0" (click)="onDeleteSelectedExams()">
                       <i class="fa fa-trash mr-1"></i> Xóa ({{ selectedExamIds.length }}) bài thi
                     </button>
                     <button

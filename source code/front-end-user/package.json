@@ -24,6 +24,7 @@
     "@ckeditor/ckeditor5-angular": "^1.2.3",
     "@ckeditor/ckeditor5-build-balloon": "^19.0.2",
     "@ckeditor/ckeditor5-build-classic": "^19.0.2",
+    "@fortawesome/fontawesome-free": "^7.0.0",
     "@fullcalendar/angular": "^5.1.0",
     "@fullcalendar/daygrid": "^5.1.0",
     "@fullcalendar/interaction": "^5.1.0",
