@@ -26,4 +26,6 @@ public interface ExamUserRepository extends JpaRepository<ExamUser, Long> {
     @Modifying
     @Query("DELETE FROM ExamUser eu WHERE eu.user.id IN :userIds")
     void deleteAllByUserIds(@Param("userIds") List<Long> userIds);
+    @Query("SELECT eu FROM ExamUser eu WHERE eu.exam.id = :examId AND eu.answerSheet LIKE %:questionIdStr%")
+    List<ExamUser> findExamUsersContainingQuestionId(@Param("examId") Long examId, @Param("questionIdStr") String questionIdStr);
 }

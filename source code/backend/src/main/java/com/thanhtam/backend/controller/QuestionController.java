@@ -179,7 +179,7 @@ public class QuestionController {
         q.setPart(question.getPart());
         q.setPoint(question.getPoint());   // <- CHỈ DÙNG POINT
         // Các trường createdBy, createdDate giữ nguyên!
-        questionService.save(q);
+        questionService.updateQuestion(id, question);
 
         Question updated = questionService.getQuestionById(q.getId()).get();
         return ResponseEntity.ok().body(new ServiceResult(HttpStatus.OK.value(), "Get question with id: " + id, updated));

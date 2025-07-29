@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.springframework.transaction.annotation.Transactional;
+import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -186,6 +188,7 @@ public class QuestionServiceImpl implements QuestionService {
         }
 
         questionRepository.save(q);
+        updateExamPointWhenQuestionChanged(q.getId(), q.getPart().getId(), q.getPoint());
     }
 
     @Override
@@ -246,5 +249,44 @@ public class QuestionServiceImpl implements QuestionService {
             return "[]";
         }
     }
-
+    @Transactional
+    public void updateExamPointWhenQuestionChanged(Long questionId, Long partId, int newPoint) {
+        System.out.println("▶ [SYNC] Đang đồng bộ câu hỏi ID: " + questionId + ", partId: " + partId + ", point = " + newPoint);
+        String qidStr = "\"questionId\":" + questionId;
+        List<Exam> exams = examRepository.findExamsContainingQuestionId(qidStr);
+    
+        for (Exam exam : exams) {
+            List<Map<String, Object>> questionData = parseJsonArray(exam.getQuestionData());
+            boolean updated = false;
+            for (Map<String, Object> qd : questionData) {
+                Long qId = ((Number) qd.get("questionId")).longValue();
+                if (Objects.equals(qId, questionId)) {
+                    qd.put("point", newPoint);
+                    updated = true;
+                }
+            }
+            if (updated) {
+                exam.setQuestionData(toJson(questionData));
+                examRepository.saveAndFlush(exam);
+            }
+    
+            // Cập nhật answer_sheet
+            List<ExamUser> examUsers = examUserRepository.findAllByExam_Id(exam.getId());
+            for (ExamUser eu : examUsers) {
+                List<Map<String, Object>> answerSheet = parseJsonArray(eu.getAnswerSheet());
+                boolean changed = false;
+                for (Map<String, Object> ans : answerSheet) {
+                    Long qId = ((Number) ans.get("questionId")).longValue();
+                    if (Objects.equals(qId, questionId)) {
+                        ans.put("point", newPoint);
+                        changed = true;
+                    }
+                }
+                if (changed) {
+                    eu.setAnswerSheet(toJson(answerSheet));
+                    examUserRepository.saveAndFlush(eu);
+                }
+            }
+        }
+    }
 }

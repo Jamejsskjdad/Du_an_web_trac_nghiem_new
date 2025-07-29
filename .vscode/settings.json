@@ -1,0 +1,15 @@
+{
+    "java.compile.nullAnalysis.mode": "automatic",
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.import.gradle.enabled": false,
+    "java.import.maven.enabled": true,
+    "java.configuration.maven.userSettings": "",
+    "java.jdt.ls.java.home": "C:\\Program Files\\Java\\jdk-17", // tùy theo đường dẫn JDK của bạn
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar"
+    ],
+    "java.compile.importAnnotations": true,
+    "java.format.settings.url": "",
+    "java.format.settings.profile": ""
+
+}

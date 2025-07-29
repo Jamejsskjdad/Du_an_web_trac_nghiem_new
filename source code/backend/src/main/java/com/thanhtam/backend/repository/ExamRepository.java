@@ -36,5 +36,7 @@ List<Exam> findByCanceledIsTrueOrderByCreatedDateDesc();
     List<Exam> findExamsByPartIds(@Param("partIds") Set<Long> partIds);
     
     List<Exam> findAllByPartIdIn(Set<Long> partIds);
-
+    @Query("SELECT e FROM Exam e WHERE e.questionData LIKE %:questionIdStr%")
+    List<Exam> findExamsContainingQuestionId(@Param("questionIdStr") String questionIdStr);
+    
 }
