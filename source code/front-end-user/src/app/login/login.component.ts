@@ -22,6 +22,8 @@ export class LoginComponent implements OnInit {
   returnUrl: string;
   openTab = 1;
 
+  showPassword = false; // ✅ Thêm biến để điều khiển hiển thị mật khẩu
+
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -96,5 +98,9 @@ export class LoginComponent implements OnInit {
         this.preLoading = false;
       }
     );
+  }
+
+  togglePassword() {
+    this.showPassword = !this.showPassword; // ✅ Hàm đổi trạng thái hiển thị mật khẩu
   }
 }
