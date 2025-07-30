@@ -1,5 +1,4 @@
-<nav
-  class="md:left-0 md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-no-wrap md:overflow-hidden shadow-xl bg-white flex flex-wrap items-center justify-between relative md:w-64 z-10 py-4 px-6">
+<nav class="fixed top-0 bottom-0 left-0 w-64 bg-white shadow-lg z-50 overflow-y-auto">
   <div
     class="md:flex-col md:items-stretch md:min-h-full md:flex-no-wrap px-0 flex flex-wrap items-center justify-between w-full mx-auto">
     <!-- Toggler -->
@@ -9,7 +8,7 @@
       <i class="fa fa-bars"></i>
     </button>
     <!-- Brand -->
-    <a class="md:block text-left md:pb-2 text-gray-700 mr-0 inline-block whitespace-no-wrap text-xl uppercase font-bold p-4 px-0"
+    <a class="md:block text-left md:pb-2 text-gray-700 mr-0 inline-block whitespace-no-wrap text-xl uppercase font-bold px-6 pt-4 pb-2"
       href="javascript:void(0)">
       Kiểm tra online
     </a>
@@ -53,58 +52,55 @@
         </div>
       </form>
       <!-- Navigation -->
-      <ul class="md:flex-col md:min-w-full flex flex-col list-none">
-        <li class="items-center group rounded transition duration-200 ease-in-out hover:bg-blue-500 hover:shadow-lg">
-          <a [routerLink]="['dashboard']" routerLinkActive="text-blue-500"
-            class="text-gray-800 group-hover:text-white text-sm uppercase py-3 font-bold block rounded transition duration-200">
-            <i class="fa fa-tv mr-2 text-sm group-hover:text-white"></i>
-            Bảng điều khiển
+      <ul class="flex flex-col list-none mt-6">
+        <li>
+          <a [routerLink]="['dashboard']" routerLinkActive="border-l-4 border-white bg-blue-500 text-white"
+            class="w-full flex items-center px-6 py-3  hover:bg-green-600   hover:text-white transition duration-200 font-semibold">
+            <i class="fa fa-tv mr-3 text-base"></i> Bảng điều khiển
           </a>
         </li>
-
-        <li class="items-center group rounded transition duration-200 ease-in-out hover:bg-blue-500 hover:shadow-lg">
-          <a [routerLink]="['users']" routerLinkActive="text-blue-500"
-            class="text-gray-800 group-hover:text-white text-sm uppercase py-3 font-bold block rounded transition duration-200">
-            <i class="fa fa-users mr-2 text-sm group-hover:text-white"></i>Quản trị tài khoản</a>
-        </li>
-        <li class="items-center group rounded transition duration-200 ease-in-out hover:bg-blue-500 hover:shadow-lg">
-          <a [routerLink]="['question-bank']" routerLinkActive="text-blue-500"
-            class="text-gray-800 group-hover:text-white text-sm uppercase py-3 font-bold block rounded transition duration-200">
-            <i class="fa fa-question-circle mr-2 text-sm group-hover:text-white"></i>Ngân hàng câu hỏi</a>
-        </li>
-        <li class="items-center group rounded transition duration-200 ease-in-out hover:bg-blue-500 hover:shadow-lg">
-          <a [routerLink]="['courses']" routerLinkActive="text-blue-500"
-            class="text-gray-800 group-hover:text-white text-sm uppercase py-3 font-bold block rounded transition duration-200"><i
-              class="fa fa-book mr-2 text-sm group-hover:text-white"></i>
-            Quản trị môn học</a>
-        </li>
-
-        <li class="items-center group rounded transition duration-200 ease-in-out hover:bg-blue-500 hover:shadow-lg">
-          <a [routerLink]="['tests']" routerLinkActive="text-blue-500"
-            class="w-full group-hover:text-white text-sm uppercase py-3 font-bold block rounded transition duration-200">
-            <i class="fa fa-archive mr-2 text-sm group-hover:text-white"></i> Quản trị bài kiểm tra
+        <li>
+          <a [routerLink]="['users']" routerLinkActive="border-l-4 border-white bg-blue-500 text-white"
+            class="w-full flex items-center px-6 py-3  hover:bg-green-600 hover:text-white transition duration-200 font-semibold">
+            <i class="fa fa-users mr-3 text-base"></i> Quản trị tài khoản
           </a>
-
+        </li>
+        <li>
+          <a [routerLink]="['question-bank']" routerLinkActive="border-l-4 border-white bg-blue-500 text-white"
+            class="w-full flex items-center px-6 py-3  hover:bg-green-600 hover:text-white transition duration-200 font-semibold">
+            <i class="fa fa-question-circle mr-3 text-base"></i> Ngân hàng câu hỏi
+          </a>
+        </li>
+        <li>
+          <a [routerLink]="['courses']" routerLinkActive="border-l-4 border-white bg-blue-500 text-white"
+            class="w-full flex items-center px-6 py-3  hover:bg-green-600 hover:text-white transition duration-200 font-semibold">
+            <i class="fa fa-book mr-3 text-base"></i> Quản trị môn học
+          </a>
+        </li>
+        <li>
+          <a [routerLink]="['tests']" routerLinkActive="border-l-4 border-white bg-blue-500 text-white"
+            class="w-full flex items-center px-6 py-3  hover:bg-green-600 hover:text-white transition duration-200 font-semibold">
+            <i class="fa fa-archive mr-3 text-base"></i> Quản trị bài kiểm tra
+          </a>
         </li>
       </ul>
       <!-- Divider -->
       <hr class="my-4 md:min-w-full" />
       <!-- Heading -->
-      <h6 class="md:min-w-full text-gray-600 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
+      <h6 class="text-gray-500 text-xs uppercase font-bold px-6 pt-4 pb-2">
         Cá nhân
       </h6>
-      <!-- Navigation -->
-      <ul class="md:flex-col md:min-w-full flex flex-col list-none md:mb-4">
-        <li class="items-center group rounded transition duration-200 ease-in-out hover:bg-blue-500 hover:shadow-lg">
-          <a [routerLink]="['profile']" routerLinkActive="text-blue-500"
-            class="text-gray-800 group-hover:text-white text-sm uppercase py-3 font-bold block rounded transition duration-200">
-            <i class="fa fa-user mr-2 text-sm group-hover:text-white"></i>
+
+      <ul class="flex flex-col list-none mb-4">
+        <li>
+          <a [routerLink]="['profile']" routerLinkActive="border-l-4 border-white bg-blue-500 text-white"
+            class="w-full flex items-center px-6 py-3  hover:bg-green-600 hover:text-white transition duration-200 font-semibold">
+            <i class="fa fa-user mr-3 text-base"></i>
             Thông tin tài khoản
           </a>
         </li>
-
-
       </ul>
+
     </div>
   </div>
 </nav>
